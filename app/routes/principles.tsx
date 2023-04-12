@@ -1,18 +1,10 @@
 import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
-import AboutPage from "~/components/about";
-import CardSection from "~/components/home/cards";
-import Card from "~/components/home/cards";
-import Challenges from "~/components/home/challenges";
-import ContactUs from "~/components/home/contactus";
 import Footer from "~/components/home/footer";
-import Home from "~/components/home/home";
-import Managment from "~/components/home/managment";
 import Navbar from "~/components/home/navbar";
-import Partner from "~/components/home/partner";
 import Principles from "~/components/principles";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Public Intelligence" }];
+  return [{ title: "Smart Ethics" }];
 };
 
 export default function principles() {

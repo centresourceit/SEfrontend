@@ -62,7 +62,7 @@ const DashBoard = () => {
           >
             <div className="md:flex flex-col md:h-full">
               <div className="text-white text-center mb-4">
-                <h4 className="text-xl">Public Intelligence</h4>
+                <h4 className="text-xl">Smart Ethics</h4>
                 <p className="text-md font-bold">USER PANEL</p>
               </div>
               <div className="flex flex-col grow">
@@ -370,7 +370,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
   return (
     <div className="backdrop-filter backdrop-blur-lg bg-opacity-20 w-full h-10 bg-[#1b2028] rounded-md text-center grid place-items-center text-white font-light text-lg">
-      &copy; {year} Public Intelligen - All rights reserved.
+      &copy; {year} Smart Ethics - All rights reserved.
     </div>
   );
 };

@@ -9,7 +9,7 @@ import Managment from "~/components/home/managment";
 import Navbar from "~/components/home/navbar";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Public Intelligence" }];
+  return [{ title: "Smart Ethics" }];
 };
 
 

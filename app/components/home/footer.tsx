@@ -9,9 +9,9 @@ export default function Footer(): JSX.Element {
             <h1 className="text-3xl text-center font-medium text-[#181136]">Open-ethics.com</h1>
             <div className="flex gap-6 items-center mx-auto justify-center mt-8">
                 <Link to={"/"} className="text-gray-700 hover:text-gray-900 font-medium">HOME</Link>
-                <Link to={"#about"} className="text-gray-700 hover:text-gray-900 font-medium">ABOUT</Link>
-                <Link to={"#principles"} className="text-gray-700 hover:text-gray-900 font-medium">PRINCIPLES</Link>
-                <Link to={"#contact"} className="text-gray-700 hover:text-gray-900 font-medium">CONTACT</Link>
+                <Link to={"/about"} className="text-gray-700 hover:text-gray-900 font-medium">ABOUT</Link>
+                <Link to={"/principles"} className="text-gray-700 hover:text-gray-900 font-medium">PRINCIPLES</Link>
+                <Link to={"/contact"} className="text-gray-700 hover:text-gray-900 font-medium">CONTACT</Link>
             </div>
             <div className="lg:flex gap-4 items-center hidden justify-center my-4">
                 <FontAwesomeIcon icon={faFacebook} className="text-[#181136] text-2xl"></FontAwesomeIcon>

@@ -12,7 +12,7 @@ import Partner from "~/components/home/partner";
 import Pi from "~/components/pi";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Public Intelligence" }];
+  return [{ title: "Smart Ethics" }];
 };
 
 export default function Index() {

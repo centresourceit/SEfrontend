@@ -7,19 +7,19 @@ export default function Pi(): JSX.Element {
         <div className="grid place-items-center">
           <div className="z-50 p-6">
             <h1 className="text-4xl font-semibold text-[#865fe5]">
-              Public Intelligence <span className="text-[#54edec]">(PI)</span>
+              Smart Ethics <span className="text-[#54edec]">(SE)</span>
             </h1>
             <p className="text-white text-sm lg:text-md font-medium mt-6">
-              Public Intelligence is an open and democratic ethics management
-              platform to bring the right to intelligence, fairness,
-              sustainability and accountability with technology. We collaborate
-              and integrate regulations & standards to help apply ethics, manage
-              disruption and certify innovations, seamlessly and practically.
+              Smart Ethics is an open and democratic ethics management platform
+              to bring the right to intelligence, fairness, sustainability and
+              accountability with technology. We collaborate and integrate
+              regulations & standards to help apply ethics, manage disruption
+              and certify innovations, seamlessly and practically.
             </p>
             <p className="text-white text-sm lg:text-md font-medium mt-6">
-              Public Intelligence is a revolutionary new concept which aims to
-              bring awareness of our human intelligence, alongside addressing
-              the global and ethical challenges we face today.
+              Smart Ethics is a revolutionary new concept which aims to bring
+              awareness of our human intelligence, alongside addressing the
+              global and ethical challenges we face today.
             </p>
             <p className="text-white text-sm lg:text-md font-medium mt-6">
               Over centuries, we have acquired public knowledge through the
@@ -37,7 +37,7 @@ export default function Pi(): JSX.Element {
           </div>
         </div>
         <div className="w-full h-full grid place-items-center">
-          <img src="/images/pi.png" alt="logo" className="w-96 lg:w-auto"/>
+          <img src="/images/pi.png" alt="logo" className="w-96 lg:w-auto" />
         </div>
       </div>
     </section>
