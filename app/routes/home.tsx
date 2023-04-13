@@ -35,28 +35,18 @@ const DashBoard = () => {
   const asideindex = sideBarStore((state) => state.currentIndex);
   const achangeindex = sideBarStore((state) => state.changeTab);
   const navigator = useNavigate();
-  // useEffect(() => {
-  //     if(asideindex === AdminSideBarTabs.None){
-  //         navigator("/admin/home");
-  //     }
-  // }, []);
+  useEffect(() => {
+    if (asideindex === SideBarTabs.None) {
+      navigator("/home/");
+    }
+  }, []);
   return (
     <>
       <section className="h-screen w-full relative">
         <div className="h-screen w-screen bg-[#181136] fixed top-0 left-0"></div>
-        <img
-          src="/images/bg/bg4.png"
-          alt="error"
-          className="scale-x-[-1] scale-y-[-1] fixed top-0 left-0 w-full h-screen object-cover object-center"
-        />
-        <img
-          src="/images/bg/bg2.png"
-          alt="error"
-          className=" fixed top-0 left-0 w-full h-screen object-cover object-center"
-        />
-        <div className="flex w-full p-4 min-h-screen gap-4 relative">
+        <div className="flex w-full min-h-screen relative">
           <div
-            className={`z-50 backdrop-filter backdrop-blur-lg bg-opacity-20 w-full md:w-60 bg-[#1b2028] rounded-md p-2 md:flex flex-col fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto md:relative  ${
+            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto md:relative  ${
               isMobile ? "grid place-items-center" : "hidden"
             }`}
           >
@@ -77,8 +67,22 @@ const DashBoard = () => {
                   ></SidebarTab>
                 </Link>
 
-                {/* status change */}
                 <Link
+                  to={"/home/taketest/"}
+                  onClick={() => {
+                    achangeindex(SideBarTabs.TakeTesk);
+                    changeMobile(false);
+                  }}
+                >
+                  <SidebarTab
+                    icon={faBandcamp}
+                    title="Take Test"
+                    active={asideindex === SideBarTabs.TakeTesk}
+                  ></SidebarTab>
+                </Link>
+
+                {/* status change */}
+                {/* <Link
                   to={"/home/brand/"}
                   onClick={() => {
                     achangeindex(SideBarTabs.BRAND);
@@ -118,7 +122,6 @@ const DashBoard = () => {
                   ></SidebarTab>
                 </Link>
 
-                {/* edit delete view */}
                 <Link
                   to={"/admin/home/category/"}
                   onClick={() => {
@@ -264,14 +267,18 @@ const DashBoard = () => {
                     title="CAMPAIGN TYPE"
                     active={asideindex === SideBarTabs.CAMPAIGNTYPE}
                   ></SidebarTab>
+                </Link> */}
+                {/* <div className="grow"></div> */}
+                <Link to={"/login"}>
+                  <SidebarTab
+                    icon={faRightToBracket}
+                    title="LOGOUT"
+                    active={false}
+                  ></SidebarTab>
                 </Link>
-                {/* <div className="grow"></div>
-                                <Link to={"/logout"}>
-                                    <SidebarTab icon={faRightToBracket} title="LOGOUT" active={false}></SidebarTab>
-                                </Link> */}
                 <div
                   onClick={() => changeMobile(false)}
-                  className={`md:hidden flex gap-2 items-center my-1 b  py-1 px-2 rounded-md hover:border hover:border-rose-400 hover:bg-rose-500 hover:bg-opacity-10 hover:text-rose-500 text-gray-300 cursor-pointer`}
+                  className={`md:hidden flex gap-2 items-center my-1 b  py-1 px-2 rounded-md hover:bg-rose-500 hover:bg-opacity-10 hover:text-rose-500 text-gray-300 cursor-pointer`}
                 >
                   <FontAwesomeIcon
                     icon={faXmark}
@@ -306,10 +313,10 @@ type SideBarTabProps = {
 const SidebarTab = (props: SideBarTabProps) => {
   return (
     <div
-      className={`w-60 md:w-auto flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-sm cursor-pointer ${
+      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-sm cursor-pointer ${
         props.active
           ? "border border-green-400 g-green-500 bg-opacity-10 text-green-500 "
-          : "text-gray-300 hover:bg-[#181136] hover:border-l-2 border-white"
+          : "text-gray-300 hover:bg-white hover:bg-opacity-10"
       }`}
     >
       <FontAwesomeIcon icon={props.icon} className="w-6"></FontAwesomeIcon>
@@ -327,7 +334,7 @@ const TopNavBar = (props: TopNavBarProps) => {
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   return (
-    <div className="bg-[#1b2028] backdrop-filter backdrop-blur-lg bg-opacity-20  text-xl w-full text-center text-white rounded-md py-2 font-medium flex px-2 gap-4">
+    <div className="bg-[#1f2129]  text-xl w-full text-center text-white py-2 font-medium flex px-2 gap-4">
       <div className="px md:hidden" onClick={() => changeMobile(!isMobile)}>
         {/* on change will be here */}
         <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
@@ -350,7 +357,9 @@ const TopNavBar = (props: TopNavBarProps) => {
             </div>
             <div className="grow"></div> */}
       <div className="flex gap-2 relative group">
-        <div className="absolute w-40 h-60 bg-white z-[23423] right-0 top-8 rounded-md scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all origin-top-right"></div>
+        {/* <div className="absolute w-40 h-60 bg-white z-[23423] right-0 top-8 rounded-md scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all origin-top-right">
+          <button>Change</button>
+        </div> */}
         <div className="cursor-pointer">
           <img
             src={props.pic}
@@ -369,7 +378,7 @@ const TopNavBar = (props: TopNavBarProps) => {
 const Footer = () => {
   const year = new Date().getFullYear();
   return (
-    <div className="backdrop-filter backdrop-blur-lg bg-opacity-20 w-full h-10 bg-[#1b2028] rounded-md text-center grid place-items-center text-white font-light text-lg">
+    <div className="w-full h-10 bg-[#1f2129] text-center grid place-items-center text-white font-light text-lg">
       &copy; {year} Smart Ethics - All rights reserved.
     </div>
   );
