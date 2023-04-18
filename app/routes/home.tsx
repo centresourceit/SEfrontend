@@ -55,8 +55,7 @@ const DashBoard = () => {
           >
             <div className="md:flex flex-col md:h-full">
               <div className="text-white text-center mb-4">
-                <h4 className="text-xl">Smart Ethics</h4>
-                <p className="text-md font-bold">USER PANEL</p>
+                <img src="/images/logo.png" alt="logo" />
               </div>
               <div className="flex flex-col grow">
                 <Link
@@ -94,19 +93,6 @@ const DashBoard = () => {
                     icon={faSortAmountAsc}
                     title="Result"
                     active={asideindex === SideBarTabs.RresultStatus}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/home/history/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.History);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faHistory}
-                    title="History"
-                    active={asideindex === SideBarTabs.History}
                   ></SidebarTab>
                 </Link>
 

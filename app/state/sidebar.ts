@@ -6,8 +6,6 @@ enum SideBarTabs {
   TakeTesk,
   Principle,
   RresultStatus,
-  History,
-
   //   CATEGORY,
   //   COUNTRY,
   //   MARKET,
