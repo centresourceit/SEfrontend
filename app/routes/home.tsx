@@ -7,6 +7,7 @@ import {
   faCity,
   faDollarSign,
   faFlag,
+  faHistory,
   faHome,
   faLanguage,
   faLocationPin,
@@ -14,6 +15,8 @@ import {
   faPeopleGroup,
   faRightToBracket,
   faShop,
+  faSort,
+  faSortAmountAsc,
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -78,6 +81,32 @@ const DashBoard = () => {
                     icon={faBandcamp}
                     title="Take Test"
                     active={asideindex === SideBarTabs.TakeTesk}
+                  ></SidebarTab>
+                </Link>
+                <Link
+                  to={"/home/resultstatus/"}
+                  onClick={() => {
+                    achangeindex(SideBarTabs.RresultStatus);
+                    changeMobile(false);
+                  }}
+                >
+                  <SidebarTab
+                    icon={faSortAmountAsc}
+                    title="Result"
+                    active={asideindex === SideBarTabs.RresultStatus}
+                  ></SidebarTab>
+                </Link>
+                <Link
+                  to={"/home/history/"}
+                  onClick={() => {
+                    achangeindex(SideBarTabs.History);
+                    changeMobile(false);
+                  }}
+                >
+                  <SidebarTab
+                    icon={faHistory}
+                    title="History"
+                    active={asideindex === SideBarTabs.History}
                   ></SidebarTab>
                 </Link>
 

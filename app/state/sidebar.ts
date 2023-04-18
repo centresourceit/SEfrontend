@@ -5,6 +5,8 @@ enum SideBarTabs {
   MyProfile,
   TakeTesk,
   Principle,
+  RresultStatus,
+  History,
 
   //   CATEGORY,
   //   COUNTRY,
