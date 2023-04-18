@@ -9,7 +9,7 @@ const ResultStatus = () => {
       <h1 className="text-white font-medium text-xl">Result Stauts</h1>
       <div className="w-full bg-slate-400 h-[1px] my-2"></div>
       <h1 className="text-white font-medium text-4xl">
-        You hoave successfully complete the design assessment
+        You have successfully completed the design assessment
       </h1>
       <div className="flex w-full flex-col md:flex-row justify-between my-5 gap-y-8">
         <div className="grow  flex flex-col lg:flex-row gap-6">
