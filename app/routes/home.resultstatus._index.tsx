@@ -6,7 +6,7 @@ import { Link } from "@remix-run/react";
 const ResultStatus = () => {
   return (
     <div className="grow bg-[#272934] p-4 w-full">
-      <h1 className="text-white font-medium text-xl">Result Stauts</h1>
+      <h1 className="text-white font-medium text-xl">Result Status</h1>
       <div className="w-full bg-slate-400 h-[1px] my-2"></div>
       <h1 className="text-white font-medium text-4xl">
         You have successfully completed the design assessment
@@ -23,7 +23,7 @@ const ResultStatus = () => {
               Thank you for submitting your assessment.
             </p>
             <p className="text-[#865fe5] font-medium text-2xl">
-              Here is your Public Intelligence Target trust Score
+              Here is your trust Score
             </p>
             <p className="text-white text-md my-6">
               Here is your Unique ID. Use your unique to see your result again
@@ -78,26 +78,46 @@ const ResultStatus = () => {
         Congratulations! Great Start! Try the full version to see if are aligned
         to the following requirements
       </p>
-      <div className="flex gap-4 my-6">
+      <div className="flex gap-8 my-6 flex-wrap justify-evenly">
         <img
-          src="/images/brand/logo1.png"
+          src="/images/brand/logo11.jpeg"
           alt="logo1"
-          className="shrink-0 w-20 object-cover object-center"
+          className="shrink-0 w-40 h-28 object-cover object-center"
         />
         <img
-          src="/images/brand/logo2.png"
+          src="/images/brand/logo12.jpg"
           alt="logo1"
-          className="shrink-0 w-20 object-cover object-center"
+          className="shrink-0 w-40 h-28 object-cover object-center"
         />
         <img
-          src="/images/brand/logo3.png"
+          src="/images/brand/logo13.png"
           alt="logo1"
-          className="shrink-0 w-20 object-cover object-center"
+          className="shrink-0 w-40 h-28 object-cover object-center"
         />
         <img
-          src="/images/brand/logo4.png"
+          src="/images/brand/logo14.png"
           alt="logo1"
-          className="shrink-0 w-20 object-cover object-center"
+          className="shrink-0 w-40 h-28 object-cover object-center"
+        />
+        <img
+          src="/images/brand/logo15.jpg"
+          alt="logo1"
+          className="shrink-0 w-40 h-28 object-cover object-center"
+        />
+        <img
+          src="/images/brand/logo16.png"
+          alt="logo1"
+          className="shrink-0 w-40 h-28 object-cover object-center"
+        />
+        <img
+          src="/images/brand/logo17.png"
+          alt="logo1"
+          className="shrink-0 w-40 h-28 object-cover object-center"
+        />
+        <img
+          src="/images/brand/logo18.png"
+          alt="logo1"
+          className="shrink-0 w-40 h-28 object-cover object-center"
         />
       </div>
     </div>
