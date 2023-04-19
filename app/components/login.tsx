@@ -50,25 +50,24 @@ export default function Login(): JSX.Element {
 
     const parsed = LoginScheme.safeParse(login);
     if (parsed.success) {
-      const data = await ApiCall({
-        query: `
-      query signin($email:String!,$password:String!){
-        signin(email:$email,password:$password){
-          id,
-          email,
-        }
-      }
-      `,
-        veriables: login,
-      });
-      if (!data.status) {
-        toast.error(data.message, { theme: "light" });
-      } else {
-        setUser(data.data.signin!);
-        console.log(data.data);
-      }
-
-      // navitgator("/home");
+      // const data = await ApiCall({
+      //   query: `
+      // query signin($email:String!,$password:String!){
+      //   signin(email:$email,password:$password){
+      //     id,
+      //     email,
+      //   }
+      // }
+      // `,
+      //   veriables: login,
+      // });
+      // if (!data.status) {
+      //   toast.error(data.message, { theme: "light" });
+      // } else {
+      //   setUser(data.data.signin!);
+      //   console.log(data.data);
+      // }
+      navitgator("/home");
     } else {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }

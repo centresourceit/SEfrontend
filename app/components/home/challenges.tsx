@@ -26,7 +26,6 @@ export default function Challenges(): JSX.Element {
               <h4 className="text-left text-lg text-black">
                 Constantly Changing & fragmented Global Compliance Requirement
               </h4>
-
               <h4 className="text-left text-lg text-[#865fe5] mt-10">
                 Long-term Risks
               </h4>
