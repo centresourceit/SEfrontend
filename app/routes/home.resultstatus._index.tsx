@@ -82,42 +82,42 @@ const ResultStatus = () => {
         <img
           src="/images/brand/logo11.jpeg"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo12.jpg"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo13.png"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo14.png"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo15.jpg"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo16.png"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo17.png"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
         <img
           src="/images/brand/logo18.png"
           alt="logo1"
-          className="shrink-0 w-40 h-28 object-cover object-center"
+          className="shrink-0 w-40 h-24 object-fill object-center bg-white"
         />
       </div>
     </div>
