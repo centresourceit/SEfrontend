@@ -6,7 +6,7 @@ export default function Footer(): JSX.Element {
     const year = new Date().getFullYear();
     return (
         <footer className="bg-[#54edec] py-10">
-            <h1 className="text-3xl text-center font-medium text-[#181136]">Open-ethics.com</h1>
+            <h1 className="text-3xl text-center font-medium text-[#181136]">Smart-ethics.com</h1>
             <div className="flex gap-6 items-center mx-auto justify-center mt-8">
                 <Link to={"/"} className="text-gray-700 hover:text-gray-900 font-medium">HOME</Link>
                 <Link to={"/about"} className="text-gray-700 hover:text-gray-900 font-medium">ABOUT</Link>

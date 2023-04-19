@@ -11,7 +11,7 @@ export default function Challenges(): JSX.Element {
           <div className="z-50 grid place-items-center">
             <div className="p-2 md:p-10">
               <h1 className="text-[#865fe5] text-4xl font-semibold text-left">
-                We Address Global Ethics Challenges
+                We Address Global Ethical Challenges
               </h1>
               <h4 className="text-left text-lg text-[#865fe5] mt-10">
                 Unregulated AI
@@ -31,7 +31,7 @@ export default function Challenges(): JSX.Element {
                 Long-term Risks
               </h4>
               <h4 className="text-left text-lg text-black">
-                Raising Unquantifiable Ethical Concens
+                Raising Unquantifiable Ethical Concerns
               </h4>
             </div>
             <div className="p-6">
@@ -42,7 +42,7 @@ export default function Challenges(): JSX.Element {
                 Donate and support the cause
               </button>
               <button className="text-white font-medium text-xl bg-[#865fe5] py-1 px-4 rounded-full border-2 border-[#865fe5] m-2 hover:bg-transparent hover:text-[#865fe5] inline-block">
-                Download Right to Intelligence Proposeal Paper
+                Download Right to Intelligence Proposal Paper
               </button>
             </div>
           </div>

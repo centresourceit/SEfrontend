@@ -19,7 +19,7 @@ export default function Pi(): JSX.Element {
             <p className="text-white text-sm lg:text-md font-medium mt-6">
               Smart Ethics is a revolutionary new concept which aims to bring
               awareness of our human intelligence, alongside addressing the
-              global and ethical challenges we face today.
+              global and ethics challenges we face today.
             </p>
             <p className="text-white text-sm lg:text-md font-medium mt-6">
               Over centuries, we have acquired public knowledge through the

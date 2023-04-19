@@ -4,10 +4,21 @@ import { Link, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { ToastContainer, toast } from "react-toastify";
+import { ApiCall } from "~/services/api";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function Login(): JSX.Element {
   const navitgator = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  type userData = {
+    id: string;
+    email: string;
+  };
+
+  const [user, setUser] = useLocalStorageState<userData>("user", {
+    defaultValue: undefined,
+  });
 
   const handelPassword = () => {
     setShowPassword((val) => !val);
@@ -16,7 +27,7 @@ export default function Login(): JSX.Element {
   const emaliRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
 
-  const submit = () => {
+  const submit = async () => {
     const LoginScheme = z
       .object({
         email: z
@@ -39,7 +50,25 @@ export default function Login(): JSX.Element {
 
     const parsed = LoginScheme.safeParse(login);
     if (parsed.success) {
-      navitgator("/home");
+      const data = await ApiCall({
+        query: `
+      query signin($email:String!,$password:String!){
+        signin(email:$email,password:$password){
+          id,
+          email,
+        }
+      }
+      `,
+        veriables: login,
+      });
+      if (!data.status) {
+        toast.error(data.message, { theme: "light" });
+      } else {
+        setUser(data.data.signin!);
+        console.log(data.data);
+      }
+
+      // navitgator("/home");
     } else {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
