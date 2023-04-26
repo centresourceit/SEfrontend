@@ -1,10 +1,15 @@
 import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useNavigate } from "@remix-run/react";
+import { Form, Link, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
 import { ToastContainer, toast } from "react-toastify";
+import { ApiCall } from "~/services/api";
+
+
+
+
 
 export default function Register(): JSX.Element {
   const navitgator = useNavigate();
@@ -12,9 +17,18 @@ export default function Register(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showRePassword, setShowRePassword] = useState<boolean>(false);
 
+  const nextButton = useRef<HTMLButtonElement>(null);
+
+
+
   const emaliRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const rePassRef = useRef<HTMLInputElement>(null);
+
+  const iref = useRef<HTMLInputElement>(null);
+  const eref = useRef<HTMLInputElement>(null);
+  const rref = useRef<HTMLInputElement>(null);
+  const tref = useRef<HTMLInputElement>(null);
 
   const handelPassword = () => {
     setShowPassword((val) => !val);
@@ -23,7 +37,7 @@ export default function Register(): JSX.Element {
     setShowRePassword((val) => !val);
   };
 
-  const submit = () => {
+  const submit = async () => {
     const RegisterScheme = z
       .object({
         email: z
@@ -88,7 +102,30 @@ export default function Register(): JSX.Element {
 
     const parsed = RegisterScheme.safeParse(register);
     if (parsed.success) {
-      navitgator("/home");
+      const data = await ApiCall({
+        query: `
+        mutation signup($signUpUser:SignUpUserInput!){
+          signup(signUpUserInput:$signUpUser){
+            id,
+            email,
+            role,
+            token
+          }
+        }
+      `,
+        veriables: {
+          signUpUser: { email: register.email, password: register.password },
+        },
+      });
+      if (!data.status) {
+        toast.error(data.message, { theme: "light" });
+      } else {
+        iref!.current!.value = data.data.signup!.id;
+        eref!.current!.value = data.data.signup!.email;
+        rref!.current!.value = data.data.signup!.role;
+        tref!.current!.value = data.data.signup!.token;
+        nextButton.current!.click();
+      }
     } else {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
@@ -163,6 +200,17 @@ export default function Register(): JSX.Element {
               </Link>
             </div>
           </div>
+        </div>
+        <div className="hidden">
+          <Form method="post">
+            <input type="hidden" name="id" ref={iref} />
+            <input type="hidden" name="token" ref={tref} />
+            <input type="hidden" name="email" ref={eref} />
+            <input type="hidden" name="role" ref={rref} />
+            <button ref={nextButton} name="submit">
+              Submit
+            </button>
+          </Form>
         </div>
       </section>
       <ToastContainer></ToastContainer>

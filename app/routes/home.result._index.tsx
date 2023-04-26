@@ -90,11 +90,6 @@ const AdminDashboard = () => {
         rec={30}
       ></PercentQuestions>
 
-      <div className="flex gap-4">
-        <button className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
-          SUBMIT
-        </button>
-      </div>
     </div>
   );
 };

@@ -3,6 +3,8 @@ import {
   faBarChart,
   faBars,
   faBlog,
+  faBook,
+  faBuilding,
   faChartPie,
   faCity,
   faDollarSign,
@@ -12,11 +14,14 @@ import {
   faLanguage,
   faLocationPin,
   faMap,
+  faPaintBrush,
   faPeopleGroup,
   faRightToBracket,
+  faRuler,
   faShop,
   faSort,
   faSortAmountAsc,
+  faStar,
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -25,272 +30,193 @@ import {
   faBandcamp,
   faDeploydog,
   faFacebook,
+  faRProject,
 } from "@fortawesome/free-brands-svg-icons";
 // import AsideBarStore, { AdminSideBarTabs } from "~/state/siderbar";
 import { LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
+import { userPrefs } from "~/cookies";
+import isbot from "isbot";
+
+export const loader: LoaderFunction = async (props: LoaderArgs) => {
+  const cookieHeader = props.request.headers.get("Cookie");
+  const cookie: any = await userPrefs.parse(cookieHeader);
+  if (
+    cookie == null ||
+    cookie == undefined ||
+    Object.keys(cookie).length == 0
+  ) {
+    return redirect("/login");
+  }
+  return json({
+    user: cookie,
+    isAdmin: cookie.role == "ADMIN" ? true : false,
+  });
+};
 
 const DashBoard = () => {
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   const asideindex = sideBarStore((state) => state.currentIndex);
   const achangeindex = sideBarStore((state) => state.changeTab);
+  const user = useLoaderData().user;
+  const isAdmin = useLoaderData().isAdmin;
+
   const navigator = useNavigate();
-  useEffect(() => {
-    if (asideindex === SideBarTabs.None) {
-      navigator("/home/");
+  const init = () => {
+    if (isAdmin) {
+      achangeindex(SideBarTabs.User);
+      navigator("/home/user");
+    } else {
+      if (asideindex === SideBarTabs.None) {
+        navigator("/home");
+      }
     }
+  };
+  useEffect(() => {
+    init();
   }, []);
+
+  const logoutHandle = () => {
+    navigator("/logout");
+  };
   return (
     <>
       <section className="h-screen w-full relative">
-        <div className="h-screen w-screen bg-[#181136] fixed top-0 left-0"></div>
-        <div className="flex w-full min-h-screen relative">
+        <div className="flex min-h-screen relative flex-nowrap w-full">
           <div
-            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto md:relative  ${
+            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${
               isMobile ? "grid place-items-center" : "hidden"
             }`}
           >
             <div className="md:flex flex-col md:h-full">
               <div className="text-white text-center mb-4">
-                <img src="/images/logo.png" alt="logo" />
+                <img
+                  src="/images/logo.png"
+                  alt="logo"
+                  className="w-80 md:w-40 inline-block"
+                />
               </div>
               <div className="flex flex-col grow">
-                <Link
-                  to={"/home"}
-                  onClick={() => achangeindex(SideBarTabs.None)}
-                >
-                  <SidebarTab
-                    icon={faBarChart}
-                    title="DASHBOARD"
-                    active={asideindex === SideBarTabs.None}
-                  ></SidebarTab>
-                </Link>
+                {isAdmin ? (
+                  <>
+                    <Link
+                      to={"/home/user/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.User);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faUser}
+                        title="User"
+                        active={asideindex === SideBarTabs.User}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/company/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.Company);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faBuilding}
+                        title="Company"
+                        active={asideindex === SideBarTabs.Company}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/project/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.Project);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faBook}
+                        title="Project"
+                        active={asideindex === SideBarTabs.Project}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/principle/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.Principle);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faStar}
+                        title="Principle"
+                        active={asideindex === SideBarTabs.Principle}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/license/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.License);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faPaintBrush}
+                        title="License"
+                        active={asideindex === SideBarTabs.License}
+                      ></SidebarTab>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={"/home"}
+                      onClick={() => achangeindex(SideBarTabs.None)}
+                    >
+                      <SidebarTab
+                        icon={faBarChart}
+                        title="DASHBOARD"
+                        active={asideindex === SideBarTabs.None}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/taketest/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.TakeTesk);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faBandcamp}
+                        title="Take Test"
+                        active={asideindex === SideBarTabs.TakeTesk}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/resultstatus/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.RresultStatus);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faSortAmountAsc}
+                        title="Result"
+                        active={asideindex === SideBarTabs.RresultStatus}
+                      ></SidebarTab>
+                    </Link>
+                  </>
+                )}
 
-                <Link
-                  to={"/home/taketest/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.TakeTesk);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faBandcamp}
-                    title="Take Test"
-                    active={asideindex === SideBarTabs.TakeTesk}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/home/resultstatus/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.RresultStatus);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faSortAmountAsc}
-                    title="Result"
-                    active={asideindex === SideBarTabs.RresultStatus}
-                  ></SidebarTab>
-                </Link>
-
-                {/* status change */}
-                {/* <Link
-                  to={"/home/brand/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.BRAND);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faBandcamp}
-                    title="BRAND"
-                    active={asideindex === SideBarTabs.BRAND}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/campaign/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.CAMPAIGN);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faFlag}
-                    title="CAMPAIGN"
-                    active={asideindex === SideBarTabs.CAMPAIGN}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/user/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.USER);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faUser}
-                    title="USER"
-                    active={asideindex === SideBarTabs.USER}
-                  ></SidebarTab>
-                </Link>
-
-                <Link
-                  to={"/admin/home/category/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.CATEGORY);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faChartPie}
-                    title="CATEGORY"
-                    active={asideindex === SideBarTabs.CATEGORY}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/market/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.MARKET);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faShop}
-                    title="MARKET"
-                    active={asideindex === SideBarTabs.MARKET}
-                  ></SidebarTab>
-                </Link>
-
-                <Link
-                  to={"/admin/home/team/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.TEAM);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faPeopleGroup}
-                    title="TEAM"
-                    active={asideindex === SideBarTabs.TEAM}
-                  ></SidebarTab>
-                </Link>
-
-                <Link
-                  to={"/admin/home/blognews/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.BLOGNEWS);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faBlog}
-                    title="BLOG NEWS EVENT"
-                    active={asideindex === SideBarTabs.BLOGNEWS}
-                  ></SidebarTab>
-                </Link>
-
-                <Link
-                  to={"/admin/home/country/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.COUNTRY);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faMap}
-                    title="COUNTRY"
-                    active={asideindex === SideBarTabs.COUNTRY}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/state/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.STATE);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faLocationPin}
-                    title="STATE"
-                    active={asideindex === SideBarTabs.STATE}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/city/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.CITY);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faCity}
-                    title="CITY"
-                    active={asideindex === SideBarTabs.CITY}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/language/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.LANGUAGES);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faLanguage}
-                    title="LANGUAGES"
-                    active={asideindex === SideBarTabs.LANGUAGES}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/currency/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.CURRENCY);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faDollarSign}
-                    title="CURRENCY"
-                    active={asideindex === SideBarTabs.CURRENCY}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/platforms/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.PLATFORMS);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faFacebook}
-                    title="PLATFORMS"
-                    active={asideindex === SideBarTabs.PLATFORMS}
-                  ></SidebarTab>
-                </Link>
-                <Link
-                  to={"/admin/home/campaigntype/"}
-                  onClick={() => {
-                    achangeindex(SideBarTabs.CAMPAIGNTYPE);
-                    changeMobile(false);
-                  }}
-                >
-                  <SidebarTab
-                    icon={faBars}
-                    title="CAMPAIGN TYPE"
-                    active={asideindex === SideBarTabs.CAMPAIGNTYPE}
-                  ></SidebarTab>
-                </Link> */}
                 {/* <div className="grow"></div> */}
-                <Link to={"/login"}>
+                <button onClick={logoutHandle}>
                   <SidebarTab
                     icon={faRightToBracket}
                     title="LOGOUT"
                     active={false}
                   ></SidebarTab>
-                </Link>
+                </button>
                 <div
                   onClick={() => changeMobile(false)}
                   className={`md:hidden flex gap-2 items-center my-1 b  py-1 px-2 rounded-md hover:bg-rose-500 hover:bg-opacity-10 hover:text-rose-500 text-gray-300 cursor-pointer`}
@@ -304,7 +230,7 @@ const DashBoard = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-full grow">
+          <div className="flex flex-col grow">
             <TopNavBar
               name={"karan"}
               pic={"/images/avatar/user.jpg"}

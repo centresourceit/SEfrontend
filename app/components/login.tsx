@@ -1,24 +1,20 @@
 import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useNavigate } from "@remix-run/react";
+import { Form, Link, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { ToastContainer, toast } from "react-toastify";
 import { ApiCall } from "~/services/api";
-import useLocalStorageState from "use-local-storage-state";
 
 export default function Login(): JSX.Element {
   const navitgator = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const nextButton = useRef<HTMLButtonElement>(null);
 
-  type userData = {
-    id: string;
-    email: string;
-  };
-
-  const [user, setUser] = useLocalStorageState<userData>("user", {
-    defaultValue: undefined,
-  });
+  const iref = useRef<HTMLInputElement>(null);
+  const eref = useRef<HTMLInputElement>(null);
+  const rref = useRef<HTMLInputElement>(null);
+  const tref = useRef<HTMLInputElement>(null);
 
   const handelPassword = () => {
     setShowPassword((val) => !val);
@@ -50,24 +46,28 @@ export default function Login(): JSX.Element {
 
     const parsed = LoginScheme.safeParse(login);
     if (parsed.success) {
-      // const data = await ApiCall({
-      //   query: `
-      // query signin($email:String!,$password:String!){
-      //   signin(email:$email,password:$password){
-      //     id,
-      //     email,
-      //   }
-      // }
-      // `,
-      //   veriables: login,
-      // });
-      // if (!data.status) {
-      //   toast.error(data.message, { theme: "light" });
-      // } else {
-      //   setUser(data.data.signin!);
-      //   console.log(data.data);
-      // }
-      navitgator("/home");
+      const data = await ApiCall({
+        query: `
+        query signin($loginUserInput:LoginUserInput!){
+          signin(loginUserInput:$loginUserInput){
+            token,
+            id,
+            email,
+            role
+          }
+        }
+      `,
+        veriables: { loginUserInput: login },
+      });
+      if (!data.status) {
+        toast.error(data.message, { theme: "light" });
+      } else {
+        iref!.current!.value = data.data.signin!.id;
+        eref!.current!.value = data.data.signin!.email;
+        rref!.current!.value = data.data.signin!.role;
+        tref!.current!.value = data.data.signin!.token;
+        nextButton.current!.click();
+      }
     } else {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
@@ -129,6 +129,17 @@ export default function Login(): JSX.Element {
               </Link>
             </div>
           </div>
+        </div>
+        <div className="hidden">
+          <Form method="post">
+            <input type="hidden" name="id" ref={iref} />
+            <input type="hidden" name="token" ref={tref} />
+            <input type="hidden" name="email" ref={eref} />
+            <input type="hidden" name="role" ref={rref} />
+            <button ref={nextButton} name="submit">
+              Submit
+            </button>
+          </Form>
         </div>
       </section>
       <ToastContainer></ToastContainer>
