@@ -19,10 +19,11 @@ const UserDashboard = () => {
       <div className="flex items-center gap-6 my-6">
         <div className="grow">
           <p className="text-green-500 font-semibold text-xl rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
-            <span className="text-white">
+            <span className="text-white px-2">
               Show BOLD Status Of Assessment here:
             </span>
-            Under Review/ Unaproved/ Approved verified
+            Under Review
+            {/* / Unaproved/ Approved verified */}
           </p>
         </div>
         <h1 className="text-white font-medium text-lg">
@@ -31,24 +32,32 @@ const UserDashboard = () => {
       </div>
       <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
         <div className="bg-white bg-opacity-10 rounded-md p-4">
-          <h1 className="text-white font-medium text-3xl">Principles 1</h1>
-          <p className="text-[#865fe5] font-medium text-2xl">SDG</p>
+          <h1 className="text-white font-medium text-3xl">Principle 1</h1>
+          <p className="text-[#865fe5] font-medium text-2xl">
+            Human Rights & Privacy
+          </p>
         </div>
         <div className="bg-white bg-opacity-10 rounded-md p-4">
-          <h1 className="text-white font-medium text-3xl">Principles 2</h1>
-          <p className="text-[#865fe5] font-medium text-2xl">Purpose</p>
+          <h1 className="text-white font-medium text-3xl">Principle 2</h1>
+          <p className="text-[#865fe5] font-medium text-2xl">
+            Purpose Realisation
+          </p>
         </div>
         <div className="bg-white bg-opacity-10 rounded-md p-4">
-          <h1 className="text-white font-medium text-3xl">Principles 3</h1>
-          <p className="text-[#865fe5] font-medium text-2xl">ESG</p>
+          <h1 className="text-white font-medium text-3xl">Principle 3</h1>
+          <p className="text-[#865fe5] font-medium text-2xl">
+            Sustainability Management
+          </p>
         </div>
         <div className="bg-white bg-opacity-10 rounded-md p-4">
-          <h1 className="text-white font-medium text-3xl">Principles 4</h1>
-          <p className="text-[#865fe5] font-medium text-2xl">Risk</p>
+          <h1 className="text-white font-medium text-3xl">Principle 4</h1>
+          <p className="text-[#865fe5] font-medium text-2xl">Risk Evaluation</p>
         </div>
         <div className="bg-white bg-opacity-10 rounded-md p-4">
-          <h1 className="text-white font-medium text-3xl">Principles 5</h1>
-          <p className="text-[#865fe5] font-medium text-2xl">Redesign</p>
+          <h1 className="text-white font-medium text-3xl">Principle 5</h1>
+          <p className="text-[#865fe5] font-medium text-2xl">
+            Accountable Redesign
+          </p>
         </div>
       </div>
       <div className="w-full flex gap-6 my-6">
@@ -255,7 +264,8 @@ const UserDashboard = () => {
       </div>
 
       <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
-        Confidential /Commercial if Confidence / Confidential
+        Confidential
+        {/* /Commercial if Confidence / Confidential */}
       </p>
 
       <div className="flex gap-6 items-center">

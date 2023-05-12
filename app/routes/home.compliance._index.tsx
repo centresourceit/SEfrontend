@@ -19,16 +19,13 @@ export async function loader(params: LoaderArgs) {
   const cookie: any = await userPrefs.parse(cookieHeader);
   const data = await ApiCall({
     query: `
-    query getAllLicense{
-      getAllLicense{
+    query getAllCompliance{
+      getAllCompliances{
         id,
-        licenseType,
-        paymentAmount,
-        discountAmount,
-        discountValidTill,
-        questionAllowed,
-        projectPerLicense,
-        status
+        name,
+        description,
+        status,
+        LearnMoreLink
       }
     }
   `,
@@ -36,25 +33,25 @@ export async function loader(params: LoaderArgs) {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
-  return json({ license: data.data.getAllLicense, token: cookie.token });
+  return json({ compliance: data.data.getAllCompliances, token: cookie.token });
 }
 
-const License = () => {
-  const loaderlicense = useLoaderData().license;
+const Compliance = () => {
+  const loadercompliance = useLoaderData().compliance;
   const token = useLoaderData().token;
-  const [license, setLicense] = useState<any[]>(loaderlicense);
+  const [compliance, setCompliance] = useState<any[]>(loadercompliance);
 
   const updateStatus = async (id: number, status: string) => {
     const data = await ApiCall({
       query: `
-      mutation updateLicenseById($updateLicenseInput:UpdateLicenseInput!){
-        updateLicenseById(updateLicenseInput:$updateLicenseInput){
+      mutation updateComplianceById($updateComplianceInput:UpdateComplianceInput!){
+        updateComplianceById(updateComplianceInput:$updateComplianceInput){
           id
         }
       }
       `,
       veriables: {
-        updateLicenseInput: {
+        updateComplianceInput: {
           id: id,
           status: status,
         },
@@ -73,45 +70,42 @@ const License = () => {
   const updateLicense = async () => {
     const data = await ApiCall({
       query: `
-      query getAllLicense{
-        getAllLicense{
+      query getAllCompliance{
+        getAllCompliances{
           id,
-          licenseType,
-          paymentAmount,
-          discountAmount,
-          discountValidTill,
-          questionAllowed,
-          projectPerLicense,
-          status
+          name,
+          description,
+          status,
+          LearnMoreLink
         }
       }
     `,
       veriables: {},
       headers: { authorization: `Bearer ${token}` },
     });
-    setLicense((val) => data.data.getAllLicense);
+    setCompliance((val) => data.data.getAllCompliances);
   };
 
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
-        <h1 className="text-white font-medium text-2xl">License</h1>
+        <h1 className="text-white font-medium text-2xl">Compliance</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-6 flex-wrap my-6">
-          {license == null || license == undefined ? (
+          {compliance == null || compliance == undefined ? (
             <>
               <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
-                There is no license.
+                There is no compliance.
               </p>
             </>
           ) : (
-            license.map((val: any, index: number) => {
+            compliance.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-[#31353f] w-72 p-4">
+                <div key={index} className="bg-[#31353f] w-80 p-4">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
-                      {val.licenseType}
+                      {val.name}
                     </p>
                     <div className="grow"></div>
                     <div className="cursor-pointer">
@@ -133,23 +127,14 @@ const License = () => {
                     </div>
                   </div>
                   <p className="text-gray-200 font-normal text-md my-1">
-                    Payment Amount : {val.paymentAmount}
+                    Description : {val.description}
                   </p>
-                  <p className="text-gray-200 font-normal text-md my-1">
-                    Discount Amount : {val.discountAmount}
-                  </p>
-                  <p className="text-gray-200 font-normal text-md my-1">
-                    Question Allowed : {val.questionAllowed}
-                  </p>
-                  <p className="text-gray-200 font-normal text-md my-1">
-                    Project/License : {val.projectPerLicense}
-                  </p>
-                  <p className="text-gray-200 font-normal text-md my-1">
-                    Discount Valid Till :{" "}
-                    {new Date(val.discountValidTill).toLocaleDateString(
-                      "en-US"
-                    )}
-                  </p>
+                  <Link
+                    className="text-blue-400 font-normal text-md my-1"
+                    to={val.LearnMoreLink}
+                  >
+                    {val.LearnMoreLink}
+                  </Link>
                 </div>
               );
             })
@@ -161,4 +146,4 @@ const License = () => {
   );
 };
 
-export default License;
+export default Compliance;

@@ -16,12 +16,14 @@ import {
   faMap,
   faPaintBrush,
   faPeopleGroup,
+  faQuestion,
   faRightToBracket,
   faRuler,
   faShop,
   faSort,
   faSortAmountAsc,
   faStar,
+  faTasks,
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -165,6 +167,45 @@ const DashBoard = () => {
                         icon={faPaintBrush}
                         title="License"
                         active={asideindex === SideBarTabs.License}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/licenseslave/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.LicenseSlave);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faTasks}
+                        title="License Purchased"
+                        active={asideindex === SideBarTabs.LicenseSlave}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/compliance/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.Compliance);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faSortAmountAsc}
+                        title="Compliance"
+                        active={asideindex === SideBarTabs.Compliance}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/questions/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.Questions);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={faQuestion}
+                        title="Questions"
+                        active={asideindex === SideBarTabs.Questions}
                       ></SidebarTab>
                     </Link>
                   </>

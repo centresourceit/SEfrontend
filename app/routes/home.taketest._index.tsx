@@ -1,10 +1,18 @@
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
+import answersStore from "~/state/taketest";
+import { ToastContainer, toast } from "react-toastify";
+
+import styles from "react-toastify/dist/ReactToastify.css";
+
+export function links() {
+  return [{ rel: "stylesheet", href: styles }];
+}
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
@@ -14,55 +22,222 @@ export async function loader(params: LoaderArgs) {
     query getPrinciple{
       getPrinciple{
         name,
-        QuestionBank{
+        question_bank{
           id,
           questionType,
           question
           answer{
             answer,
-            mark
+            mark,
+            rec
           }
         }
       },
     }
   `,
     veriables: {},
-    headers: { authorization: `Bearer ${cookie.token}` },
+    headers: {
+      authorization: `Bearer ${cookie.token}`,
+      token: cookie.token,
+    },
   });
 
-  console.log(data.data);
-
-  return json({ questions: data.data.getPrinciple });
+  return json({ questions: data.data.getPrinciple, userId: cookie.id });
 }
 const TakeTest = () => {
   const questions = useLoaderData().questions;
+  const token = useLoaderData().token;
+  const userId: number = Number(useLoaderData().userId);
 
+  const answers = answersStore((state) => state.answers);
+  const addAnswer = answersStore((state) => state.addAnswer);
+  const changeAnswerStatue = answersStore((state) => state.changeAnswerStatue);
+
+  const [quecount, setQuecount] = useState<number>(0);
   let count = 0;
 
+  const navigator = useNavigate();
+  const init = async () => {
+    let quenum = 0;
+    for (let i: number = 0; i < questions.length; i++) {
+      quenum += questions[i].question_bank.length;
+    }
+    setQuecount((val) => quenum);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const saveAndExit = async () => {
+    const datau = await ApiCall({
+      query: `
+      mutation updateResults($updateAnswerInput:UpdateAnswerInput!,$updateResultInput:UpdateResultInput!){
+        updateResults(updateAnswerInput:$updateAnswerInput,updateResultInput:$updateResultInput){
+          id,
+        }
+      }
+    `,
+      veriables: {
+        updateAnswerInput: {
+          answers: answers,
+        },
+        updateResultInput: {
+          userId: userId,
+          projectId: 1,
+          licenseId: 1,
+          totalScore: 0,
+          certificatedId: 1,
+        },
+      },
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    if (datau.status) {
+      navigator("/home");
+    } else {
+      const data = await ApiCall({
+        query: `
+      mutation createResults($createAnswerInput:CreateAnswerInput!,$createResultInput:CreateResultInput!){
+        createResults(createAnswerInput:$createAnswerInput,createResultInput:$createResultInput){
+          id
+        }
+      }
+    `,
+        veriables: {
+          createAnswerInput: {
+            answers: answers,
+          },
+          createResultInput: {
+            userId: userId,
+            projectId: 1,
+            licenseId: 1,
+            totalScore: 0,
+            certificatedId: 1,
+          },
+        },
+        headers: { authorization: `Bearer ${token}` },
+      });
+      if (data.status) {
+        navigator("/home");
+      } else {
+        toast.error(data.message, { theme: "light" });
+      }
+    }
+  };
+
+  const submit = async () => {
+    changeAnswerStatue();
+
+    let totalScore1 = 0;
+    answers.forEach((ans) => {
+      totalScore1 += Number(ans.mark) || 0;
+    });
+
+    const datau = await ApiCall({
+      query: `
+      mutation updateResults($updateAnswerInput:UpdateAnswerInput!,$updateResultInput:UpdateResultInput!){
+        updateResults(updateAnswerInput:$updateAnswerInput,updateResultInput:$updateResultInput){
+          id,
+        }
+      }
+    `,
+      veriables: {
+        updateAnswerInput: {
+          answers: answers,
+        },
+        updateResultInput: {
+          userId: userId,
+          projectId: 1,
+          licenseId: 1,
+          totalScore: totalScore1,
+          certificatedId: 1,
+        },
+      },
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    if (datau.status) {
+      navigator("/home/result");
+    } else {
+      let totalScore = 0;
+      answers.forEach((ans) => {
+        totalScore += Number(ans.mark) || 0;
+      });
+
+      const data = await ApiCall({
+        query: `
+      mutation createResults($createAnswerInput:CreateAnswerInput!,$createResultInput:CreateResultInput!){
+        createResults(createAnswerInput:$createAnswerInput,createResultInput:$createResultInput){
+          id
+        }
+      }
+    `,
+        veriables: {
+          createAnswerInput: {
+            answers: answers,
+          },
+          createResultInput: {
+            userId: userId,
+            projectId: 1,
+            licenseId: 1,
+            totalScore: totalScore,
+            certificatedId: 1,
+          },
+        },
+        headers: { authorization: `Bearer ${token}` },
+      });
+      if (data.status) {
+        navigator("/home/result");
+      } else {
+        toast.error(data.message, { theme: "light" });
+      }
+    }
+  };
+
   return (
-    <div className="grow bg-[#272934] p-4 w-full">
-      <h1 className="text-white font-medium text-4xl">Take Test</h1>
-      <div className="w-full bg-slate-400 h-[1px] my-2"></div>
-      <h1 className="text-white font-medium text-3xl">Answer the question.</h1>
-      {questions.map((val: any, index: number) => (
-        <div key={index}>
-          <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500">
-            {val.name}
-          </p>
-          {val.QuestionBank.map((que: any, ind: number) => {
-            count++;
-            return (
-              <div key={ind}>
-                {que.questionType == "MCQ" || que.questionType == "TANDF" ? (
-                  <MCQQuestions
-                    queNumber={count}
-                    question={que.question}
-                    Options={que.answer}
-                  ></MCQQuestions>
-                ) : (
-                  ""
-                )}
-                {/* 
+    <>
+      <div className="grow bg-[#272934] p-4 w-full">
+        <h1 className="text-white font-medium text-4xl">Take Test</h1>
+        <div className="w-full bg-slate-400 h-[1px] my-2"></div>
+        <h1 className="text-white font-medium text-3xl">
+          Answer the question.
+        </h1>
+        {questions == null || questions == undefined ? (
+          <>
+            <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500">
+              There is no principle.
+            </p>
+          </>
+        ) : ( 
+          questions.map((val: any, index: number) => (
+            <div key={index}>
+              <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500">
+                {val.name}
+              </p>
+              {val.question_bank == null || val.question_bank == undefined ? (
+                <>
+                  <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500">
+                    There is no questions.
+                  </p>
+                </>
+              ) : (
+                val.question_bank.map((que: any, ind: number) => {
+                  count++;
+                  return (
+                    <div key={ind}>
+                      {que.questionType == "MCQ" ||
+                      que.questionType == "TANDF" ? (
+                        <MCQQuestions
+                          questionsId={que.id}
+                          queNumber={count}
+                          question={que.question}
+                          Options={que.answer}
+                        ></MCQQuestions>
+                      ) : (
+                        ""
+                      )}
+                      {/* 
                 {que.questionType == "TANDF" ? (
                   <TFQuestions
                     queNumber={count}
@@ -71,47 +246,69 @@ const TakeTest = () => {
                 ) : (
                   ""
                 )} */}
-                {que.questionType == "SLIDER" ? (
-                  <SliderQuestions
-                    queNumber={count}
-                    question={que.question}
-                    maxnumber={100}
-                    step={10}
-                    Options={que.answer}
-                  ></SliderQuestions>
-                ) : (
-                  ""
-                )}
-                {que.questionType == "PERCENTAGE" ? (
-                  <PercentQuestions
-                    queNumber={count}
-                    question={que.question}
-                    option={que.answer}
-                  ></PercentQuestions>
-                ) : (
-                  ""
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ))}
+                      {que.questionType == "SLIDER" ? (
+                        <SliderQuestions
+                          questionsId={que.id}
+                          queNumber={count}
+                          question={que.question}
+                          maxnumber={100}
+                          step={10}
+                          Options={que.answer}
+                        ></SliderQuestions>
+                      ) : (
+                        ""
+                      )}
+                      {que.questionType == "PERCENTAGE" ? (
+                        <PercentQuestions
+                          questionsId={que.id}
+                          queNumber={count}
+                          question={que.question}
+                          option={que.answer}
+                        ></PercentQuestions>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          ))
+        )}
 
-      <div className="flex gap-4">
-        <Link
+        <div className="flex gap-4">
+          <button
+            onClick={saveAndExit}
+            className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
+          >
+            SAVE AND EXIT
+          </button>
+
+          {answers.length == quecount ? (
+            <button
+              onClick={submit}
+              className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
+            >
+              SUBMIT
+            </button>
+          ) : null}
+          {/* <Link
           to={"/home/result"}
-          className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded"
+          className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
         >
           SUBMIT
-        </Link>
+        </Link> */}
+        </div>
       </div>
-    </div>
+      <ToastContainer></ToastContainer>
+    </>
   );
 };
 
 export default TakeTest;
 
 interface MCQQuestionsProps {
+  questionsId: number;
   question: string;
   Options: any[];
   queNumber: number;
@@ -119,6 +316,8 @@ interface MCQQuestionsProps {
 const MCQQuestions: React.FC<MCQQuestionsProps> = (
   props: MCQQuestionsProps
 ): JSX.Element => {
+  const answers = answersStore((state) => state.answers);
+  const addAnswer = answersStore((state) => state.addAnswer);
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
@@ -129,6 +328,15 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
           {props.Options.map((value: any, index: number) => {
             return (
               <div
+                onClick={() =>
+                  addAnswer({
+                    question: props.question,
+                    answer: value.answer,
+                    mark: value.mark,
+                    rec: value.rec,
+                    questionId: props.questionsId,
+                  })
+                }
                 className="flex items-center gap-4 border-2 border-[#3d3f49] border-dashed hover:border-gray-300  w-full py-2 px-4"
                 key={index}
               >
@@ -154,6 +362,7 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
 };
 
 interface TFQuestionsProps {
+  questionsId: number;
   question: string;
   queNumber: number;
 }
@@ -204,6 +413,7 @@ const TFQuestions: React.FC<TFQuestionsProps> = (
 };
 
 interface SliderQuestionsProps {
+  questionsId: number;
   question: string;
   queNumber: number;
   maxnumber: number;
@@ -219,7 +429,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
   const handleChange = (value: number) => {
     setValue((val) => value);
   };
-  console.log(props.Options);
+  const addAnswer = answersStore((state) => state.addAnswer);
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
@@ -237,7 +447,16 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
             step={1}
             className="accent-emerald-500 w-full h-10"
             defaultValue={0}
-            onChange={(val) => handleChange(parseInt(val.target.value))}
+            onChange={(val) => {
+              handleChange(parseInt(val.target.value));
+              addAnswer({
+                question: props.question,
+                answer: props.Options[value].answer,
+                mark: props.Options[value].mark,
+                rec: props.Options[value].rec,
+                questionId: props.questionsId,
+              });
+            }}
           />
           <p className="text-white text-3xl font-semibold">
             {props.Options[value].answer}
@@ -264,6 +483,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
 };
 
 interface PercentQuestionsProps {
+  questionsId: number;
   question: string;
   queNumber: number;
   option: any[];
@@ -277,6 +497,7 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
   const handleIndex = (index: number) => {
     setSelected((val) => index);
   };
+  const addAnswer = answersStore((state) => state.addAnswer);
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
@@ -292,7 +513,16 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
           {props.option.map((value: any, index: number) => (
             <div
               key={index}
-              onClick={() => handleIndex(index)}
+              onClick={() => {
+                handleIndex(index);
+                addAnswer({
+                  question: props.question,
+                  answer: value.answer,
+                  mark: value.mark,
+                  rec: value.rec,
+                  questionId: props.questionsId,
+                });
+              }}
               className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${
                 index == selected
                   ? "bg-green-500 bg-opacity-50"

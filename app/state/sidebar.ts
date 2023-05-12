@@ -10,6 +10,9 @@ enum SideBarTabs {
   Project,
   Principle,
   License,
+  Compliance,
+  Questions,
+  LicenseSlave
   //   CATEGORY,
   //   COUNTRY,
   //   MARKET,
