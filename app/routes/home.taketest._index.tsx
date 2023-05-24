@@ -8,6 +8,8 @@ import { ApiCall } from "~/services/api";
 import answersStore from "~/state/taketest";
 import { ToastContainer, toast } from "react-toastify";
 
+import { nanoid } from "nanoid";
+
 import styles from "react-toastify/dist/ReactToastify.css";
 
 export function links() {
@@ -25,7 +27,8 @@ export async function loader(params: LoaderArgs) {
         question_bank{
           id,
           questionType,
-          question
+          question,
+          description,
           answer{
             answer,
             mark,
@@ -38,11 +41,14 @@ export async function loader(params: LoaderArgs) {
     veriables: {},
     headers: {
       authorization: `Bearer ${cookie.token}`,
-      token: cookie.token,
     },
   });
 
-  return json({ questions: data.data.getPrinciple, userId: cookie.id });
+  return json({
+    questions: data.data.getPrinciple,
+    userId: cookie.id,
+    token: cookie.token,
+  });
 }
 const TakeTest = () => {
   const questions = useLoaderData().questions;
@@ -87,7 +93,7 @@ const TakeTest = () => {
           projectId: 1,
           licenseId: 1,
           totalScore: 0,
-          certificatedId: 1,
+          certificatedId: 0,
         },
       },
       headers: { authorization: `Bearer ${token}` },
@@ -113,7 +119,7 @@ const TakeTest = () => {
             projectId: 1,
             licenseId: 1,
             totalScore: 0,
-            certificatedId: 1,
+            certificatedId: 0,
           },
         },
         headers: { authorization: `Bearer ${token}` },
@@ -151,7 +157,7 @@ const TakeTest = () => {
           projectId: 1,
           licenseId: 1,
           totalScore: totalScore1,
-          certificatedId: 1,
+          certificatedId: nanoid(10),
         },
       },
       headers: { authorization: `Bearer ${token}` },
@@ -182,7 +188,7 @@ const TakeTest = () => {
             projectId: 1,
             licenseId: 1,
             totalScore: totalScore,
-            certificatedId: 1,
+            certificatedId: nanoid(10),
           },
         },
         headers: { authorization: `Bearer ${token}` },
@@ -200,16 +206,22 @@ const TakeTest = () => {
       <div className="grow bg-[#272934] p-4 w-full">
         <h1 className="text-white font-medium text-4xl">Take Test</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
-        <h1 className="text-white font-medium text-3xl">
-          Answer the question.
-        </h1>
+        <div className="flex flex-wrap items-center mt-4">
+          <h1 className="text-white font-medium text-3xl">
+            Answer the question.
+          </h1>
+          <div className="grow"></div>
+          <p className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500">
+            Apprpx time to complete: {quecount * 2} Minutes
+          </p>
+        </div>
         {questions == null || questions == undefined ? (
           <>
             <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500">
               There is no principle.
             </p>
           </>
-        ) : ( 
+        ) : (
           questions.map((val: any, index: number) => (
             <div key={index}>
               <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500">
@@ -232,25 +244,18 @@ const TakeTest = () => {
                           questionsId={que.id}
                           queNumber={count}
                           question={que.question}
+                          description={que.description}
                           Options={que.answer}
                         ></MCQQuestions>
                       ) : (
                         ""
                       )}
-                      {/* 
-                {que.questionType == "TANDF" ? (
-                  <TFQuestions
-                    queNumber={count}
-                    question={que.question}
-                  ></TFQuestions>
-                ) : (
-                  ""
-                )} */}
                       {que.questionType == "SLIDER" ? (
                         <SliderQuestions
                           questionsId={que.id}
                           queNumber={count}
                           question={que.question}
+                          description={que.description}
                           maxnumber={100}
                           step={10}
                           Options={que.answer}
@@ -263,6 +268,7 @@ const TakeTest = () => {
                           questionsId={que.id}
                           queNumber={count}
                           question={que.question}
+                          description={que.description}
                           option={que.answer}
                         ></PercentQuestions>
                       ) : (
@@ -292,12 +298,6 @@ const TakeTest = () => {
               SUBMIT
             </button>
           ) : null}
-          {/* <Link
-          to={"/home/result"}
-          className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
-        >
-          SUBMIT
-        </Link> */}
         </div>
       </div>
       <ToastContainer></ToastContainer>
@@ -310,6 +310,7 @@ export default TakeTest;
 interface MCQQuestionsProps {
   questionsId: number;
   question: string;
+  description: string;
   Options: any[];
   queNumber: number;
 }
@@ -324,6 +325,9 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
         <h2 className="text-white font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
+        <h4 className="text-white font-medium text-xl mb-2">
+          {props.description}
+        </h4>
         <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           {props.Options.map((value: any, index: number) => {
             return (
@@ -364,6 +368,7 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
 interface TFQuestionsProps {
   questionsId: number;
   question: string;
+  description: string;
   queNumber: number;
 }
 
@@ -376,6 +381,9 @@ const TFQuestions: React.FC<TFQuestionsProps> = (
         <h2 className="text-white font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
+        <h4 className="text-white font-medium text-xl mb-2">
+          {props.description}
+        </h4>
         <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           <div className="flex items-center gap-4 border-2 border-[#3d3f49] border-dashed hover:border-gray-300  w-full py-2 px-4">
             <input
@@ -415,6 +423,7 @@ const TFQuestions: React.FC<TFQuestionsProps> = (
 interface SliderQuestionsProps {
   questionsId: number;
   question: string;
+  description: string;
   queNumber: number;
   maxnumber: number;
   step: number;
@@ -433,9 +442,12 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-white font-medium text-3xl mb-2">
+        <h2 className="text-white font-medium text-xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
+        <h4 className="text-white font-medium text-3xl mb-2">
+          {props.description}
+        </h4>
         <div className=" mt-6 w-full flex gap-4 items-center">
           <input
             ref={sliderRef.current?.value}
@@ -485,6 +497,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
 interface PercentQuestionsProps {
   questionsId: number;
   question: string;
+  description: string;
   queNumber: number;
   option: any[];
 }
@@ -504,6 +517,9 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
         <h2 className="text-white font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
+        <h4 className="text-white font-medium text-xl mb-2">
+          {props.description}
+        </h4>
         {/* <div className="flex items-center mt-6 justify-center">
           <p className="text-white font-normal text-lg">NOT AT ALL LIKELY</p>
           <div className="w-28 sm:w-60"></div>

@@ -30,15 +30,15 @@ export const ApiCall = async (args: {
       req.data.data == ""
     ) {
       if (
-        req.data.errors[0].originalError == undefined ||
-        req.data.errors[0].originalError == null
+        req.data.errors[0].extensions.originalError == undefined ||
+        req.data.errors[0].extensions.originalError == null
       )
         return { status: false, data: [], message: req.data.errors[0].message };
       const errorMessage = Array.isArray(
-        req.data.errors[0].originalError.message
+        req.data.errors[0].extensions.originalError.message
       )
-        ? req.data.errors[0].originalError.message[0]
-        : req.data.errors[0].originalError.message;
+        ? req.data.errors[0].extensions.originalError.message[0]
+        : req.data.errors[0].extensions.originalError.message;
       return { status: false, data: [], message: errorMessage };
     }
 

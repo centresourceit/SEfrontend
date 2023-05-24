@@ -68,14 +68,14 @@ const DashBoard = () => {
 
   const navigator = useNavigate();
   const init = () => {
-    if (isAdmin) {
-      achangeindex(SideBarTabs.User);
-      navigator("/home/user");
-    } else {
-      if (asideindex === SideBarTabs.None) {
-        navigator("/home");
-      }
-    }
+    // if (isAdmin) {
+    //   achangeindex(SideBarTabs.User);
+    //   navigator("/home/user");
+    // } else {
+    //   if (asideindex === SideBarTabs.None) {
+    //     navigator("/home");
+    //   }
+    // }
   };
   useEffect(() => {
     init();
