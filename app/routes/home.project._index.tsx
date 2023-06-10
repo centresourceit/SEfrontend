@@ -1,15 +1,14 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
 import { ToastContainer, toast } from "react-toastify";
 
 import styles from "react-toastify/dist/ReactToastify.css";
+import { z } from "zod";
 
 export function links() {
   return [{ rel: "stylesheet", href: styles }];
@@ -40,7 +39,11 @@ const UserDashboard = () => {
   const loaderproject = useLoaderData().project;
   const token = useLoaderData().token;
 
+
+
+
   const [project, setProject] = useState<any[]>(loaderproject);
+
 
   const updateStatus = async (id: number, status: string) => {
     const data = await ApiCall({
@@ -69,6 +72,8 @@ const UserDashboard = () => {
     }
   };
 
+
+
   const updateProjects = async () => {
     const data = await ApiCall({
       query: `
@@ -87,21 +92,48 @@ const UserDashboard = () => {
     setProject((val) => data.data.getAllProject);
   };
 
+
+  const deleteProject = async (id: number) => {
+    const data = await ApiCall({
+      query: `
+      mutation deleteProjectById($updateProjectInput:UpdateProjectInput!){
+        deleteProjectById(updateProjectInput:$updateProjectInput){
+          name,
+          id
+        }
+      }
+      `,
+      veriables: {
+        updateProjectInput: {
+          id: id,
+          deletedAt: Date.now(),
+        },
+      },
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    if (data.status) {
+      await updateProjects();
+      toast.success("Project deleted successfully", { theme: "light" });
+    } else {
+      toast.error(data.message, { theme: "light" });
+    }
+  };
+
+
+
+
+
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
-        <h1 className="text-white font-medium text-2xl">Project</h1>
+        <div className="flex w-full justify-between">
+          <h1 className="text-white font-medium text-2xl">Project</h1>
+          <Link to={"/home/addproject"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Project</Link>
+        </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
-        <div className="no-scrollbar w-full">
-          <div className="bg-[#31353f]  rounded-md flex px-4 py-2 my-2 text-white font-medium text-md flex-nowrap">
-            <div className="w-14">Id</div>
-            <div className="grow"></div>
-            <div className="w-44">Name</div>
-            <div className="grow"></div>
-            <div className="w-44">Description</div>
-            <div className="grow"></div>
-            <div className="w-24">Status</div>
-          </div>
+        <div className="flex gap-6 flex-wrap my-6">
+
           {project == null || project == undefined ? (
             <>
               <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
@@ -111,32 +143,51 @@ const UserDashboard = () => {
           ) : (
             project.map((val: any, index: number) => {
               return (
-                <div
-                  key={index}
-                  className="bg-[#31353f] hover:bg-opacity-60 rounded-md flex px-4 py-2 my-2 text-white font-medium text-md flex-nowrap"
-                >
-                  <div className="w-14">{val.id}</div>
-                  <div className="grow"></div>
-                  <div className="w-44">{val.name}</div>
-                  <div className="grow"></div>
-                  <div className="w-44">{val.description}</div>
-                  <div className="grow"></div>
-                  <div className="w-24 grid place-items-center cursor-pointer">
-                    {val.status == "ACTIVE" ? (
-                      <div
-                        onClick={() => updateStatus(val.id, "INACTIVE")}
-                        className="w-16 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium"
-                      >
-                        ACTIVE
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() => updateStatus(val.id, "ACTIVE")}
-                        className="w-16 py-1 text-white text-xs bg-rose-500 text-center rounded-md font-medium"
-                      >
-                        INACTIVE
-                      </div>
-                    )}
+                <div key={index} className="bg-[#31353f] w-80 p-4">
+                  <div className="flex gap-6">
+                    <p className="text-white font-semibold text-lg">{val.id}</p>
+                    <p className="text-white font-semibold text-xl">
+                      {val.name}
+                    </p>
+                    <div className="grow"></div>
+                    <div className="cursor-pointer">
+                      {val.status == "ACTIVE" ? (
+                        <div
+                          onClick={() => updateStatus(val.id, "INACTIVE")}
+                          className="w-16 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium"
+                        >
+                          ACTIVE
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => updateStatus(val.id, "ACTIVE")}
+                          className="w-16 py-1 text-white text-xs bg-rose-500 text-center rounded-md font-medium"
+                        >
+                          INACTIVE
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-gray-200 font-semibold text-md">
+                    {val.description}
+                  </p>
+                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
+                  <p className="text-gray-200 font-semibold text-md text-center">
+                    Action
+                  </p>
+                  <div className="flex w-full gap-4 mt-2">
+                    <button
+                      onClick={() => deleteProject(val.id)}
+                      className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => updateStatus(val.id, "ACTIVE")}
+                      className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
+                    >
+                      Update
+                    </button>
                   </div>
                 </div>
               );

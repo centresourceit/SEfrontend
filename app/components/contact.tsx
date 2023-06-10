@@ -1,9 +1,8 @@
-import { faEnvelope, faEye, faEyeSlash, faMailForward, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "@remix-run/react";
 import { ChangeEvent, useRef, useState } from "react";
 import { z } from "zod";
 import { ToastContainer, toast } from 'react-toastify';
+import { Fa6SolidEnvelope, Fa6SolidUser } from "./icons/Icons";
 
 export default function Contact(): JSX.Element {
     const [chatcount, setCharcount] = useState<number>(0);
@@ -59,13 +58,17 @@ export default function Contact(): JSX.Element {
                         <h2 className="text-white text-center text-3xl font-semibold my-4">
                             Contact Us
                         </h2>
-                        <div className="border-b-2 border-gray-200 py-1 mt-4">
-                            <FontAwesomeIcon className="text-white fotn-bold text-xl mr-4" icon={faUser}></FontAwesomeIcon>
-                            <input ref={nameRef} type="text" placeholder="Name" className="bg-transparent outline-none border-none fill-none text-white placeholder:text-gray-300" />
+                        <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
+                            <div className="text-white font-bold text-xl mr-4">
+                                <Fa6SolidUser></Fa6SolidUser>
+                            </div>
+                            <input ref={nameRef} type="text" placeholder="Name" className="bg-transparent outline-none border-none fill-none text-white placeholder:text-gray-300 py-2" />
                         </div>
-                        <div className="border-b-2 border-gray-200 py-1 mt-4">
-                            <FontAwesomeIcon className="text-white fotn-bold text-xl mr-4" icon={faEnvelope}></FontAwesomeIcon>
-                            <input ref={emailRef} type="text" placeholder="Email" className="bg-transparent outline-none border-none fill-none text-white placeholder:text-gray-300" />
+                        <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
+                            <div className="text-white font-bold text-xl mr-4">
+                                <Fa6SolidEnvelope></Fa6SolidEnvelope>
+                            </div>
+                            <input ref={emailRef} type="text" placeholder="Email" className="bg-transparent outline-none border-none fill-none text-white placeholder:text-gray-300 py-2" />
                         </div>
                         <textarea ref={messageRef} maxLength={500} onChange={(e) => textaredHandel(e)} rows={4} className="mt-4 w-full bg-transparent fill-none outline-none resize-none border-b-2 border-white text-white placeholder:text-gray-300" placeholder="Help us to understand how can i help you?"></textarea>
                         <div className="flex">

@@ -1,6 +1,6 @@
-import { faFacebook, faInstagram, faLinkedin, faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { Link } from "@remix-run/react";
+import { Fa6BrandsFacebook, Fa6BrandsInstagram, Fa6BrandsLinkedin, Fa6BrandsTwitter, Fa6BrandsYoutube } from "../icons/Icons";
 
 export default function Footer(): JSX.Element {
     const year = new Date().getFullYear();
@@ -14,11 +14,32 @@ export default function Footer(): JSX.Element {
                 <Link to={"/contact"} className="text-gray-700 hover:text-gray-900 font-medium">CONTACT</Link>
             </div>
             <div className="lg:flex gap-4 items-center hidden justify-center my-4">
-                <FontAwesomeIcon icon={faFacebook} className="text-[#181136] text-2xl"></FontAwesomeIcon>
-                <FontAwesomeIcon icon={faInstagram} className="text-[#181136]  text-2xl"></FontAwesomeIcon>
-                <FontAwesomeIcon icon={faLinkedin} className="text-[#181136]  text-2xl"></FontAwesomeIcon>
-                <FontAwesomeIcon icon={faYoutube} className="text-[#181136]  text-2xl"></FontAwesomeIcon>
-                <FontAwesomeIcon icon={faTwitter} className="text-[#181136]  text-2xl"></FontAwesomeIcon>
+
+                <div
+                    className="text-[#181136] text-2xl"
+                >
+                    <Fa6BrandsFacebook></Fa6BrandsFacebook>
+                </div>
+                <div
+                    className="text-[#181136]  text-2xl"
+                >
+                    <Fa6BrandsInstagram></Fa6BrandsInstagram>
+                </div>
+                <div
+                    className="text-[#181136]  text-2xl"
+                >
+                    <Fa6BrandsLinkedin></Fa6BrandsLinkedin>
+                </div>
+                <div
+                    className="text-[#181136]  text-2xl"
+                >
+                    <Fa6BrandsYoutube></Fa6BrandsYoutube>
+                </div>
+                <div
+                    className="text-[#181136]  text-2xl"
+                >
+                    <Fa6BrandsTwitter></Fa6BrandsTwitter>
+                </div>
             </div>
             <p className="text-center font-medium text[#181136]">Company number 14403815 address : 32 Park Cross Street, Leets, England, LS1 2QHaddress</p>
             <p className="text-center font-medium text[#181136]"> &copy; Copyrights Reserved {year} </p>

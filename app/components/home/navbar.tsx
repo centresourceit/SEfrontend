@@ -1,13 +1,6 @@
-import {
-  faFacebook,
-  faInstagram,
-  faLinkedin,
-  faTwitch,
-  faTwitter,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { Link } from "@remix-run/react";
+import { Fa6BrandsFacebook, Fa6BrandsInstagram, Fa6BrandsLinkedin, Fa6BrandsTwitter, Fa6BrandsYoutube } from "../icons/Icons";
 
 export default function Navbar(): JSX.Element {
   return (
@@ -41,26 +34,31 @@ export default function Navbar(): JSX.Element {
       </div>
       <div className="w-20 hidden lg:flex"></div>
       <div className="lg:flex gap-4 items-center hidden">
-        <FontAwesomeIcon
-          icon={faFacebook}
+        <div
           className="text-[#54edec] text-2xl"
-        ></FontAwesomeIcon>
-        <FontAwesomeIcon
-          icon={faInstagram}
+        >
+          <Fa6BrandsFacebook></Fa6BrandsFacebook>
+        </div>
+        <div
           className="text-[#54edec]  text-2xl"
-        ></FontAwesomeIcon>
-        <FontAwesomeIcon
-          icon={faLinkedin}
+        >
+          <Fa6BrandsInstagram></Fa6BrandsInstagram>
+        </div>
+        <div
           className="text-[#54edec]  text-2xl"
-        ></FontAwesomeIcon>
-        <FontAwesomeIcon
-          icon={faYoutube}
+        >
+          <Fa6BrandsLinkedin></Fa6BrandsLinkedin>
+        </div>
+        <div
           className="text-[#54edec]  text-2xl"
-        ></FontAwesomeIcon>
-        <FontAwesomeIcon
-          icon={faTwitter}
+        >
+          <Fa6BrandsYoutube></Fa6BrandsYoutube>
+        </div>
+        <div
           className="text-[#54edec]  text-2xl"
-        ></FontAwesomeIcon>
+        >
+          <Fa6BrandsTwitter></Fa6BrandsTwitter>
+        </div>
       </div>
     </nav>
   );

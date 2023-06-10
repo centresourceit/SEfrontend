@@ -1,8 +1,5 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import axios from "axios";
 import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
@@ -95,7 +92,10 @@ const UserDashboard = () => {
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
-        <h1 className="text-white font-medium text-2xl">Company</h1>
+        <div className="flex w-full justify-between">
+          <h1 className="text-white font-medium text-2xl">Company</h1>
+          <Link to={"/home/addcompany/"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Company</Link>
+        </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-6 flex-wrap my-6">
           {company == null || company == undefined ? (

@@ -134,6 +134,7 @@ const feedback = () => {
         veriables: { createFeedbackInput: feedback },
         headers: { authorization: `Bearer ${token}` },
       });
+      
       if (!data.status) {
         toast.error(data.message, { theme: "light" });
       } else {

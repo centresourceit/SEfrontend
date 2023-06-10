@@ -1,5 +1,3 @@
-import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -212,7 +210,7 @@ const TakeTest = () => {
           </h1>
           <div className="grow"></div>
           <p className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500">
-            Apprpx time to complete: {quecount * 2} Minutes
+            Approx time to complete: {quecount * 2} Minutes
           </p>
         </div>
         {questions == null || questions == undefined ? (
@@ -239,7 +237,7 @@ const TakeTest = () => {
                   return (
                     <div key={ind}>
                       {que.questionType == "MCQ" ||
-                      que.questionType == "TANDF" ? (
+                        que.questionType == "TANDF" ? (
                         <MCQQuestions
                           questionsId={que.id}
                           queNumber={count}
@@ -479,9 +477,8 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
             return (
               <div key={index}>
                 <p
-                  className={`text-white font-semibold text-xl p-2 py-1 rounded-md  text-center ${
-                    value == index ? "bg-green-500" : ""
-                  }`}
+                  className={`text-white font-semibold text-xl p-2 py-1 rounded-md  text-center ${value == index ? "bg-green-500" : ""
+                    }`}
                 >
                   {props.Options[index].answer}
                 </p>
@@ -539,11 +536,10 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
                   questionId: props.questionsId,
                 });
               }}
-              className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${
-                index == selected
+              className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${index == selected
                   ? "bg-green-500 bg-opacity-50"
                   : "bg-transparent"
-              }`}
+                }`}
             >
               {value.answer}%
             </div>

@@ -1,24 +1,35 @@
-import {
-  faEdit,
-  faEye,
-  faHeart,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { Fa6SolidHeart } from "~/components/icons/Icons";
 import { userPrefs } from "~/cookies";
+import { ApiCall } from "~/services/api";
 
-export async function loader({ params, request }: LoaderArgs) {
-  const cookieHeader = request.headers.get("Cookie");
+
+
+export async function loader(params: LoaderArgs) {
+  const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
-  return json({ userId: cookie.id });
+  const data = await ApiCall({
+    query: `
+    query getAllResults{
+      getAllResults{
+        id,
+        certificatedId,
+        totalScore
+      },
+    }
+  `,
+    veriables: {},
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+  return json({ question: data.data.getAllResults, token: cookie.token, userId: cookie.id });
 }
 
 const UserDashboard = () => {
   const userId = useLoaderData().userId;
-
+  const questiondata = useLoaderData().question.pop();
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full">
@@ -38,7 +49,7 @@ const UserDashboard = () => {
             </p>
           </div>
           <h1 className="text-white font-medium text-lg">
-            Application id: 4Df674
+            Application id: {questiondata.certificatedId.toString().toUpperCase()}
           </h1>
         </div>
         <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
@@ -242,9 +253,9 @@ const UserDashboard = () => {
             </button>
           </div>
           <div>
-            <button className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+            <Link to={"/home/taketest/"} className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
               Start Again
-            </button>
+            </Link>
           </div>
         </div>
         <div className="w-full flex gap-6 my-6">
@@ -292,10 +303,9 @@ const UserDashboard = () => {
         </p>
 
         <div className="flex gap-6 items-center">
-          <FontAwesomeIcon
-            className="text-rose-500 text-4xl"
-            icon={faHeart}
-          ></FontAwesomeIcon>
+          <div className="text-rose-500 text-4xl">
+            <Fa6SolidHeart></Fa6SolidHeart>
+          </div>
           <h1 className="text-white font-medium text-xl">
             Please share our open framework, submit your feedback and contribute
             to help us improve – your feedback matters, lets change the world!

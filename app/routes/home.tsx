@@ -1,39 +1,4 @@
-import {
-  IconDefinition,
-  faBarChart,
-  faBars,
-  faBlog,
-  faBook,
-  faBuilding,
-  faChartPie,
-  faCity,
-  faDollarSign,
-  faFlag,
-  faHistory,
-  faHome,
-  faLanguage,
-  faLocationPin,
-  faMap,
-  faPaintBrush,
-  faPeopleGroup,
-  faQuestion,
-  faRightToBracket,
-  faRuler,
-  faShop,
-  faSort,
-  faSortAmountAsc,
-  faStar,
-  faTasks,
-  faUser,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBandcamp,
-  faDeploydog,
-  faFacebook,
-  faRProject,
-} from "@fortawesome/free-brands-svg-icons";
+
 // import AsideBarStore, { AdminSideBarTabs } from "~/state/siderbar";
 import { LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
@@ -41,6 +6,8 @@ import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
 import isbot from "isbot";
+import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidStar, Fa6SolidUser, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
+import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
   const cookieHeader = props.request.headers.get("Cookie");
@@ -52,7 +19,21 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
   ) {
     return redirect("/login");
   }
+  const data = await ApiCall({
+    query: `
+    query getUserById($id:Int!){
+      getUserById(id:$id){
+        id,
+        name,
+  		  email,
+      },
+    }
+  `,
+    veriables: { id: parseInt(cookie.id) },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
   return json({
+    username: data.data.getUserById.name,
     user: cookie,
     isAdmin: cookie.role == "ADMIN" ? true : false,
   });
@@ -65,6 +46,7 @@ const DashBoard = () => {
   const achangeindex = sideBarStore((state) => state.changeTab);
   const user = useLoaderData().user;
   const isAdmin = useLoaderData().isAdmin;
+  const username = useLoaderData().username;
 
   const navigator = useNavigate();
   const init = () => {
@@ -89,9 +71,8 @@ const DashBoard = () => {
       <section className="h-screen w-full relative">
         <div className="flex min-h-screen relative flex-nowrap w-full">
           <div
-            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${
-              isMobile ? "grid place-items-center" : "hidden"
-            }`}
+            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${isMobile ? "grid place-items-center" : "hidden"
+              }`}
           >
             <div className="md:flex flex-col md:h-full">
               <div className="text-white text-center mb-4">
@@ -112,7 +93,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faUser}
+                        icon={Fa6SolidUser}
                         title="User"
                         active={asideindex === SideBarTabs.User}
                       ></SidebarTab>
@@ -125,7 +106,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faBuilding}
+                        icon={Fa6SolidBuilding}
                         title="Company"
                         active={asideindex === SideBarTabs.Company}
                       ></SidebarTab>
@@ -138,7 +119,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faBook}
+                        icon={Fa6SolidBook}
                         title="Project"
                         active={asideindex === SideBarTabs.Project}
                       ></SidebarTab>
@@ -151,7 +132,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faStar}
+                        icon={Fa6SolidStar}
                         title="Principle"
                         active={asideindex === SideBarTabs.Principle}
                       ></SidebarTab>
@@ -164,7 +145,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faPaintBrush}
+                        icon={Fa6SolidPaintbrush}
                         title="License"
                         active={asideindex === SideBarTabs.License}
                       ></SidebarTab>
@@ -177,7 +158,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faTasks}
+                        icon={Fa6RegularStarHalfStroke}
                         title="License Purchased"
                         active={asideindex === SideBarTabs.LicenseSlave}
                       ></SidebarTab>
@@ -190,7 +171,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faSortAmountAsc}
+                        icon={Fa6SolidObjectUngroup}
                         title="Compliance"
                         active={asideindex === SideBarTabs.Compliance}
                       ></SidebarTab>
@@ -203,7 +184,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faQuestion}
+                        icon={Fa6SolidCircleQuestion}
                         title="Questions"
                         active={asideindex === SideBarTabs.Questions}
                       ></SidebarTab>
@@ -216,7 +197,7 @@ const DashBoard = () => {
                       onClick={() => achangeindex(SideBarTabs.None)}
                     >
                       <SidebarTab
-                        icon={faBarChart}
+                        icon={Fa6SolidChartArea}
                         title="DASHBOARD"
                         active={asideindex === SideBarTabs.None}
                       ></SidebarTab>
@@ -229,7 +210,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faBandcamp}
+                        icon={Fa6SolidCodeBranch}
                         title="Take Test"
                         active={asideindex === SideBarTabs.TakeTesk}
                       ></SidebarTab>
@@ -242,7 +223,7 @@ const DashBoard = () => {
                       }}
                     >
                       <SidebarTab
-                        icon={faSortAmountAsc}
+                        icon={Fa6SolidBookTanakh}
                         title="Result"
                         active={asideindex === SideBarTabs.RresultStatus}
                       ></SidebarTab>
@@ -253,7 +234,7 @@ const DashBoard = () => {
                 {/* <div className="grow"></div> */}
                 <button onClick={logoutHandle}>
                   <SidebarTab
-                    icon={faRightToBracket}
+                    icon={MaterialSymbolsLogoutRounded}
                     title="LOGOUT"
                     active={false}
                   ></SidebarTab>
@@ -262,10 +243,7 @@ const DashBoard = () => {
                   onClick={() => changeMobile(false)}
                   className={`md:hidden flex gap-2 items-center my-1 b  py-1 px-2 rounded-md hover:bg-rose-500 hover:bg-opacity-10 hover:text-rose-500 text-gray-300 cursor-pointer`}
                 >
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className="w-6"
-                  ></FontAwesomeIcon>
+                  <Fa6SolidXmark></Fa6SolidXmark>
                   <p>CLOSE</p>
                 </div>
               </div>
@@ -273,7 +251,7 @@ const DashBoard = () => {
           </div>
           <div className="flex flex-col grow">
             <TopNavBar
-              name={"karan"}
+              name={username}
               pic={"/images/avatar/user.jpg"}
             ></TopNavBar>
             <Outlet></Outlet>
@@ -289,19 +267,18 @@ export default DashBoard;
 
 type SideBarTabProps = {
   title: string;
-  icon: IconDefinition;
+  icon: React.FC;
   active: boolean;
 };
 const SidebarTab = (props: SideBarTabProps) => {
   return (
     <div
-      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-sm cursor-pointer ${
-        props.active
-          ? "border border-green-400 g-green-500 bg-opacity-10 text-green-500 "
-          : "text-gray-300 hover:bg-white hover:bg-opacity-10"
-      }`}
+      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-sm cursor-pointer ${props.active
+        ? "border border-green-400 g-green-500 bg-opacity-10 text-green-500 "
+        : "text-gray-300 hover:bg-white hover:bg-opacity-10"
+        }`}
     >
-      <FontAwesomeIcon icon={props.icon} className="w-6"></FontAwesomeIcon>
+      <props.icon></props.icon>
       <p>{props.title}</p>
     </div>
   );
@@ -319,10 +296,11 @@ const TopNavBar = (props: TopNavBarProps) => {
     <div className="bg-[#1f2129]  text-xl w-full text-center text-white py-2 font-medium flex px-2 gap-4">
       <div className="px md:hidden" onClick={() => changeMobile(!isMobile)}>
         {/* on change will be here */}
-        <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
+        <Fa6SolidBars></Fa6SolidBars>
       </div>
       <div className="px hidden md:block">
-        <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>
+        <Fa6SolidHouse></Fa6SolidHouse>
+        {/* <FontAwesomeIcon icon={faHome}></FontAwesomeIcon> */}
       </div>
       <div className="text-center hidden md:block">Home</div>
       <div className="grow"></div>

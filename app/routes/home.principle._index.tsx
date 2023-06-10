@@ -1,5 +1,3 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
@@ -88,7 +86,11 @@ const UserDashboard = () => {
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
-        <h1 className="text-white font-medium text-2xl">Principle</h1>
+
+        <div className="flex w-full justify-between">
+          <h1 className="text-white font-medium text-2xl">Principle</h1>
+          <Link to={"/home/addprinciple"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Principle</Link>
+        </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="no-scrollbar w-full">
           <div className="bg-[#31353f]  rounded-md flex px-4 py-2 my-2 text-white font-medium text-md flex-nowrap">

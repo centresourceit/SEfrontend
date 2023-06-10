@@ -1,9 +1,30 @@
-import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LinksFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { LinksFunction, LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { userPrefs } from "~/cookies";
+import { ApiCall } from "~/services/api";
+
+
+export async function loader(params: LoaderArgs) {
+  const cookieHeader = params.request.headers.get("Cookie");
+  const cookie: any = await userPrefs.parse(cookieHeader);
+  const data = await ApiCall({
+    query: `
+    query getAllResults{
+      getAllResults{
+        id,
+        certificatedId,
+        totalScore
+      },
+    }
+  `,
+    veriables: {},
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+  return json({ question: data.data.getAllResults, token: cookie.token });
+}
 
 const ResultStatus = () => {
+  const questiondata = useLoaderData().question.pop();
   return (
     <div className="grow bg-[#272934] p-4 w-full">
       <h1 className="text-white font-medium text-xl">Result Status</h1>
@@ -14,9 +35,15 @@ const ResultStatus = () => {
       <div className="flex w-full flex-col md:flex-row justify-between my-5 gap-y-8">
         <div className="grow  flex flex-col lg:flex-row gap-6">
           <div className="rounded-full bg-[#865fe5] grid place-items-center shrink-0 w-80 h-80">
-            <p className="text-white font-bold text-7xl">
-              3.1<span className="text-3xl font-normal">/5</span>
-            </p>
+            <div>
+              <p className="text-white font-bold text-7xl text-center">
+                {questiondata.totalScore}
+                {/* 3.1<span className="text-3xl font-normal">/5</span> */}
+              </p>
+              <p className="text-white font-bold text-3xl text-center">
+                Your Score
+              </p>
+            </div>
           </div>
           <div className="grow px-4 py-2">
             <p className="text-white text-md font-bold">
@@ -28,11 +55,11 @@ const ResultStatus = () => {
             <p className="text-white text-md my-6">
               Here is your Unique ID. Use your unique to see your result again
             </p>
-            <p className="text-[#865fe5] font-medium text-3xl">4DF674</p>
+            <p className="text-[#865fe5] font-medium text-3xl">{questiondata.certificatedId.toString().toUpperCase()}</p>
             <div className="flex gap-4 my-4">
-              <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={"/home/taketest/"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Start Again
-              </button>
+              </Link>
               <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Share
               </button>
@@ -55,9 +82,9 @@ const ResultStatus = () => {
         </div>
         <div className="grow">
           <div className="grid place-items-center">
-            <button className="bg-[#865fe5] text-2xl font-semibold py-2 px-4 text-white">
+            <Link to={"/home/taketest/"} className="bg-[#865fe5] text-2xl font-semibold py-2 px-4 text-white">
               Start Again
-            </button>
+            </Link>
             <h1 className="text-[#865fe5] font-medium text-2xl my-4">
               Want to imporove your Score?
             </h1>

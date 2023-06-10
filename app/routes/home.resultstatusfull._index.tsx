@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,7 +20,7 @@ ChartJS.register(
 );
 
 const ResultStatus = () => {
-  const options = {
+  const options: any = {
     indexAxis: "y",
     elements: {
       bar: {
@@ -146,9 +147,9 @@ const ResultStatus = () => {
             </p>
             <p className="text-[#865fe5] font-medium text-3xl">4DF674</p>
             <div className="flex gap-4 my-4">
-              <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={"/home/taketest"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Start Again
-              </button>
+              </Link>
               <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Share
               </button>

@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { Fa6SolidArrowLeft, Fa6SolidHeart } from "../icons/Icons";
 
 export default function CardSection(): JSX.Element {
   return (
@@ -69,12 +68,14 @@ const Card: React.FC<CardProps> = (props: CardProps): JSX.Element => {
           {props.title.split(" ")[1]}
         </p>
         <button className="text-gray-200 text-sm font-bold my-4">
-          <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Read More
+          <Fa6SolidArrowLeft></Fa6SolidArrowLeft>
+          Read More
         </button>
 
         <div className="flex gap-4 items-center mt-24 mb-4">
           <button className="text-[#181136] bg-[#54edec] py px-2 text-md font-medium rounded-full hover:bg-[#5239b5]">
-            <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon> Vote
+            <Fa6SolidHeart></Fa6SolidHeart>
+            Vote
           </button>
           <p className="text-white text-sm">{props.votes} Votes</p>
         </div>

@@ -1,10 +1,9 @@
-import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Link, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { ToastContainer, toast } from "react-toastify";
 import { ApiCall } from "~/services/api";
+import { Fa6SolidEye, Fa6SolidEyeSlash, Fa6SolidUser } from "./icons/Icons";
 
 export default function Login(): JSX.Element {
   const navitgator = useNavigate();
@@ -86,29 +85,26 @@ export default function Login(): JSX.Element {
             <h2 className="text-white text-center text-3xl font-semibold my-4">
               Login
             </h2>
-            <div className="border-b-2 border-gray-200 py-1">
-              <FontAwesomeIcon
-                className="text-white fotn-bold text-xl mr-4"
-                icon={faUser}
-              ></FontAwesomeIcon>
+            <div className="border-b-2 border-gray-200 py-1 flex items-center">
+              <div className="text-white font-bold text-xl mr-4">
+                <Fa6SolidUser></Fa6SolidUser>
+              </div>
               <input
                 type="text"
                 ref={emaliRef}
                 placeholder="Email"
-                className="bg-transparent outline-none border-none fill-none text-white"
+                className="bg-transparent outline-none border-none fill-none text-white py-2"
               />
             </div>
-            <div className="border-b-2 border-gray-200 py-1 mt-4">
-              <FontAwesomeIcon
-                className="text-white fotn-bold text-xl mr-4"
-                icon={showPassword ? faEye : faEyeSlash}
-                onClick={handelPassword}
-              ></FontAwesomeIcon>
+            <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
+              <div className="text-white font-bold text-xl mr-4" onClick={() => setShowPassword(val => !showPassword)}>
+                {showPassword ? <Fa6SolidEye></Fa6SolidEye> : <Fa6SolidEyeSlash></Fa6SolidEyeSlash>}
+              </div>
               <input
                 ref={passRef}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="bg-transparent outline-none border-none fill-none text-white"
+                className="bg-transparent outline-none border-none fill-none text-white py-2"
               />
             </div>
             <button

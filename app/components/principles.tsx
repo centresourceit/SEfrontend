@@ -1,6 +1,5 @@
-import { faArrowLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "@remix-run/react";
+import { Fa6SolidArrowLeft, Fa6SolidHeart } from "./icons/Icons";
 
 interface PrinciplesProps {
   left: boolean;
@@ -17,9 +16,8 @@ export default function Principles(props: PrinciplesProps): JSX.Element {
     <section className="h-screen w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#181136] h-screen w-full place-items-center">
         <div
-          className={`w-full h-full grid place-items-center ${
-            props.left ? "lg:order-1" : "lg:order-2"
-          }`}
+          className={`w-full h-full grid place-items-center ${props.left ? "lg:order-1" : "lg:order-2"
+            }`}
         >
           <img
             src={props.images}
@@ -28,9 +26,8 @@ export default function Principles(props: PrinciplesProps): JSX.Element {
           />
         </div>
         <div
-          className={`grid place-items-center ${
-            props.left ? "lg:order-2" : "lg:order-1"
-          }`}
+          className={`grid place-items-center ${props.left ? "lg:order-2" : "lg:order-1"
+            }`}
         >
           <div className="w-96 lg:w-[35rem] p-6">
             <p className="text-white text-sm font-medium">{props.principle}</p>
@@ -43,11 +40,12 @@ export default function Principles(props: PrinciplesProps): JSX.Element {
             </p>
             <div className="flex gap-4 items-center mt-6 mb-4 text-xl">
               <button className="text-white hover:text-[#181136] bg-[#5239b5] text-md font-medium rounded-full hover:bg-[#54edec] py-2 px-4 lg:py-3 lg:px-6">
-                <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Read More
+                <Fa6SolidArrowLeft></Fa6SolidArrowLeft>
+                Read More
               </button>
               <div className="w-10"></div>
               <button className="text-[#181136] hover:text-white bg-[#54edec] text-md font-medium rounded-full hover:bg-[#5239b5] py-2 px-4 lg:py-3 lg:px-6">
-                <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon> Vote
+                <Fa6SolidHeart></Fa6SolidHeart> Vote
               </button>
             </div>
           </div>
