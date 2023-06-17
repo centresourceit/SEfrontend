@@ -1,6 +1,6 @@
 import { LoaderArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { nanoid } from "nanoid";
 import styles from "react-toastify/dist/ReactToastify.css";
@@ -16,21 +16,6 @@ export async function loader({ params, request }: LoaderArgs) {
     const cookieHeader = request.headers.get("Cookie");
     const cookie: any = await userPrefs.parse(cookieHeader);
 
-    const data = await ApiCall({
-        query: `
-        query getPrinciple{
-          getPrinciple{
-            id,
-            name,
-            description,
-            status
-          },
-        }
-      `,
-        veriables: {},
-        headers: { authorization: `Bearer ${cookie.token}` },
-    });
-
     const licenses = await ApiCall({
         query: `
         query getAllLicense{
@@ -44,10 +29,43 @@ export async function loader({ params, request }: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const data = await ApiCall({
+        query: `
+        query getQuestionById($id: Int!){
+            getQuestionById(id: $id){
+                id,
+                question,
+                description,
+                questionType,
+                questioncode,
+                status,
+                version,
+                questionRefId,
+                principle{
+                  id
+                },
+                answer{
+                  mark,
+                  rec,
+                  answer,
+                },
+                questionPlan{
+                  id,
+                  licenseType,
+                }
+            },
+        }
+      `,
+        veriables: {
+            id: parseInt(params.id!)
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
     return json({
-        principle: data.data.getPrinciple,
+        question: data.data.getQuestionById,
+        token: cookie.token,
+        userId: cookie.id,
         licenses: licenses.data.getAllLicense,
-        token: cookie.token, userId: cookie.id
     });
 }
 
@@ -55,22 +73,24 @@ export async function loader({ params, request }: LoaderArgs) {
 const AddQuestion: React.FC = (): JSX.Element => {
     const userId = useLoaderData().userId;
     const token = useLoaderData().token;
-    const navigator = useNavigate();
-    const principels = useLoaderData().principle;
+
     const licenses = useLoaderData().licenses;
+    const fatchquestion = useLoaderData().question;
+
+    const navigator = useNavigate();
 
     const question = useRef<HTMLInputElement>(null);
     const qDescription = useRef<HTMLTextAreaElement>(null);
-
-    const qPrinciple = useRef<HTMLSelectElement>(null);
-    const qType = useRef<HTMLSelectElement>(null);
     const qPlan = useRef<HTMLSelectElement>(null);
 
-    type answer = {
-        answer: string;
-        mark: string;
-        rec: string;
-    }
+
+    useEffect(() => {
+        console.log(fatchquestion);
+        question!.current!.value = fatchquestion.question;
+        qDescription!.current!.value = fatchquestion.description;
+        qPlan!.current!.value = fatchquestion.questionPlan.id;
+        setAnswers(val => fatchquestion.answer);
+    }, [])
 
     const [answers, setAnswers] = useState<{ answer: string; mark: number; rec: string; }[]>([
         {
@@ -79,11 +99,9 @@ const AddQuestion: React.FC = (): JSX.Element => {
             rec: "",
         }
     ]);
-    const addAnserField = () => {
 
-        if (qType.current?.value == "0") return toast.error("First select the question type.", { theme: "light" });
-        if (answers.length > 10) toast.error("You already created max now on answer.", { theme: "light" });
-        if (qType.current?.value == "TANDF") {
+    const addAnserField = () => {
+        if (fatchquestion.questionType == "TANDF") {
             if (answers.length < 2) {
                 setAnswers(val => [...val, {
                     answer: "",
@@ -117,20 +135,13 @@ const AddQuestion: React.FC = (): JSX.Element => {
             return updatedAnswers;
         });
     };
+
     const handleRecChange = (index: number, value: string) => {
         setAnswers((prevAnswers) => {
             const updatedAnswers = [...prevAnswers];
             updatedAnswers[index].rec = value;
             return updatedAnswers;
         });
-    };
-
-    const handelTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value == "TANDF") {
-            if (answers.length > 2) {
-                setAnswers(val => val.slice(0, 2))
-            }
-        }
     };
 
     const addQuestion = async () => {
@@ -153,16 +164,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
 
         const QuestionScheme = z
             .object({
-                principleId: z
-                    .number({
-                        required_error: "Select the principle",
-                        invalid_type_error: "Select valid the principle"
-                    })
-                    .refine(val => val != 0, { message: "Select the principle" }),
-                questionType: z
-                    .string()
-                    .nonempty("Select the question type")
-                    .refine(val => val != "0", { message: "Select the question type" }),
                 licensesId: z
                     .number({
                         required_error: "Select the Question License Plan",
@@ -175,7 +176,23 @@ const AddQuestion: React.FC = (): JSX.Element => {
                 description: z
                     .string()
                     .nonempty("Question Description is required"),
+                answer: z.array(AnswerScheme),
+                questionType: z
+                    .string()
+                    .nonempty("Select the question type")
+                    .refine(val => val != "0", { message: "Select the question type" }),
+                principleId: z
+                    .number({
+                        required_error: "Select the principle",
+                        invalid_type_error: "Select valid the principle"
+                    })
+                    .refine(val => val != 0, { message: "Select the principle" }),
                 version: z
+                    .number({
+                        required_error: "Question",
+                        invalid_type_error: "Select valid the principle"
+                    }),
+                questionRefId: z
                     .number({
                         required_error: "Question",
                         invalid_type_error: "Select valid the principle"
@@ -183,7 +200,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
                 questioncode: z
                     .string()
                     .nonempty("Question code is required"),
-                answer: z.array(AnswerScheme)
             })
             .strict();
 
@@ -191,18 +207,17 @@ const AddQuestion: React.FC = (): JSX.Element => {
         type QuestionScheme = z.infer<typeof QuestionScheme>;
 
         const answerScheme: QuestionScheme = {
+            licensesId: parseInt(qPlan!.current!.value),
             question: question!.current!.value,
             description: qDescription!.current!.value,
-            principleId: parseInt(qPrinciple!.current!.value),
-            questionType: qType!.current!.value,
-            licensesId: parseInt(qPlan!.current!.value),
             answer: answers,
-            questioncode: nanoid(10),
-            version: 1
+            questionType: fatchquestion.questionType,
+            principleId: fatchquestion.principle.id,
+            version: fatchquestion.version + 1,
+            questionRefId: fatchquestion.questionRefId,
+            questioncode: fatchquestion.questioncode,
         };
-
         const parsed = QuestionScheme.safeParse(answerScheme);
-
         if (parsed.success) {
             const data = await ApiCall({
                 query: `
@@ -234,35 +249,11 @@ const AddQuestion: React.FC = (): JSX.Element => {
 
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>
-                Selete Principle
-            </h2>
-            <select ref={qPrinciple} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Principle</option>
-                {principels.map((val: any, index: number) => {
-                    return (
-                        <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.name}</option>
-                    );
-                })}
-            </select>
-
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Question Type
-            </h2>
-
-            <select ref={qType} onChange={(e) => handelTypeChange(e)} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question Type</option>
-                <option className="bg-[#272934] text-white text-lg" value="MCQ">MCQ</option>
-                <option className="bg-[#272934] text-white text-lg" value="SLIDER">SLIDER</option>
-                <option className="bg-[#272934] text-white text-lg" value="TANDF">TANDF</option>
-                <option className="bg-[#272934] text-white text-lg" value="PERCENTAGE">PERCENTAGE</option>
-            </select>
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
                 Question Plan
             </h2>
+
             <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question License Plan</option>
+                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question Plan</option>
                 {
                     licenses.map((val: any, index: number) => {
                         return (
@@ -329,11 +320,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
                     />
                 </div>
             </div>)}
-
-
-
-
-
             <div>
                 <button
                     onClick={addQuestion}

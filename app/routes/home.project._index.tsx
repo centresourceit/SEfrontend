@@ -1,5 +1,5 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { userPrefs } from "~/cookies";
@@ -39,6 +39,10 @@ const UserDashboard = () => {
   const loaderproject = useLoaderData().project;
   const token = useLoaderData().token;
 
+  const [delBox, setDelBox] = useState<boolean>(false);
+  const [id, setId] = useState<number>(0);
+
+  const navigator = useNavigate();
 
 
 
@@ -93,7 +97,7 @@ const UserDashboard = () => {
   };
 
 
-  const deleteProject = async (id: number) => {
+  const deleteProject = async () => {
     const data = await ApiCall({
       query: `
       mutation deleteProjectById($updateProjectInput:UpdateProjectInput!){
@@ -115,17 +119,34 @@ const UserDashboard = () => {
     if (data.status) {
       await updateProjects();
       toast.success("Project deleted successfully", { theme: "light" });
+      setDelBox(val => false);
     } else {
       toast.error(data.message, { theme: "light" });
     }
   };
 
-
-
-
-
   return (
     <>
+      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+        <div className="bg-white rounded-md p-4">
+          <h1 className="text-center text-2xl font-semibold">Delete</h1>
+          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <div className="flex w-full gap-4 mt-2">
+            <button
+              onClick={() => deleteProject()}
+              className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setDelBox(val => false)}
+              className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Project</h1>
@@ -143,7 +164,7 @@ const UserDashboard = () => {
           ) : (
             project.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-[#31353f] w-80 p-4">
+                <div key={index} className="bg-[#31353f] w-80 p-4 flex flex-col">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -168,22 +189,23 @@ const UserDashboard = () => {
                       )}
                     </div>
                   </div>
-                  <p className="text-gray-200 font-semibold text-md">
+                  <p className="mt-2 text-gray-200 font-semibold text-md">
                     {val.description}
                   </p>
+                  <div className="grow"></div>
                   <div className="w-full bg-gray-400 h-[2px] my-2"></div>
                   <p className="text-gray-200 font-semibold text-md text-center">
                     Action
                   </p>
                   <div className="flex w-full gap-4 mt-2">
                     <button
-                      onClick={() => deleteProject(val.id)}
+                      onClick={() => { setId(val.id); setDelBox(val => true); }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
                     >
                       Delete
                     </button>
                     <button
-                      onClick={() => updateStatus(val.id, "ACTIVE")}
+                      onClick={() => navigator(`/home/editproject/${val.id}`)}
                       className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
                     >
                       Update

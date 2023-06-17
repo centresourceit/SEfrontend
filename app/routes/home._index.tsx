@@ -1,35 +1,79 @@
 
 import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
 import { Fa6SolidHeart } from "~/components/icons/Icons";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
+
+
+import Stripe from "stripe";
 
 
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+
   const data = await ApiCall({
     query: `
     query getAllResults{
       getAllResults{
         id,
         certificatedId,
-        totalScore
+        resultStatus,
+        totalScore,
+        certified
       },
     }
   `,
     veriables: {},
     headers: { authorization: `Bearer ${cookie.token}` },
   });
-  return json({ question: data.data.getAllResults, token: cookie.token, userId: cookie.id });
+  return json({
+    question: data.data.getAllResults,
+    token: cookie.token,
+    userId: cookie.id,
+    strip_key: process.env.STRIP_KEY
+  });
 }
 
 const UserDashboard = () => {
   const userId = useLoaderData().userId;
-  const questiondata = useLoaderData().question.pop();
+  const questiondata = useLoaderData().question != undefined ? useLoaderData().question.length > 0 ? useLoaderData().question.pop() : null : null;
+
+  const stripkey = useLoaderData().strip_key;
+
+  const stripe = new Stripe(
+    stripkey,
+    { apiVersion: "2022-11-15" }
+  );
+
+  const handlepayment = async () => {
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Example Product",
+              images: [
+                "https://plus.unsplash.com/premium_photo-1684952849219-5a0d76012ed2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80",
+              ],
+            },
+            unit_amount: 50000, // Amount in cents
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: "https://your-website.com/success",
+      cancel_url: "https://your-website.com/cancel",
+    });
+    window.location.assign(session.url == null ? "" : session.url);
+  };
+
   return (
     <>
       <div className="grow bg-[#272934] p-4 w-full">
@@ -44,12 +88,12 @@ const UserDashboard = () => {
               <span className="text-white px-2">
                 Show BOLD Status Of Assessment here:
               </span>
-              Under Review
+              {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
               {/* / Unaproved/ Approved verified */}
             </p>
           </div>
           <h1 className="text-white font-medium text-lg">
-            Application id: {questiondata.certificatedId.toString().toUpperCase()}
+            Application id: {questiondata == null ? "-" : questiondata.certificatedId.toString().toUpperCase()}
           </h1>
         </div>
         <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
@@ -265,7 +309,7 @@ const UserDashboard = () => {
         </div>
 
         <div className="flex my-8 flex-wrap justify-around gap-8">
-          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4">
+          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4 cursor-pointer">
             <h1 className="text-white font-medium text-3xl text-center">
               Get your (Paid) Verified Certificate
             </h1>
@@ -273,7 +317,7 @@ const UserDashboard = () => {
               (Recommended for Commercial usage)
             </p>
           </div>
-          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4">
+          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4 cursor-pointer">
             <h1 className="text-white font-medium text-3xl text-center">
               Get your (Paid) Recommendation
             </h1>
@@ -281,7 +325,7 @@ const UserDashboard = () => {
               (Recommended for Commercial usage)
             </p>
           </div>
-          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4">
+          <div className="bg-indigo-500 rounded-md py-2 w-80 px-4 cursor-pointer">
             <h1 className="text-white font-medium text-3xl text-center">
               Publish Free
             </h1>
@@ -298,7 +342,7 @@ const UserDashboard = () => {
         </div>
 
         <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
-          Confidential
+          <span className="text-white">Certificate Status :</span>   {questiondata == null ? "-" : questiondata.certified.toString().toUpperCase()}
           {/* /Commercial if Confidence / Confidential */}
         </p>
 

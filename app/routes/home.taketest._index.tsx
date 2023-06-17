@@ -91,7 +91,7 @@ const TakeTest = () => {
           projectId: 1,
           licenseId: 1,
           totalScore: 0,
-          certificatedId: 0,
+          certificatedId: "0",
         },
       },
       headers: { authorization: `Bearer ${token}` },
@@ -117,7 +117,7 @@ const TakeTest = () => {
             projectId: 1,
             licenseId: 1,
             totalScore: 0,
-            certificatedId: 0,
+            certificatedId: "0",
           },
         },
         headers: { authorization: `Bearer ${token}` },
@@ -537,8 +537,8 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
                 });
               }}
               className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${index == selected
-                  ? "bg-green-500 bg-opacity-50"
-                  : "bg-transparent"
+                ? "bg-green-500 bg-opacity-50"
+                : "bg-transparent"
                 }`}
             >
               {value.answer}%

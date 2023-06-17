@@ -1,5 +1,5 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
@@ -23,7 +23,7 @@ export async function loader(params: LoaderArgs) {
         question,
         description,
         questionType,
-        questionPlan,
+        questioncode,
         status,
         answer{
           mark,
@@ -33,6 +33,14 @@ export async function loader(params: LoaderArgs) {
         principle{
           name,
           description,
+        },
+        questionPlan{
+          licenseType,
+          paymentAmount,
+          discountAmount,
+          questionAllowed,
+          projectPerLicense,
+          discountValidTill,
         }
       }
     }
@@ -48,6 +56,12 @@ const Compliance = () => {
   const loaderquestions = useLoaderData().questions;
   const token = useLoaderData().token;
   const [questions, setQuestions] = useState<any[]>(loaderquestions);
+
+  const navigator = useNavigate();
+
+
+  const [delBox, setDelBox] = useState<boolean>(false);
+  const [id, setId] = useState<number>(0);
 
   const updateStatus = async (id: number, status: string) => {
     const data = await ApiCall({
@@ -84,7 +98,7 @@ const Compliance = () => {
           question,
           description,
           questionType,
-          questionPlan,
+          questioncode,
           status,
           answer{
             mark,
@@ -94,6 +108,14 @@ const Compliance = () => {
           principle{
             name,
             description,
+          },
+          questionPlan{
+            licenseType,
+            paymentAmount,
+            discountAmount,
+            questionAllowed,
+            projectPerLicense,
+            discountValidTill,
           }
         }
       }
@@ -104,8 +126,57 @@ const Compliance = () => {
     setQuestions((val) => data.data.getAllQuestion);
   };
 
+
+  const deleteQuestion = async () => {
+    const data = await ApiCall({
+      query: `
+      mutation deleteQuestionById($updateQuestionbankInput:UpdateQuestionbankInput!){
+        deleteQuestionById(updateQuestionbankInput:$updateQuestionbankInput){
+          id
+        }
+      }
+      `,
+      veriables: {
+        updateQuestionbankInput: {
+          id: id,
+          deletedAt: Date.now(),
+        },
+      },
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    if (data.status) {
+      await updateQuestions();
+      toast.success("Question deleted successfully", { theme: "light" });
+      setDelBox(val => false);
+    } else {
+      toast.error(data.message, { theme: "light" });
+    }
+  };
+
+
   return (
     <>
+      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+        <div className="bg-white rounded-md p-4">
+          <h1 className="text-center text-2xl font-semibold">Delete</h1>
+          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <div className="flex w-full gap-4 mt-2">
+            <button
+              onClick={() => deleteQuestion()}
+              className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setDelBox(val => false)}
+              className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Questions</h1>
@@ -172,7 +243,6 @@ const Compliance = () => {
                     );
                   })}
                   <div className="w-full h-[2px] bg-gray-300 my-2"></div>
-
                   <p className="text-gray-200 font-semibold text-2lx mt-2">
                     {val.principle.name}
                   </p>
@@ -181,11 +251,49 @@ const Compliance = () => {
                   </p>
                   <div className="w-full h-[2px] bg-gray-300 my-2"></div>
                   <p className="text-gray-200 text-2lx mt-2">
-                    Question Plan: {val.questionPlan}
-                  </p>
-                  <p className="text-gray-200 text-2lx mt-2">
                     Question Type: {val.questionType}
                   </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    Question code: {val.questioncode.toString().toUpperCase()}
+                  </p>
+                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
+
+                  <p className="text-gray-200 text-2lx mt-2">
+                    License Type: {val.questionPlan.licenseType}
+                  </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    License Payment Amount: {val.questionPlan.paymentAmount}
+                  </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    Discount Amount: {val.questionPlan.discountAmount}
+                  </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    Question Allowed: {val.questionPlan.questionAllowed}
+                  </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    Project/License: {val.questionPlan.projectPerLicense}
+                  </p>
+                  <p className="text-gray-200 text-2lx mt-2">
+                    Discount Valid Till: {new Date(val.questionPlan.discountValidTill).toDateString()}
+                  </p>
+                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
+                  <p className="text-gray-200 font-semibold text-md text-center w-96">
+                    Action
+                  </p>
+                  <div className="flex gap-4 mt-2 w-96">
+                    <button
+                      onClick={() => { setId(val.id); setDelBox(val => true); }}
+                      className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => navigator(`/home/editquestion/${val.id}`)}
+                      className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
               );
             })
