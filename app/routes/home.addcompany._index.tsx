@@ -37,7 +37,11 @@ const AddComapany: React.FC = (): JSX.Element => {
             (value!.target.files![0].size / 1024 / 1024).toString()
         );
         if (file_size < 4) {
-            setLogo((val) => value!.target.files![0]);
+            if (value!.target.files![0].type.startsWith("image/")) {
+                setLogo((val) => value!.target.files![0]);
+            } else {
+                toast.error("Please select an image file.", { theme: "light" });
+            }
         } else {
             toast.error("Image file size must be less then 4 mb", { theme: "light" });
         }
@@ -47,14 +51,14 @@ const AddComapany: React.FC = (): JSX.Element => {
 
         if (logo == null) return toast.error("Select company Logo", { theme: "light" });;
 
+        const MAX_FILE_SIZE = 500000;
+        const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
         const CompanyScheme = z
             .object({
                 name: z
                     .string()
                     .nonempty("Company Name is required."),
-                logo: z
-                    .string()
-                    .nonempty("Logo is required."),
                 website: z
                     .string()
                     .nonempty("Website Url is required."),
@@ -62,6 +66,9 @@ const AddComapany: React.FC = (): JSX.Element => {
                     .string()
                     .nonempty("Email is required.")
                     .email("Enter a valid email."),
+                logo: z
+                    .string()
+                    .nonempty("Please select an image."),
                 ctoContact: z
                     .number({ required_error: "Contact Number is required.", invalid_type_error: "Enter a valid number." })
                     .min(10, "Contact Number should be minmum 10 digit"),
@@ -71,24 +78,31 @@ const AddComapany: React.FC = (): JSX.Element => {
                 description: z
                     .string()
                     .nonempty("Company Description is required"),
+                // image: z
+                //     .any()
+                //     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+                //     .refine(
+                //         (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+                //         "Only .jpg, .jpeg, .png and .webp formats are supported."
+                //     )
             })
             .strict();
 
         type CompanyScheme = z.infer<typeof CompanyScheme>;
+
         const companyScheme: CompanyScheme = {
             name: cName!.current!.value,
-            logo: URL.createObjectURL(logo!),
             website: cWebsite!.current!.value,
             email: cEmail!.current!.value,
             ctoContact: Number(cNumber!.current!.value),
             description: cDesciption!.current!.value,
             address: cAddress!.current!.value,
+            logo: URL.createObjectURL(logo)
+            // image: logo
         };
-
 
         const parsed = CompanyScheme.safeParse(companyScheme);
         if (parsed.success) {
-
             const data = await ApiCall({
                 query: `
                 mutation createCompany($createCompanyInput:CreateCompanyInput!){
@@ -96,12 +110,13 @@ const AddComapany: React.FC = (): JSX.Element => {
                       id
                     }
                   }
-              `,
+                `,
                 veriables: {
                     createCompanyInput: companyScheme
                 },
                 headers: { authorization: `Bearer ${token}` },
             });
+
 
             if (!data.status) {
                 toast.error(data.message, { theme: "light" });
@@ -114,11 +129,8 @@ const AddComapany: React.FC = (): JSX.Element => {
     return (
         <>
             <div className="grow w-full bg-[#272934] p-4  ">
-
                 <h1 className="text-white font-medium text-2xl">Add New Company</h1>
                 <div className="bg-gray-400 w-full h-[2px] my-2"></div>
-
-
                 <h2 className="text-white font-semibold text-md">
                     <span className="text-green-500 pr-2">&#x2666;</span>
                     Logo
