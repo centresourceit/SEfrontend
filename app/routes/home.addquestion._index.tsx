@@ -80,7 +80,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
         }
     ]);
     const addAnserField = () => {
-
         if (qType.current?.value == "0") return toast.error("First select the question type.", { theme: "light" });
         if (answers.length > 10) toast.error("You already created max now on answer.", { theme: "light" });
         if (qType.current?.value == "TANDF") {
@@ -134,7 +133,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
     };
 
     const addQuestion = async () => {
-
         const AnswerScheme = z.object({
             answer: z
                 .string()
@@ -227,124 +225,132 @@ const AddQuestion: React.FC = (): JSX.Element => {
         else { toast.error(parsed.error.errors[0].message, { theme: "light" }); }
     };
 
-    return (<>
-        <div className="grow w-full bg-[#272934] p-4  ">
-            <h1 className="text-white font-medium text-2xl">Add New Question</h1>
-            <div className="bg-gray-400 w-full h-[2px] my-2"></div>
-
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Selete Principle
-            </h2>
-            <select ref={qPrinciple} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Principle</option>
-                {principels.map((val: any, index: number) => {
-                    return (
-                        <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.name}</option>
-                    );
-                })}
-            </select>
-
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Question Type
-            </h2>
-
-            <select ref={qType} onChange={(e) => handelTypeChange(e)} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question Type</option>
-                <option className="bg-[#272934] text-white text-lg" value="MCQ">MCQ</option>
-                <option className="bg-[#272934] text-white text-lg" value="SLIDER">SLIDER</option>
-                <option className="bg-[#272934] text-white text-lg" value="TANDF">TANDF</option>
-                <option className="bg-[#272934] text-white text-lg" value="PERCENTAGE">PERCENTAGE</option>
-            </select>
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Question Plan
-            </h2>
-            <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question License Plan</option>
+    return (
+        <>
+            <div className="grow w-full bg-[#272934] p-4  ">
+                <h1 className="text-white font-medium text-2xl">Add New Question</h1>
+                <div className="bg-gray-400 w-full h-[2px] my-2"></div>
                 {
-                    licenses.map((val: any, index: number) => {
-                        return (
-                            <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.licenseType}</option>
-                        );
-                    })
+                    licenses == null || licenses == undefined ?
+                        <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
+                            There is no licenses. Create question in order to create question.
+                        </p>
+                        : principels == null || principels == undefined ?
+                            <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
+                                There is no principles. Create question in order to create principle.
+                            </p> :
+                            <>
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Selete Principle
+                                </h2>
+                                <select ref={qPrinciple} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                    <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Principle</option>
+                                    {principels.map((val: any, index: number) => {
+                                        return (
+                                            <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.name}</option>
+                                        );
+                                    })}
+                                </select>
+
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question Type
+                                </h2>
+
+                                <select ref={qType} onChange={(e) => handelTypeChange(e)} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                    <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question Type</option>
+                                    <option className="bg-[#272934] text-white text-lg" value="MCQ">MCQ</option>
+                                    <option className="bg-[#272934] text-white text-lg" value="SLIDER">SLIDER</option>
+                                    <option className="bg-[#272934] text-white text-lg" value="TANDF">TANDF</option>
+                                    <option className="bg-[#272934] text-white text-lg" value="PERCENTAGE">PERCENTAGE</option>
+                                </select>
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question Plan
+                                </h2>
+                                <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                    <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question License Plan</option>
+                                    {
+                                        licenses.map((val: any, index: number) => {
+                                            return (
+                                                <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.licenseType}</option>
+                                            );
+                                        })
+                                    }
+                                </select>
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question
+                                </h2>
+                                <input
+                                    ref={question}
+                                    className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                                    placeholder="Enter Question"
+                                />
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question Description
+                                </h2>
+                                <textarea
+                                    ref={qDescription}
+                                    className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300 resize-none h-28"
+                                    placeholder="Enter Question Description"
+                                ></textarea>
+
+                                <div>
+                                    <button
+                                        onClick={addAnserField}
+                                        className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded mt-4"
+                                    >
+                                        Add New Answer Field
+                                    </button>
+                                </div>
+
+                                {answers.map((val: { answer: string; mark: number | string; rec: string; }, index: number) => <div key={index} className="p-4 bg-[#1f2129] my-4 bg-opacity-80 rounded-mds">
+                                    <h2 className="text-white font-semibold text-md">
+                                        <span className="text-green-500 pr-2">&#x2666;</span>
+                                        Answer {index + 1}
+                                    </h2>
+                                    <div>
+                                        <input
+                                            value={val.answer}
+                                            onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                            className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                                            placeholder="Enter Answer"
+                                        />
+                                    </div>
+                                    <div>
+                                        <input
+                                            value={val.mark}
+                                            onChange={(e) => handleMarkChange(index, e.target.value)}
+                                            className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                                            placeholder="Enter Mark"
+                                        />
+                                    </div>
+                                    <div>
+                                        <input
+                                            value={val.rec}
+                                            onChange={(e) => handleRecChange(index, e.target.value)}
+                                            className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                                            placeholder="Enter recommendation"
+                                        />
+                                    </div>
+
+                                </div>)}
+                                <div>
+                                    <button
+                                        onClick={addQuestion}
+                                        className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded mt-4"
+                                    >
+                                        SUBMIT
+                                    </button>
+                                </div>
+                            </>
                 }
-            </select>
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Question
-            </h2>
-            <input
-                ref={question}
-                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
-                placeholder="Enter Question"
-            />
-            <h2 className="text-white font-semibold text-md">
-                <span className="text-green-500 pr-2">&#x2666;</span>
-                Question Description
-            </h2>
-            <textarea
-                ref={qDescription}
-                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300 resize-none h-28"
-                placeholder="Enter Question Description"
-            ></textarea>
-
-            <div>
-                <button
-                    onClick={addAnserField}
-                    className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded mt-4"
-                >
-                    Add New Answer Field
-                </button>
             </div>
-
-            {answers.map((val: { answer: string; mark: number | string; rec: string; }, index: number) => <div key={index} className="p-4 bg-[#1f2129] my-4 bg-opacity-80 rounded-mds">
-                <h2 className="text-white font-semibold text-md">
-                    <span className="text-green-500 pr-2">&#x2666;</span>
-                    Answer {index + 1}
-                </h2>
-                <div>
-                    <input
-                        value={val.answer}
-                        onChange={(e) => handleAnswerChange(index, e.target.value)}
-                        className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
-                        placeholder="Enter Answer"
-                    />
-                </div>
-                <div>
-                    <input
-                        value={val.mark}
-                        onChange={(e) => handleMarkChange(index, e.target.value)}
-                        className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
-                        placeholder="Enter Mark"
-                    />
-                </div>
-                <div>
-                    <input
-                        value={val.rec}
-                        onChange={(e) => handleRecChange(index, e.target.value)}
-                        className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
-                        placeholder="Enter recommendation"
-                    />
-                </div>
-            </div>)}
-
-
-
-
-
-            <div>
-                <button
-                    onClick={addQuestion}
-                    className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded mt-4"
-                >
-                    SUBMIT
-                </button>
-            </div>
-        </div>
-        <ToastContainer></ToastContainer>
-    </>);
+            <ToastContainer></ToastContainer>
+        </>);
 }
 
 export default AddQuestion;

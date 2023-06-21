@@ -93,7 +93,7 @@ export default function Login(): JSX.Element {
                 type="text"
                 ref={emaliRef}
                 placeholder="Email"
-                className="bg-transparent outline-none border-none fill-none text-white py-2"
+                className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
               />
             </div>
             <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
@@ -104,7 +104,7 @@ export default function Login(): JSX.Element {
                 ref={passRef}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="bg-transparent outline-none border-none fill-none text-white py-2"
+                className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
               />
             </div>
             <button

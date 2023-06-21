@@ -46,7 +46,7 @@ export default function Register(): JSX.Element {
         password: z
           .string()
           .nonempty("Password is required")
-          .min(8, "Password should be have atlest 8 character.")
+          .min(8, "Password should be have atleast 8 character.")
           .regex(
             /[A-Z]/,
             "Password should be contain atleast one Capital letter."
@@ -55,30 +55,30 @@ export default function Register(): JSX.Element {
             /[a-z]/,
             "Password should be contain atleast one lower letter."
           )
-          .regex(/\d/, "Password should be contain atleast one degit letter.")
+          .regex(/\d/, "Password should be contain atleast one digit letter.")
           .regex(
             /[@$!%*?&]/,
-            "Password should be contain atleast one specil character [@$!%*?&]."
+            "Password should be contain atleast one special character [@$!%*?&]."
           ),
         repassword: z
           .string()
           .nonempty("Re-Password is required")
-          .min(8, "Re-Password should be have atlest 8 character.")
+          .min(8, "Re-Password should be have atleast 8 character.")
           .regex(
             /[A-Z]/,
             "Re-Password should be contain atleast one Capital letter."
           )
           .regex(
             /[a-z]/,
-            "Re-Password should be contain atleast one lower letter."
+            "Re-Password should be contain atleast one lower case letter."
           )
           .regex(
             /\d/,
-            "Re-Password should be contain atleast one degit letter."
+            "Re-Password should be contain atleast one digit letter."
           )
           .regex(
             /[@$!%*?&]/,
-            "Re-Password should be contain atleast one specil character [@$!%*?&]."
+            "Re-Password should be contain atleast one special character [@$!%*?&]."
           ),
       })
       .strict()
@@ -153,7 +153,7 @@ export default function Register(): JSX.Element {
                 ref={emaliRef}
                 type="text"
                 placeholder="Email"
-                className="bg-transparent outline-none border-none fill-none text-white py-2"
+                className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
               />
             </div>
             <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
@@ -167,7 +167,7 @@ export default function Register(): JSX.Element {
                 ref={passRef}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="bg-transparent outline-none border-none fill-none text-white py-2"
+                className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
               />
             </div>
             <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
@@ -181,7 +181,7 @@ export default function Register(): JSX.Element {
                 ref={rePassRef}
                 type={showRePassword ? "text" : "password"}
                 placeholder="Re-Password"
-                className="bg-transparent outline-none border-none fill-none text-white py-2"
+                className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
               />
             </div>
             <button

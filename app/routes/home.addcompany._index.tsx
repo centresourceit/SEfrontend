@@ -78,13 +78,13 @@ const AddComapany: React.FC = (): JSX.Element => {
                 description: z
                     .string()
                     .nonempty("Company Description is required"),
-                // image: z
-                //     .any()
-                //     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-                //     .refine(
-                //         (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-                //         "Only .jpg, .jpeg, .png and .webp formats are supported."
-                //     )
+                image: z
+                    .any()
+                    // .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+                    // .refine(
+                    //     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+                    //     "Only .jpg, .jpeg, .png and .webp formats are supported."
+                    // )
             })
             .strict();
 
@@ -101,6 +101,7 @@ const AddComapany: React.FC = (): JSX.Element => {
             // image: logo
         };
 
+
         const parsed = CompanyScheme.safeParse(companyScheme);
         if (parsed.success) {
             const data = await ApiCall({
@@ -112,7 +113,7 @@ const AddComapany: React.FC = (): JSX.Element => {
                   }
                 `,
                 veriables: {
-                    createCompanyInput: companyScheme
+                    createCompanyInput: companyScheme,
                 },
                 headers: { authorization: `Bearer ${token}` },
             });
