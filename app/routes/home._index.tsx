@@ -302,7 +302,7 @@ const UserDashboard = () => {
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-2xl text-center">
-                    {error ? "-" : (totalScore / 10) / quelen}/10
+                    {error ? "-" : ((totalScore / 10) / quelen).toFixed(2)}/10
                   </p>
                 </td>
                 <td>

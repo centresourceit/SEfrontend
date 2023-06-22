@@ -51,7 +51,7 @@ const ResultStatus = () => {
               <div className="rounded-full bg-[#865fe5] grid place-items-center shrink-0 w-80 h-80">
                 <div>
                   <p className="text-white font-bold text-7xl text-center">
-                    {(Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length}/10
+                    {((Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length).toFixed(2)}/10
                     {/* 3.1<span className="text-3xl font-normal">/5</span> */}
                   </p>
                   <p className="text-white font-bold text-3xl text-center">
