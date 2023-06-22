@@ -5,7 +5,6 @@ import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
-import isbot from "isbot";
 import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidStar, Fa6SolidUser, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
 import { ApiCall } from "~/services/api";
 
@@ -40,6 +39,7 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
 };
 
 const DashBoard = () => {
+
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   const asideindex = sideBarStore((state) => state.currentIndex);
@@ -49,15 +49,16 @@ const DashBoard = () => {
   const username = useLoaderData().username;
 
   const navigator = useNavigate();
+
   const init = () => {
-    // if (isAdmin) {
-    //   achangeindex(SideBarTabs.User);
-    //   navigator("/home/user");
-    // } else {
-    //   if (asideindex === SideBarTabs.None) {
-    //     navigator("/home");
-    //   }
-    // }
+    if (isAdmin) {
+      achangeindex(SideBarTabs.User);
+      navigator("/home/user");
+    } else {
+      if (asideindex === SideBarTabs.None) {
+        navigator("/home");
+      }
+    }
   };
   useEffect(() => {
     init();

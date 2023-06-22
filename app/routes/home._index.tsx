@@ -7,8 +7,7 @@ import { ApiCall } from "~/services/api";
 
 
 import Stripe from "stripe";
-
-
+import { useEffect, useState } from "react";
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
@@ -22,13 +21,20 @@ export async function loader(params: LoaderArgs) {
         certificatedId,
         resultStatus,
         totalScore,
-        certified
+        certified,
+        assesement{
+          result{
+            question,
+            status
+          }
+        }
       },
     }
   `,
     veriables: {},
     headers: { authorization: `Bearer ${cookie.token}` },
   });
+
   return json({
     question: data.data.getAllResults,
     token: cookie.token,
@@ -39,7 +45,30 @@ export async function loader(params: LoaderArgs) {
 
 const UserDashboard = () => {
   const userId = useLoaderData().userId;
-  const questiondata = useLoaderData().question != undefined ? useLoaderData().question.length > 0 ? useLoaderData().question.pop() : null : null;
+  const que = useLoaderData().question;
+  const questiondata = que != undefined ? que.length > 0 ? que.pop() : null : null;
+
+  const [totalScore, setTotalScore] = useState<number>(0);
+  const [quelen, setQuelen] = useState<number>(0);
+  const [error, setError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (questiondata.totalScore == null || questiondata.totalScore == undefined) {
+      setError(true);
+    } else {
+      setTotalScore(questiondata.totalScore);
+    }
+
+    if (questiondata.assesement == null || questiondata.assesement == undefined) {
+      setError(true);
+    } else {
+      setQuelen(questiondata.assesement.result.length);
+    }
+  }, []);
+
+
+
+
 
   const stripkey = useLoaderData().strip_key;
 
@@ -73,6 +102,7 @@ const UserDashboard = () => {
     });
     window.location.assign(session.url == null ? "" : session.url);
   };
+
 
   return (
     <>
@@ -163,18 +193,18 @@ const UserDashboard = () => {
                   </p>
                 </td>
                 <td>
-                  <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                  <p className="text-yellow-500 font-semibold text-3xl text-center">
+                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
               </tr>
@@ -185,18 +215,18 @@ const UserDashboard = () => {
                   </p>
                 </td>
                 <td>
-                  <p className="text-rose-500 font-semibold text-3xl text-center">
-                    Not Met
-                  </p>
-                </td>
-                <td>
                   <p className="text-yellow-500 font-semibold text-3xl text-center">
-                    Review
+                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
+                  </p>
+                </td>
+                <td>
+                  <p className="text-green-500 font-semibold text-3xl text-center">
+                    -
                   </p>
                 </td>
               </tr>
@@ -207,18 +237,18 @@ const UserDashboard = () => {
                   </p>
                 </td>
                 <td>
-                  <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                  <p className="text-yellow-500 font-semibold text-3xl text-center">
+                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                  </p>
+                </td>
+                <td>
+                  <p className="text-yellow-500 font-semibold text-3xl text-center">
+                    -
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
               </tr>
@@ -230,17 +260,17 @@ const UserDashboard = () => {
                 </td>
                 <td>
                   <p className="text-yellow-500 font-semibold text-3xl text-center">
-                    Review
+                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
               </tr>
@@ -251,18 +281,18 @@ const UserDashboard = () => {
                   </p>
                 </td>
                 <td>
-                  <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                  <p className="text-yellow-500 font-semibold text-3xl text-center">
+                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-3xl text-center">
-                    Met
+                    -
                   </p>
                 </td>
               </tr>
@@ -272,17 +302,17 @@ const UserDashboard = () => {
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-2xl text-center">
-                    3.1/5
+                    {error ? "-" : (totalScore / 10) / quelen}/10
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-2xl text-center">
-                    4.1/5
+                    -/10
                   </p>
                 </td>
                 <td>
                   <p className="text-green-500 font-semibold text-2xl text-center">
-                    4.6/5
+                    -/10
                   </p>
                 </td>
               </tr>
@@ -311,7 +341,7 @@ const UserDashboard = () => {
         <div className="flex my-8 flex-wrap justify-around gap-8">
           <div className="bg-indigo-500 rounded-md py-2 w-80 px-4 cursor-pointer">
             <h1 className="text-white font-medium text-3xl text-center">
-              Get your (Paid) Verified Certificate
+              Get your Verified Certificate
             </h1>
             <p className="text-center text-gray-200 mt-2">
               (Recommended for Commercial usage)
@@ -319,7 +349,7 @@ const UserDashboard = () => {
           </div>
           <div className="bg-indigo-500 rounded-md py-2 w-80 px-4 cursor-pointer">
             <h1 className="text-white font-medium text-3xl text-center">
-              Get your (Paid) Recommendation
+              Get Recommendation
             </h1>
             <p className="text-center text-gray-200 mt-2">
               (Recommended for Commercial usage)
@@ -330,7 +360,7 @@ const UserDashboard = () => {
               Publish Free
             </h1>
             <p className="text-center text-gray-200 mt-2">
-              (for reserch and design conceptualisation)
+              (For research and design conceptualisation)
             </p>
           </div>
         </div>

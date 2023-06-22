@@ -85,7 +85,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
 
 
     useEffect(() => {
-        console.log(fatchquestion);
         question!.current!.value = fatchquestion.question;
         qDescription!.current!.value = fatchquestion.description;
         qPlan!.current!.value = fatchquestion.questionPlan.id;

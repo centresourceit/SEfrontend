@@ -13,7 +13,13 @@ export async function loader(params: LoaderArgs) {
       getAllResults{
         id,
         certificatedId,
-        totalScore
+        totalScore,
+        assesement{
+          result{
+            question,
+            status
+          }
+        }
       },
     }
   `,
@@ -45,7 +51,7 @@ const ResultStatus = () => {
               <div className="rounded-full bg-[#865fe5] grid place-items-center shrink-0 w-80 h-80">
                 <div>
                   <p className="text-white font-bold text-7xl text-center">
-                    {questiondata.totalScore}
+                    {(Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length}/10
                     {/* 3.1<span className="text-3xl font-normal">/5</span> */}
                   </p>
                   <p className="text-white font-bold text-3xl text-center">
@@ -94,7 +100,7 @@ const ResultStatus = () => {
                   Start Again
                 </Link>
                 <h1 className="text-[#865fe5] font-medium text-2xl my-4">
-                  Want to imporove your Score?
+                  Want to improve your Score?
                 </h1>
                 <div className="bg-white bg-opacity-10 py-2 px-4 pb-6">
                   <h1 className="text-[#865fe5] font-medium text-2xl my-2 text-center">

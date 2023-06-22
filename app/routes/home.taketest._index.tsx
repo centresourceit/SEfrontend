@@ -162,7 +162,7 @@ const TakeTest = () => {
     });
 
     if (datau.status) {
-      navigator("/home/result");
+      navigator("/home/resultstatus");
     } else {
       let totalScore = 0;
       answers.forEach((ans) => {
@@ -192,7 +192,7 @@ const TakeTest = () => {
         headers: { authorization: `Bearer ${token}` },
       });
       if (data.status) {
-        navigator("/home/result");
+        navigator("/home/resultstatus");
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -549,3 +549,6 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
     </>
   );
 };
+
+
+export { MCQQuestions, SliderQuestions, PercentQuestions };
