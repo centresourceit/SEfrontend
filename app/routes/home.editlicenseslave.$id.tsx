@@ -180,7 +180,7 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
 
 
     return (<>
-        <div className="grow w-full bg-[#272934] p-4  ">
+        <div className="grow w-full  p-4  ">
             <h1 className="text-white font-medium text-2xl">Edit License Slave</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
             <h2 className="text-white font-semibold text-md">
@@ -189,11 +189,11 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
             </h2>
 
             <select ref={lType} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select License Type</option>
+                <option value="0" className=" text-white text-lg " disabled>Select License Type</option>
                 {
                     licenses.map((val: any, index: number) => {
                         return (
-                            <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.licenseType}</option>
+                            <option key={index} className=" text-white text-lg" value={val.id}>{val.licenseType}</option>
                         );
                     })
                 }
@@ -204,11 +204,11 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
                 License User
             </h2>
             <select ref={lUser} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select License User</option>
+                <option value="0" className=" text-white text-lg " disabled>Select License User</option>
                 {
                     users.map((val: any, index: number) => {
                         return (
-                            <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.name}</option>
+                            <option key={index} className=" text-white text-lg" value={val.id}>{val.name}</option>
                         );
                     })
                 }
@@ -231,9 +231,9 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
                 License Status
             </h2>
             <select ref={paymentStatus} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select License Status</option>
-                <option className="bg-[#272934] text-white text-lg" value="ACTIVE">ACTIVE</option>
-                <option className="bg-[#272934] text-white text-lg" value="INACTIVE">INACTIVE</option>
+                <option value="0" className=" text-white text-lg " disabled>Select License Status</option>
+                <option className=" text-white text-lg" value="ACTIVE">ACTIVE</option>
+                <option className=" text-white text-lg" value="INACTIVE">INACTIVE</option>
             </select>
 
 

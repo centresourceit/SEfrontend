@@ -89,7 +89,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
         qDescription!.current!.value = fatchquestion.description;
         qPlan!.current!.value = fatchquestion.questionPlan.id;
         setAnswers(val => fatchquestion.answer);
-    }, [])
+    }, []);
 
     const [answers, setAnswers] = useState<{ answer: string; mark: number; rec: string; }[]>([
         {
@@ -242,7 +242,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
     };
 
     return (<>
-        <div className="grow w-full bg-[#272934] p-4  ">
+        <div className="grow w-full  p-4  ">
             <h1 className="text-white font-medium text-2xl">Add New Question</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
 
@@ -252,11 +252,11 @@ const AddQuestion: React.FC = (): JSX.Element => {
             </h2>
 
             <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select Question Plan</option>
+                <option value="0" className=" text-white text-lg " disabled>Select Question Plan</option>
                 {
                     licenses.map((val: any, index: number) => {
                         return (
-                            <option key={index} className="bg-[#272934] text-white text-lg" value={val.id}>{val.licenseType}</option>
+                            <option key={index} className=" text-white text-lg" value={val.id}>{val.licenseType}</option>
                         );
                     })
                 }
@@ -289,7 +289,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
                 </button>
             </div>
 
-            {answers.map((val: { answer: string; mark: number | string; rec: string; }, index: number) => <div key={index} className="p-4 bg-[#1f2129] my-4 bg-opacity-80 rounded-mds">
+            {answers.map((val: { answer: string; mark: number | string; rec: string; }, index: number) => <div key={index} className="p-4 bg-primary-800 my-4 bg-opacity-80 rounded-mds">
                 <h2 className="text-white font-semibold text-md">
                     <span className="text-green-500 pr-2">&#x2666;</span>
                     Answer {index + 1}

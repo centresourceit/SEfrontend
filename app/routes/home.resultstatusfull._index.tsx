@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Colors,
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
@@ -27,14 +28,14 @@ const ResultStatus = () => {
         borderWidth: 2,
       },
     },
-    scaleFontColor: "#FFFFFF",
+    // scaleFontColor: "#FFFFFF",
     responsive: true,
     plugins: {
       legend: {
         display: false,
       },
       labels: {
-        color: "red",
+        color: "white",
       },
       title: {
         display: false,
@@ -120,9 +121,9 @@ const ResultStatus = () => {
     "Accountable Re-design",
   ];
   return (
-    <div className="grow bg-[#272934] p-4 w-full">
-      <h1 className="text-white font-medium text-xl">Result Stauts</h1>
-      <div className="w-full bg-slate-400 h-[1px] my-2"></div>
+    <div className="grow  p-4 w-full">
+      <h1 className="text-secondary font-medium text-2xl">Result Stauts</h1>
+      <div className="w-full bg-secondary h-[1px] my-2"></div>
       <div className="flex w-full flex-col md:flex-row justify-between my-5 gap-y-8 flex-wrap">
         <div className="grow  flex flex-col lg:flex-row gap-6">
           <div className="grow shrink-0">
@@ -169,14 +170,14 @@ const ResultStatus = () => {
         </div>
         {labels.map((val: any, index: number) => (
           <div className="grid place-items-center" key={index}>
-            <div className="bg-white rounded-lg p-4">
+            <div className="bg-primary-800 rounded-lg p-4">
               <div className="flex gap-x-2">
                 <img src="/images/brand/task.png" alt="task" className="w-14" />
                 <div>
-                  <h2 className="text-gray-600 font-medium text-sm">
+                  <h2 className="text-white font-medium text-sm">
                     Principle {index + 1}
                   </h2>
-                  <h2 className="text-[#865fe5] font-medium text-xl">
+                  <h2 className="text-secondary font-medium text-xl">
                     {titles[index]}
                   </h2>
                 </div>

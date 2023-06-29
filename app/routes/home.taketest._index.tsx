@@ -201,7 +201,7 @@ const TakeTest = () => {
 
   return (
     <>
-      <div className="grow bg-[#272934] p-4 w-full">
+      <div className="grow  p-4 w-full">
         <h1 className="text-white font-medium text-4xl">Take Test</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex flex-wrap items-center mt-4">
@@ -210,7 +210,7 @@ const TakeTest = () => {
           </h1>
           <div className="grow"></div>
           <p className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500">
-            Approx time to complete: {quecount * 2} Minutes
+            Approx time to complete: {quecount} Minutes
           </p>
         </div>
         {questions == null || questions == undefined ? (
@@ -320,7 +320,7 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-white font-medium text-3xl mb-2">
+        <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
         <h4 className="text-white font-medium text-xl mb-2">
@@ -376,7 +376,7 @@ const TFQuestions: React.FC<TFQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-white font-medium text-3xl mb-2">
+        <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
         <h4 className="text-white font-medium text-xl mb-2">
@@ -440,7 +440,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-white font-medium text-xl mb-2">
+        <h2 className="text-secondary font-medium text-xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
         <h4 className="text-white font-medium text-3xl mb-2">
@@ -472,7 +472,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
             {props.Options[value].answer}
           </p>
         </div>
-        <div className="flex gap-4 justify-between bg-[#272934] rounded-md px-4 py-2">
+        <div className="flex gap-4 justify-between  rounded-md px-4 py-2">
           {props.Options.map((val: any, index: number) => {
             return (
               <div key={index}>
@@ -511,7 +511,7 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-white font-medium text-3xl mb-2">
+        <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
         <h4 className="text-white font-medium text-xl mb-2">

@@ -34,9 +34,9 @@ const ResultStatus = () => {
   const questiondata = useLoaderData().question != undefined ? useLoaderData().question.length > 0 ? useLoaderData().question.pop() : null : null;
 
   return (
-    <div className="grow bg-[#272934] p-4 w-full">
-      <h1 className="text-white font-medium text-xl">Result Status</h1>
-      <div className="w-full bg-slate-400 h-[1px] my-2"></div>
+    <div className="grow  p-4 w-full">
+      <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
+      <div className="w-full bg-secondary h-[1px] my-2"></div>
 
       {questiondata == null ?
         <h1 className="text-white font-medium text-2xl my-4">
@@ -52,7 +52,6 @@ const ResultStatus = () => {
                 <div>
                   <p className="text-white font-bold text-7xl text-center">
                     {((Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length).toFixed(2)}/10
-                    {/* 3.1<span className="text-3xl font-normal">/5</span> */}
                   </p>
                   <p className="text-white font-bold text-3xl text-center">
                     Your Score
@@ -63,13 +62,13 @@ const ResultStatus = () => {
                 <p className="text-white text-md font-bold">
                   Thank you for submitting your assessment.
                 </p>
-                <p className="text-[#865fe5] font-medium text-2xl">
+                <p className="text-secondary font-medium text-2xl">
                   Here is your trust Score
                 </p>
                 <p className="text-white text-md my-6">
                   Here is your Unique ID. Use your unique to see your result again
                 </p>
-                <p className="text-[#865fe5] font-medium text-3xl">{questiondata.certificatedId.toString().toUpperCase()}</p>
+                <p className="text-secondary font-medium text-3xl">{questiondata.certificatedId.toString().toUpperCase()}</p>
                 <div className="flex gap-4 my-4">
                   <Link to={"/home/taketest/"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                     Start Again
@@ -99,11 +98,11 @@ const ResultStatus = () => {
                 <Link to={"/home/taketest/"} className="bg-[#865fe5] text-2xl font-semibold py-2 px-4 text-white">
                   Start Again
                 </Link>
-                <h1 className="text-[#865fe5] font-medium text-2xl my-4">
+                <h1 className="text-secondary font-medium text-2xl my-4">
                   Want to improve your Score?
                 </h1>
                 <div className="bg-white bg-opacity-10 py-2 px-4 pb-6">
-                  <h1 className="text-[#865fe5] font-medium text-2xl my-2 text-center">
+                  <h1 className="text-secondary font-medium text-2xl my-2 text-center">
                     Get your (Paid)
                     <br />
                     Recommendation
@@ -114,6 +113,11 @@ const ResultStatus = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="w-full flex gap-6 my-6">
+            <div className="grow bg-gray-500 h-[2px]"></div>
+            <div className="w-10 bg-gray-300 h-[4px]"></div>
+            <div className="grow bg-gray-500 h-[2px]"></div>
           </div>
           <p className="text-3xl text-white font-semibold">
             Congratulations! Great Start! Try the full version to see if are aligned

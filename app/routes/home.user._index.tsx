@@ -1,7 +1,6 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import axios from "axios";
-import React, { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 import { ToastContainer, toast } from "react-toastify";
@@ -123,7 +122,6 @@ const UserDashboard = () => {
     }
   };
 
-
   return (
     <>
       <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
@@ -146,7 +144,7 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
-      <div className="grow bg-[#272934] p-4 w-full">
+      <div className="grow  p-4 w-full">
         <h1 className="text-white font-medium text-2xl">User</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-6 flex-wrap my-6">
@@ -159,7 +157,7 @@ const UserDashboard = () => {
           ) :
             user.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-[#31353f] w-80 p-4 flex flex-col">
+                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
                   <div className="flex gap-2">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">

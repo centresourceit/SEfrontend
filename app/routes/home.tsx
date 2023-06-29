@@ -72,7 +72,7 @@ const DashBoard = () => {
       <section className="h-screen w-full relative">
         <div className="flex min-h-screen relative flex-nowrap w-full">
           <div
-            className={`z-50 w-full md:w-60 bg-[#1f2129] p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${isMobile ? "grid place-items-center" : "hidden"
+            className={`z-50 w-full md:w-60 bg-primary-800 p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${isMobile ? "grid place-items-center" : "hidden"
               }`}
           >
             <div className="md:flex flex-col md:h-full">
@@ -250,13 +250,17 @@ const DashBoard = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col grow">
-            <TopNavBar
-              name={username}
-              pic={"/images/avatar/user.jpg"}
-            ></TopNavBar>
+          <div className="flex flex-col grow bg-primary-700">
+            <div className="p-2">
+              <TopNavBar
+                name={username}
+                pic={"/images/avatar/user.jpg"}
+              ></TopNavBar>
+            </div>
             <Outlet></Outlet>
-            <Footer></Footer>
+            <div className="p-2">
+              <Footer></Footer>
+            </div>
           </div>
         </div>
       </section>
@@ -274,9 +278,9 @@ type SideBarTabProps = {
 const SidebarTab = (props: SideBarTabProps) => {
   return (
     <div
-      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-sm cursor-pointer ${props.active
-        ? "border border-green-400 g-green-500 bg-opacity-10 text-green-500 "
-        : "text-gray-300 hover:bg-white hover:bg-opacity-10"
+      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-xl cursor-pointer ${props.active
+        ? "border border-secondary bg-secondary bg-opacity-10 text-secondary"
+        : "text-secondary hover:bg-secondary hover:text-white hover:bg-opacity-25"
         }`}
     >
       <props.icon></props.icon>
@@ -294,41 +298,25 @@ const TopNavBar = (props: TopNavBarProps) => {
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   return (
-    <div className="bg-[#1f2129]  text-xl w-full text-center text-white py-2 font-medium flex px-2 gap-4">
+    <div className="bg-primary-800  text-2xl w-full text-center text-white p-4 font-medium flex gap-4 rounded-md">
       <div className="px md:hidden" onClick={() => changeMobile(!isMobile)}>
-        {/* on change will be here */}
         <Fa6SolidBars></Fa6SolidBars>
       </div>
       <div className="px hidden md:block">
         <Fa6SolidHouse></Fa6SolidHouse>
-        {/* <FontAwesomeIcon icon={faHome}></FontAwesomeIcon> */}
       </div>
       <div className="text-center hidden md:block">Home</div>
       <div className="grow"></div>
-      {/* <div className="bg-[#31353f] hidden sm:flex rounded-md px-2 gap-2 content-center align-middle items-center text-sm ">
-                <FontAwesomeIcon
-                    className="text-gray-300"
-                    icon={faSearch}
-                ></FontAwesomeIcon>
-                <input
-                    type="text"
-                    className="bg-transparent outline-none placeholder:text-gray-300"
-                    placeholder="Start typing to search.."
-                />
-            </div>
-            <div className="grow"></div> */}
-      <div className="flex gap-2 relative group">
-        {/* <div className="absolute w-40 h-60 bg-white z-[23423] right-0 top-8 rounded-md scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all origin-top-right">
-          <button>Change</button>
-        </div> */}
+      <div></div>
+      <div className="flex gap-2 relative group  items-center">
         <div className="cursor-pointer">
           <img
             src={props.pic}
             alt="avatar"
-            className="w-6 h-6 rounded-md object-cover object-center"
+            className="w-8 h-8 rounded-sm object-cover object-center"
           />
         </div>
-        <div className="text-white font-medium text-lg text-center cursor-pointer">
+        <div className="text-white font-medium text-2xl text-center cursor-pointer">
           {props.name}
         </div>
       </div>
@@ -339,7 +327,7 @@ const TopNavBar = (props: TopNavBarProps) => {
 const Footer = () => {
   const year = new Date().getFullYear();
   return (
-    <div className="w-full h-10 bg-[#1f2129] text-center grid place-items-center text-white font-light text-lg">
+    <div className="w-full h-14 bg-primary-800 text-center grid place-items-center text-white font-light text-2xl rounded-md">
       &copy; {year} Smart Ethics - All rights reserved.
     </div>
   );

@@ -1,5 +1,12 @@
 import axios from "axios";
-import { BaseUrl } from "~/const";
+import { BaseUrl, uploadUrl } from "~/const";
+
+interface imageReture {
+  status: boolean;
+  data: unknown;
+  message: string;
+  function: string;
+}
 
 type ApiRespose = {
   status: boolean;
@@ -51,3 +58,14 @@ export const ApiCall = async (args: {
     }
   }
 };
+
+export async function UploadFile(file: File): Promise<imageReture> {
+  let formData = new FormData();
+  formData.append("file", file);
+  const data = await axios({
+    method: "post",
+    url: `${uploadUrl}uploader/upload`,
+    data: formData,
+  });
+  return data.data;
+}

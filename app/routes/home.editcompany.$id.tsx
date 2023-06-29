@@ -1,6 +1,6 @@
 import { LoaderArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import styles from "react-toastify/dist/ReactToastify.css";
@@ -15,13 +15,38 @@ export function links() {
 export async function loader({ params, request }: LoaderArgs) {
     const cookieHeader = request.headers.get("Cookie");
     const cookie: any = await userPrefs.parse(cookieHeader);
-    return json({ token: cookie.token, userId: cookie.id });
+
+    const data = await ApiCall({
+        query: `
+            query getCompanyById($id:Int!){
+                getCompanyById(id:$id){
+                    id,
+                    name,
+                    logo,
+                    website,
+                    email,
+                    ctoContact,
+                    description,
+                    address
+                }
+            }
+            `,
+        veriables: {
+            id: parseInt(params.id!)
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+    return json({ token: cookie.token, userId: cookie.id, company: data.data.getCompanyById });
 }
 
 const AddComapany: React.FC = (): JSX.Element => {
     const userId = useLoaderData().userId;
     const token = useLoaderData().token;
     const navigator = useNavigate();
+
+    const company = useLoaderData().company;
+
+
     const [logo, setLogo] = useState<File | null>(null);
     const cLogo = useRef<HTMLInputElement>(null);
     const cName = useRef<HTMLInputElement>(null);
@@ -30,6 +55,15 @@ const AddComapany: React.FC = (): JSX.Element => {
     const cNumber = useRef<HTMLInputElement>(null);
     const cDesciption = useRef<HTMLTextAreaElement>(null);
     const cAddress = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        cName!.current!.value = company.name;
+        cWebsite!.current!.value = company.website;
+        cEmail!.current!.value = company.email;
+        cNumber!.current!.value = company.ctoContact;
+        cDesciption!.current!.value = company.description;
+        cAddress!.current!.value = company.address;
+    }, []);
 
     const handleLogoChange = (value: React.ChangeEvent<HTMLInputElement>) => {
         let file_size = parseInt(
@@ -47,11 +81,10 @@ const AddComapany: React.FC = (): JSX.Element => {
     }
 
     const addComapany = async () => {
-
-        if (logo == null) return toast.error("Select company Logo", { theme: "light" });
-
         const CompanyScheme = z
             .object({
+                id: z
+                    .number({ required_error: "Company id is required.", invalid_type_error: "Enter a valid company id." }),
                 name: z
                     .string()
                     .nonempty("Company Name is required."),
@@ -80,20 +113,25 @@ const AddComapany: React.FC = (): JSX.Element => {
             })
             .strict();
 
-
         type CompanyScheme = z.infer<typeof CompanyScheme>;
 
-        const image = await UploadFile(logo);
-        if (!image.status) return toast.error("Unable to upload logo", { theme: "light" });
+        let imageurl: string = "";
+
+        if (logo != null) {
+            const image = await UploadFile(logo);
+            if (!image.status) return toast.error("Unable to upload logo", { theme: "light" });
+            imageurl = image.data!.toString();
+        }
 
         const companyScheme: CompanyScheme = {
+            id: company.id,
             name: cName!.current!.value,
             website: cWebsite!.current!.value,
             email: cEmail!.current!.value,
             ctoContact: cNumber!.current!.value,
             description: cDesciption!.current!.value,
             address: cAddress!.current!.value,
-            logo: image.data!.toString()
+            logo: logo == null ? company.logo : imageurl
         };
 
 
@@ -101,14 +139,14 @@ const AddComapany: React.FC = (): JSX.Element => {
         if (parsed.success) {
             const data = await ApiCall({
                 query: `
-                mutation createCompany($createCompanyInput:CreateCompanyInput!){
-                    createCompany(createCompanyInput:$createCompanyInput){
+                mutation updateCompanyById($updateCompanyInput:UpdateCompanyInput!){
+                    updateCompanyById(updateCompanyInput:$updateCompanyInput){
                       id
                     }
                   }
                 `,
                 veriables: {
-                    createCompanyInput: companyScheme,
+                    updateCompanyInput: companyScheme,
                 },
                 headers: { authorization: `Bearer ${token}` },
             });
@@ -135,7 +173,11 @@ const AddComapany: React.FC = (): JSX.Element => {
                     <div className="my-4">
                         <img src={URL.createObjectURL(logo!)} alt="logo" className="w-80 rounded-md" />
                     </div>
-                    : null}
+                    :
+                    <div className="my-4">
+                        <img src={company.logo} alt="logo" className="w-80 rounded-md" />
+                    </div>
+                }
                 <button onClick={() => cLogo.current?.click()} className="text-white font-semibold text-md py-1 my-2 inline-block px-4 rounded-md bg-green-500">{logo == null ? "Add Logo" : "Change Logo"}</button>
                 <div className="hidden">
                     <input type="file" ref={cLogo} accept="image/*" onChange={handleLogoChange} />

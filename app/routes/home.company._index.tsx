@@ -1,6 +1,6 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import React, { useState } from "react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import React, { useEffect, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
@@ -23,6 +23,7 @@ export async function loader(params: LoaderArgs) {
         name
         website,
         email,
+        logo,
         ctoContact,
         description,
         address,
@@ -42,8 +43,12 @@ const UserDashboard = () => {
   const token = useLoaderData().token;
   const [company, setCompany] = useState<any[]>(loaderCompany);
 
+  const navigator = useNavigate();
+
   const [delBox, setDelBox] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
+
+
 
   const updateStatus = async (id: number, status: string) => {
     const data = await ApiCall({
@@ -80,6 +85,7 @@ const UserDashboard = () => {
           name
           website,
           email,
+          logo,
           ctoContact,
           description,
           address,
@@ -144,7 +150,7 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
-      <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
+      <div className="grow  p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Company</h1>
           <Link to={"/home/addcompany/"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Company</Link>
@@ -160,7 +166,7 @@ const UserDashboard = () => {
           ) : (
             company.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-[#31353f] w-80 p-4 flex flex-col">
+                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -184,6 +190,9 @@ const UserDashboard = () => {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <div className="my-4">
+                    <img src={val.logo} alt="logo" className="w-44 h-44 rounded-md object-cover" />
                   </div>
                   <p className="text-gray-200 font-semibold text-md">
                     {val.description}
@@ -211,7 +220,7 @@ const UserDashboard = () => {
                       Delete
                     </button>
                     <button
-                      onClick={() => updateStatus(val.id, "ACTIVE")}
+                      onClick={() => navigator(`/home/editcompany/${val.id}`)}
                       className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
                     >
                       Update

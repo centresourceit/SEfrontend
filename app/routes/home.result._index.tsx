@@ -78,7 +78,7 @@ const AdminDashboard = () => {
   let count = 0;
 
   return (
-    <div className="grow bg-[#272934] p-4 w-full">
+    <div className="grow  p-4 w-full">
       <h1 className="text-white font-medium text-4xl">Your Result</h1>
       <div className="w-full bg-slate-400 h-[1px] my-2"></div>
       {questions == null || questions == undefined ? (

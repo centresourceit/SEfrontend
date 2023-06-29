@@ -161,7 +161,7 @@ const feedback = () => {
 
   return (
     <>
-      <div className="grow bg-[#272934] p-4 w-full">
+      <div className="grow  p-4 w-full">
         <h1 className="text-white font-medium text-2xl">Feedback</h1>
         <div className="bg-gray-400 w-full h-[2px] my-2"></div>
         <h2 className="text-white font-normal text-lg text-justify bg-green-500 bg-opacity-20 px-4 py-2 border-l-4 rounded-md w-full border-green-500 my-6">
@@ -181,38 +181,38 @@ const feedback = () => {
           >
             <option
               value="0"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md hidden"
+              className=" rounded-t-md mt-4 py-2 text-md hidden"
               disabled
             >
               Select Your Feedback Type
             </option>
             <option
               value="General_Feedback"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md"
+              className=" rounded-t-md mt-4 py-2 text-md"
             >
               General Feedback
             </option>
             <option
               value="Suggestions"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               Suggestions
             </option>
             <option
               value="Bug_Report"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               Bug Report
             </option>
             <option
               value="New_Question_Request"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md"
+              className=" rounded-t-md mt-4 py-2 text-md"
             >
               New Question Request
             </option>
             <option
               value="New_Feature_Request"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               New Feature Request
             </option>
@@ -251,38 +251,38 @@ const feedback = () => {
           >
             <option
               value="0"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md hidden"
+              className=" rounded-t-md mt-4 py-2 text-md hidden"
               disabled
             >
               Rate Your Experience
             </option>
             <option
               value="POOR"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md"
+              className=" rounded-t-md mt-4 py-2 text-md"
             >
               POOR
             </option>
             <option
               value="SATISFACTORY"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               SATISFACTORY
             </option>
             <option
               value="GOOD"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               GOOD
             </option>
             <option
               value="VERY_GOOD"
-              className="bg-[#272934] rounded-t-md mt-4 py-2 text-md"
+              className=" rounded-t-md mt-4 py-2 text-md"
             >
               VERY_GOOD
             </option>
             <option
               value="EXCELLENT"
-              className="bg-[#272934] rounded-t-md mt-4 py-2  text-md"
+              className=" rounded-t-md mt-4 py-2  text-md"
             >
               EXCELLENT
             </option>

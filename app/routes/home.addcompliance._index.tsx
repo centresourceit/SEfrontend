@@ -86,7 +86,7 @@ const AddCompliance: React.FC = (): JSX.Element => {
         else { toast.error(parsed.error.errors[0].message, { theme: "light" }); }
     };
     return (<>
-        <div className="grow w-full bg-[#272934] p-4  ">
+        <div className="grow w-full  p-4  ">
             <h1 className="text-white font-medium text-2xl">Add New Compliance</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
             <h2 className="text-white font-semibold text-md">

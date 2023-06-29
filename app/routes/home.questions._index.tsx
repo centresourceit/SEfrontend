@@ -177,7 +177,7 @@ const Compliance = () => {
           </div>
         </div>
       </div>
-      <div className="grow bg-[#272934] p-4 w-full overflow-x-hidden">
+      <div className="grow  p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Questions</h1>
           <Link to={"/home/addquestion/"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Questions</Link>
@@ -193,7 +193,7 @@ const Compliance = () => {
           ) : (
             questions.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-[#31353f] p-4 my-4">
+                <div key={index} className="bg-primary-800 p-4 my-4">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">

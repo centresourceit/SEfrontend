@@ -8,8 +8,6 @@ import { Fa6SolidEye, Fa6SolidEyeSlash, Fa6SolidUser } from "./icons/Icons";
 
 
 
-
-
 export default function Register(): JSX.Element {
   const navitgator = useNavigate();
 
@@ -17,8 +15,6 @@ export default function Register(): JSX.Element {
   const [showRePassword, setShowRePassword] = useState<boolean>(false);
 
   const nextButton = useRef<HTMLButtonElement>(null);
-
-
 
   const emaliRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);

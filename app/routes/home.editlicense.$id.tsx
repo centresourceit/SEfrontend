@@ -151,7 +151,7 @@ const AddLicense: React.FC = (): JSX.Element => {
         }
     };
     return (<>
-        <div className="grow w-full bg-[#272934] p-4  ">
+        <div className="grow w-full  p-4  ">
             <h1 className="text-white font-medium text-2xl">Edit License</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
 
@@ -162,11 +162,11 @@ const AddLicense: React.FC = (): JSX.Element => {
             </h2>
 
             <select ref={lType} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
-                <option value="0" className="bg-[#272934] text-white text-lg " disabled>Select License Type</option>
-                <option className="bg-[#272934] text-white text-lg" value="FREE">FREE</option>
-                <option className="bg-[#272934] text-white text-lg" value="BUSINESS">BUSINESS</option>
-                <option className="bg-[#272934] text-white text-lg" value="PREMIUM">PREMIUM</option>
-                <option className="bg-[#272934] text-white text-lg" value="PLATINUM">PLATINUM</option>
+                <option value="0" className=" text-white text-lg " disabled>Select License Type</option>
+                <option className=" text-white text-lg" value="FREE">FREE</option>
+                <option className=" text-white text-lg" value="BUSINESS">BUSINESS</option>
+                <option className=" text-white text-lg" value="PREMIUM">PREMIUM</option>
+                <option className=" text-white text-lg" value="PLATINUM">PLATINUM</option>
             </select>
 
             <h2 className="text-white font-semibold text-md">
