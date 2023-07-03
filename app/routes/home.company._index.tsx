@@ -166,7 +166,7 @@ const UserDashboard = () => {
           ) : (
             company.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
+                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col my-6">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -204,7 +204,7 @@ const UserDashboard = () => {
                     Contact: {val.ctoContact}
                   </p>
                   <p className="text-gray-200 font-normal text-md my-1">
-                    Address: {val.email}
+                    Address: {val.address}
                   </p>
 
                   <div className="grow"></div>

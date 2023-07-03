@@ -15,7 +15,11 @@ import { ToastContainer } from "react-toastify";
 
 import stylesheet from "~/tailwind.css";
 
+import styles from "react-toastify/dist/ReactToastify.css";
+
+
 export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
   { rel: "stylesheet", href: stylesheet },
   { rel: "icon", type: "image/png", href: "/favicon.png" },
 ];
@@ -38,6 +42,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <ToastContainer></ToastContainer>
       </body>
     </html>
   );

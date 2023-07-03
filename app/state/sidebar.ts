@@ -12,20 +12,9 @@ enum SideBarTabs {
   License,
   Compliance,
   Questions,
-  LicenseSlave
-  //   CATEGORY,
-  //   COUNTRY,
-  //   MARKET,
-  //   STATE,
-  //   LANGUAGES,
-  //   CURRENCY,
-  //   PLATFORMS,
-  //   CAMPAIGNTYPE,
-  //   TEAM,
-  //   BLOGNEWS,
-  //   BRAND,
-  //   USER,
-  //   CAMPAIGN,
+  LicenseSlave,
+  UserCompany,
+  UserProject
 }
 
 interface SideBarState {

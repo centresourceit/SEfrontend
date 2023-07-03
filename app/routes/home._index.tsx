@@ -1,5 +1,5 @@
 
-import { LoaderArgs, json } from "@remix-run/node";
+import { LoaderArgs, json, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Fa6SolidHeart } from "~/components/icons/Icons";
 import { userPrefs } from "~/cookies";
@@ -12,6 +12,10 @@ import { useEffect, useState } from "react";
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+
+  if (cookie.role == "ADMIN") {
+    redirect("/home/user")
+  }
 
   const data = await ApiCall({
     query: `
@@ -35,18 +39,48 @@ export async function loader(params: LoaderArgs) {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
+  const user = await ApiCall({
+    query: `
+      query getUserById($id:Int!){
+        getUserById(id:$id){
+          id,
+       	  name, 
+    		  companyId, 
+          company{
+            id,
+            name,
+            website,
+            email,
+            logo,
+            ctoContact,
+            description,
+            address,
+            status
+          }
+        }
+      }
+      `,
+    veriables: {
+      id: Number(cookie.id)
+    },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+
   return json({
     question: data.data.getAllResults,
     token: cookie.token,
     userId: cookie.id,
-    strip_key: process.env.STRIP_KEY
+    strip_key: process.env.STRIP_KEY,
+    user: user.data.getUserById
   });
 }
 
 const UserDashboard = () => {
-  const userId = useLoaderData().userId;
-  const que = useLoaderData().question;
+  const loader = useLoaderData();
+  const userId = loader.userId;
+  const que = loader.question;
   const questiondata = que != undefined ? que.length > 0 ? que.pop() : null : null;
+  const user = loader.user;
 
   const [totalScore, setTotalScore] = useState<number>(0);
   const [quelen, setQuelen] = useState<number>(0);
@@ -107,6 +141,18 @@ const UserDashboard = () => {
   return (
     <>
       <div className="grow  p-4 w-full">
+
+        {
+          user.companyId == null ?
+            <div className=" my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
+              <p className="text-rose-500 font-semibold text-2xl">
+                You haven't created your company.
+              </p>
+              <Link to={"/home/addcompanyuser"} className="bg-rose-500 text-white py-1 px-4 rounded-md text-xl mt-4 inline-block">Create</Link>
+            </div>
+            :
+            null
+        }
         <h1 className="text-secondary font-medium text-3xl">
           Assessment History and Management Portal for the last Three
           assessments here

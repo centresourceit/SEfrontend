@@ -75,7 +75,7 @@ const AddProject: React.FC = (): JSX.Element => {
             } else {
                 pName!.current!.value = ""
                 pDesciption!.current!.value = "";
-                navigator("/home/project/");
+                navigator(-1);
             }
         }
         else { toast.error(parsed.error.errors[0].message, { theme: "light" }); }

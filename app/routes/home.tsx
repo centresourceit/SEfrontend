@@ -1,11 +1,10 @@
-
 // import AsideBarStore, { AdminSideBarTabs } from "~/state/siderbar";
 import { LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
-import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidStar, Fa6SolidUser, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
+import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
 import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
@@ -227,6 +226,32 @@ const DashBoard = () => {
                         icon={Fa6SolidBookTanakh}
                         title="Result"
                         active={asideindex === SideBarTabs.RresultStatus}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/usercompany/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.UserCompany);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={Fa6SolidRulerCombined}
+                        title="Company"
+                        active={asideindex === SideBarTabs.UserCompany}
+                      ></SidebarTab>
+                    </Link>
+                    <Link
+                      to={"/home/userproject/"}
+                      onClick={() => {
+                        achangeindex(SideBarTabs.UserProject);
+                        changeMobile(false);
+                      }}
+                    >
+                      <SidebarTab
+                        icon={Fa6SolidDiagramProject}
+                        title="Project"
+                        active={asideindex === SideBarTabs.UserProject}
                       ></SidebarTab>
                     </Link>
                   </>

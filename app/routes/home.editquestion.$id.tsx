@@ -251,7 +251,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
                 Question Plan
             </h2>
 
-            <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+            <select ref={qPlan} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                 <option value="0" className=" text-white text-lg " disabled>Select Question Plan</option>
                 {
                     licenses.map((val: any, index: number) => {

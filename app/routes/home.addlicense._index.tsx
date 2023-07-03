@@ -122,7 +122,7 @@ const AddLicense: React.FC = (): JSX.Element => {
                 License Type
             </h2>
 
-            <select ref={lType} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+            <select ref={lType} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                 <option value="0" className=" text-white text-lg " disabled>Select License Type</option>
                 <option className=" text-white text-lg" value="FREE">FREE</option>
                 <option className=" text-white text-lg" value="BUSINESS">BUSINESS</option>

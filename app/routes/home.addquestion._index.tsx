@@ -244,7 +244,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                     <span className="text-green-500 pr-2">&#x2666;</span>
                                     Selete Principle
                                 </h2>
-                                <select ref={qPrinciple} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                <select ref={qPrinciple} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                                     <option value="0" className=" text-white text-lg " disabled>Select Principle</option>
                                     {principels.map((val: any, index: number) => {
                                         return (
@@ -258,7 +258,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                     Question Type
                                 </h2>
 
-                                <select ref={qType} onChange={(e) => handelTypeChange(e)} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                <select ref={qType} onChange={(e) => handelTypeChange(e)} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                                     <option value="0" className=" text-white text-lg " disabled>Select Question Type</option>
                                     <option className=" text-white text-lg" value="MCQ">MCQ</option>
                                     <option className=" text-white text-lg" value="SLIDER">SLIDER</option>
@@ -269,7 +269,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                     <span className="text-green-500 pr-2">&#x2666;</span>
                                     Question Plan
                                 </h2>
-                                <select ref={qPlan} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                <select ref={qPlan} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                                     <option value="0" className=" text-white text-lg " disabled>Select Question License Plan</option>
                                     {
                                         licenses.map((val: any, index: number) => {
@@ -336,7 +336,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                             placeholder="Enter recommendation"
                                         />
                                     </div>
-
                                 </div>)}
                                 <div>
                                     <button

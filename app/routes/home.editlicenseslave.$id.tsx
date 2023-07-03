@@ -188,7 +188,7 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
                 License Type
             </h2>
 
-            <select ref={lType} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+            <select ref={lType} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                 <option value="0" className=" text-white text-lg " disabled>Select License Type</option>
                 {
                     licenses.map((val: any, index: number) => {
@@ -203,7 +203,7 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
                 <span className="text-green-500 pr-2">&#x2666;</span>
                 License User
             </h2>
-            <select ref={lUser} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+            <select ref={lUser} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                 <option value="0" className=" text-white text-lg " disabled>Select License User</option>
                 {
                     users.map((val: any, index: number) => {
@@ -230,7 +230,7 @@ const AddLicenseSlave: React.FC = (): JSX.Element => {
                 <span className="text-green-500 pr-2">&#x2666;</span>
                 License Status
             </h2>
-            <select ref={paymentStatus} defaultValue={"0"} className="px-4 bg-transparent fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+            <select ref={paymentStatus} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
                 <option value="0" className=" text-white text-lg " disabled>Select License Status</option>
                 <option className=" text-white text-lg" value="ACTIVE">ACTIVE</option>
                 <option className=" text-white text-lg" value="INACTIVE">INACTIVE</option>
