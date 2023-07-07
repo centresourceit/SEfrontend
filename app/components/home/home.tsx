@@ -5,7 +5,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 
 export default function Home(): JSX.Element {
 
-    
+
   return (
     <section className="h-screen w-full relative">
       <img
@@ -32,10 +32,7 @@ export default function Home(): JSX.Element {
               <div className="h-6 bg-[#54edec] w-[2px] shrink-0 sm:block hidden"></div>
             </div>
             <p className="text-white font-normal text-md my-4">
-              We are opne, unified teach standared management solution,solving
-              the problem of no AI Standared to accelerate AI adoption, offering
-              seamless global compliance-readiness and embedding ethics
-              efficently
+              We are open, unified tech standard management solution, solving the problem of no AI Standard to accelerate AI adoption, offering seamless global compliance-readiness and embedding ethics efficiently.
             </p>
             <div className="flex justify-evenly my-8">
               <button className="text-[#181136] bg-[#54edec] py-2 px-4 sm:py-4 sm:px-6 text-md font-medium rounded-full w-32 sm:w-40">

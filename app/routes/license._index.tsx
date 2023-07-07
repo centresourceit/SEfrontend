@@ -119,7 +119,7 @@ const license: React.FC = (): JSX.Element => {
                     ) : (
                         license.map((val: any, index: number) => {
                             return (
-                                <div key={index} className="bg-white text-slate-800 rounded-md w-80 p-4 flex flex-col  hover:scale-105 transition-all">
+                                <div key={index} className="bg-primary-500 text-white rounded-md w-80 p-4 flex flex-col  hover:scale-105 transition-all">
 
                                     <p className="text-3xl text-center font-bold">
                                         {val.licenseType}
@@ -132,19 +132,19 @@ const license: React.FC = (): JSX.Element => {
 
 
                                     <p className="text-xl font-normal my-1">
-                                        <span className="text-green-500 pr">&#x2756;</span> {val.projectPerLicense} Projects
+                                        <span className="text-secondary pr">&#x2756;</span> {val.projectPerLicense} Projects
                                     </p>
 
                                     <p className="text-xl font-normal my-1">
-                                        <span className="text-green-500 pr">&#x2756;</span> {val.questionAllowed} Questions.
+                                        <span className="text-secondary pr">&#x2756;</span> {val.questionAllowed} Questions.
                                     </p>
                                     {val.id == 1 ? null :
-                                        <div className="bg-blue-500 bg-opacity-20 border-2 border-blue-500 rounded-md p px-4 mt-4">
-                                            <p className="font-semibold text-xl my-1 text-blue-500">
+                                        <div className="bg-secondary bg-opacity-20 border-2 border-secondary rounded-md p px-4 mt-4">
+                                            <p className="font-semibold text-xl my-1 text-secondary">
                                                 {val.discountAmount} Discount
                                             </p>
 
-                                            <p className="font-normal text-lg my-1 text-blue-500">
+                                            <p className="font-normal text-lg my-1 text-secondary">
                                                 {new Date(val.discountValidTill).toDateString()} Discount Valid
                                             </p>
                                         </div>
@@ -156,7 +156,7 @@ const license: React.FC = (): JSX.Element => {
                                                 setLicenseBox(value => true);
                                                 setLicenaseid((value: any) => val);
                                             }}
-                                            className="py-1 text-white text-lg grow bg-blue-500 text-center rounded-md font-medium"
+                                            className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
                                         >
                                             Select
                                         </button>
@@ -166,6 +166,7 @@ const license: React.FC = (): JSX.Element => {
                         })
                     )}
                 </div>
+                <div className="h-20"></div>
 
             </div>
         </>

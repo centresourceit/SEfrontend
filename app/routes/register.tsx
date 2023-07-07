@@ -14,7 +14,7 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const value = Object.fromEntries(formData);
 
-  return redirect("/home", {
+  return redirect("/license", {
     headers: {
       "Set-Cookie": await userPrefs.serialize(value),
     },

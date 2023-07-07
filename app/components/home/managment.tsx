@@ -6,7 +6,7 @@ export default function Managment(): JSX.Element {
                 <div className="hidden lg:block"></div>
                 <div className="z-50 grid place-items-center">
                     <div className="p-10">
-                        <h1 className="text-white text-3xl font-semibold text-left">Our Unique Eithics Management Solution enables Faster, Cheaper & Easy AI Adoptin</h1>
+                        <h1 className="text-white text-3xl font-semibold text-left">Our Unique Eithics Management Solution enables Faster, Cheaper & Easy AI Adoption</h1>
                         <h4 className="text-left text-2xl text-[#54edec] mt-6 font-medium">Intellectual Privacy</h4>
                         <h4 className="text-left text-2xl text-[#54edec] mt-6 font-medium">Accountable Redesign</h4>
                         <h4 className="text-left text-2xl text-[#54edec] mt-6 font-medium">Purpose Realisation</h4>

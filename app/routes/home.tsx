@@ -202,7 +202,7 @@ const DashBoard = () => {
                         active={asideindex === SideBarTabs.None}
                       ></SidebarTab>
                     </Link>
-                    <Link
+                    {/* <Link
                       to={"/home/taketest/"}
                       onClick={() => {
                         achangeindex(SideBarTabs.TakeTesk);
@@ -227,7 +227,7 @@ const DashBoard = () => {
                         title="Result"
                         active={asideindex === SideBarTabs.RresultStatus}
                       ></SidebarTab>
-                    </Link>
+                    </Link> */}
                     <Link
                       to={"/home/usercompany/"}
                       onClick={() => {

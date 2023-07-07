@@ -8,7 +8,7 @@ export default function CardSection(): JSX.Element {
     >
       <Card
         principle="Principle 1"
-        title="Intellectualy Privacy"
+        title="Intellectual Privacy"
         votes={423}
         link="/"
         image="/images/cards/card1.png"
@@ -63,17 +63,17 @@ const Card: React.FC<CardProps> = (props: CardProps): JSX.Element => {
         <p className="text-gray-200 text-sm font-medium mt-4">
           {props.principle}
         </p>
-        <p className="text-white text-3xl font-semibold">
+        <p className="text-[#54edec] text-3xl font-semibold">
           {props.title.split(" ")[0]} <br />
           {props.title.split(" ")[1]}
         </p>
-        <button className="text-gray-200 text-sm font-bold my-4">
+        <button className="text-gray-200 text-sm font-bold my-4 flex gap-2 items-center">
           <Fa6SolidArrowLeft></Fa6SolidArrowLeft>
           Read More
         </button>
 
         <div className="flex gap-4 items-center mt-24 mb-4">
-          <button className="text-[#181136] bg-[#54edec] py px-2 text-md font-medium rounded-full hover:bg-[#5239b5]">
+          <button className="text-[#181136] bg-[#54edec] py px-2 text-md font-medium rounded-full hover:bg-[#5239b5] flex gap-2 items-center">
             <Fa6SolidHeart></Fa6SolidHeart>
             Vote
           </button>

@@ -218,6 +218,58 @@ const TakeTest = () => {
 
   return (
     <>
+      <div className="fixed bottom-20 left-0 p-4 w-full justify-center">
+
+        <div className="flex justify-center gap-4 mx-auto">
+
+
+          {
+            page != 0 ?
+              <button
+                onClick={prevpage}
+                className="text-center py-2 px-4 text-white bg-rose-500 font-semibold rounded hover:scale-105 transition-all"
+              >
+                Back
+              </button>
+              :
+              null
+          }
+
+          {page != 4 ?
+            <button
+              onClick={nextpage}
+              className="text-center py-2 px-4 text-white bg-green-500 font-semibold rounded hover:scale-105 transition-all"
+            >
+              Next
+            </button>
+            :
+            <>
+
+
+              {answers.length == quecount ? (
+                <button
+                  onClick={submit}
+                  className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
+                >
+                  SUBMIT
+                </button>
+              ) : null}
+            </>
+          }
+          <button
+            onClick={saveAndExit}
+            className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
+          >
+            SAVE AND EXIT
+          </button>
+          <Link
+            to={`/home/feedback/${userId}/`}
+            className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded"
+          >
+            Feedback
+          </Link>
+        </div>
+      </div>
       <div className="grow  p-4 w-full">
         <h1 className="text-white font-medium text-4xl">Take Test</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
@@ -357,7 +409,7 @@ const TakeTest = () => {
         )}
 
 
-        <div className="flex gap-4">
+        {/* <div className="flex gap-4">
           {
             page != 0 ?
               <button
@@ -396,10 +448,10 @@ const TakeTest = () => {
               ) : null}
             </>
           }
+ */}
 
 
-
-          {/* <button
+        {/* <button
             onClick={saveAndExit}
             className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
           >
@@ -414,7 +466,7 @@ const TakeTest = () => {
               SUBMIT
             </button>
           ) : null} */}
-        </div>
+        {/* </div> */}
       </div>
       <ToastContainer></ToastContainer>
     </>
