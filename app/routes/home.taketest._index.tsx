@@ -214,20 +214,15 @@ const TakeTest = () => {
     }
   }
 
-
-
   return (
     <>
-      <div className="fixed bottom-20 left-0 p-4 w-full justify-center">
-
-        <div className="flex justify-center gap-4 mx-auto">
-
-
+      <div className="fixed bottom-14 left-0 w-full grid place-items-center z-50">
+        <div className="flex justify-center gap-2 mx-auto bg-primary-800 p-3 rounded-full">
           {
             page != 0 ?
               <button
                 onClick={prevpage}
-                className="text-center py-2 px-4 text-white bg-rose-500 font-semibold rounded hover:scale-105 transition-all"
+                className="text-center py-2 px-4 text-white bg-rose-500 font-semibold rounded-full hover:scale-105 transition-all"
               >
                 Back
               </button>
@@ -238,7 +233,7 @@ const TakeTest = () => {
           {page != 4 ?
             <button
               onClick={nextpage}
-              className="text-center py-2 px-4 text-white bg-green-500 font-semibold rounded hover:scale-105 transition-all"
+              className="text-center py-2 px-4 text-white bg-green-500 font-semibold rounded-full hover:scale-105 transition-all"
             >
               Next
             </button>
@@ -249,7 +244,7 @@ const TakeTest = () => {
               {answers.length == quecount ? (
                 <button
                   onClick={submit}
-                  className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
+                  className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded-full hover:scale-105 transition-all"
                 >
                   SUBMIT
                 </button>
@@ -258,13 +253,13 @@ const TakeTest = () => {
           }
           <button
             onClick={saveAndExit}
-            className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
+            className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
           >
             SAVE AND EXIT
           </button>
           <Link
             to={`/home/feedback/${userId}/`}
-            className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded"
+            className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded-full"
           >
             Feedback
           </Link>
@@ -494,7 +489,7 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
         <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
-        <h4 className="text-white font-medium text-xl mb-2">
+        <h4 className="text-white font-normal text-xl mb-2">
           {props.description}
         </h4>
         <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -550,7 +545,7 @@ const TFQuestions: React.FC<TFQuestionsProps> = (
         <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
-        <h4 className="text-white font-medium text-xl mb-2">
+        <h4 className="text-white font-normal text-xl mb-2">
           {props.description}
         </h4>
         <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -611,10 +606,10 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
   return (
     <>
       <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-        <h2 className="text-secondary font-medium text-xl mb-2">
+        <h2 className="text-secondary font-medium text-3xl mb-2">
           {props.queNumber}. {props.question}
         </h2>
-        <h4 className="text-white font-medium text-3xl mb-2">
+        <h4 className="text-white font-normal text-xl mb-2">
           {props.description}
         </h4>
         <div className=" mt-6 w-full flex gap-4 items-center">
