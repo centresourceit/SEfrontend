@@ -2,7 +2,7 @@ import { LoaderArgs, json } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 
 export async function loader(params: LoaderArgs) {
@@ -125,7 +125,7 @@ const UserProject = () => {
                                     </p>
                                     <div className="grow"></div>
                                     <div className="flex gap-4 w-full mt-4">
-                                        <Link to={"/home/taketest/"} className="bg-primary-500 py-1 text-white text-xl font-normal flex-1 rounded-md text-center">Take Test</Link>
+                                        <Link to={`/home/taketest/${val.id}`} className="bg-primary-500 py-1 text-white text-xl font-normal flex-1 rounded-md text-center">Take Test</Link>
                                         <Link to={"/home/resultstatus/"} className="bg-primary-500 py-1 text-white text-xl font-normal flex-1 rounded-md text-center">Result</Link >
                                     </div>
                                 </div>
@@ -134,7 +134,6 @@ const UserProject = () => {
                     )}
                 </div>
             </div>
-            <ToastContainer></ToastContainer>
         </>
     );
 };

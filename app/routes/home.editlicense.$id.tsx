@@ -1,16 +1,11 @@
 import { LoaderArgs, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-import styles from "react-toastify/dist/ReactToastify.css";
 import { date, z } from "zod";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
-
-export function links() {
-    return [{ rel: "stylesheet", href: styles }];
-}
 
 export async function loader({ params, request }: LoaderArgs) {
     const cookieHeader = request.headers.get("Cookie");
@@ -227,7 +222,6 @@ const AddLicense: React.FC = (): JSX.Element => {
                 SUBMIT
             </button>
         </div>
-        <ToastContainer></ToastContainer>
     </>);
 }
 

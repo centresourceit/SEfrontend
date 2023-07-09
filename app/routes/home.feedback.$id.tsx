@@ -2,15 +2,11 @@ import { LoaderArgs, json } from "@remix-run/node";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { z } from "zod";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useLoaderData } from "@remix-run/react";
 import { ApiCall } from "~/services/api";
 
-import styles from "react-toastify/dist/ReactToastify.css";
 
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
 
 export async function loader({ params, request }: LoaderArgs) {
   const cookieHeader = request.headers.get("Cookie");
@@ -134,7 +130,7 @@ const feedback = () => {
         veriables: { createFeedbackInput: feedback },
         headers: { authorization: `Bearer ${token}` },
       });
-      
+
       if (!data.status) {
         toast.error(data.message, { theme: "light" });
       } else {
@@ -324,7 +320,6 @@ const feedback = () => {
           </button>
         </div>
       </div>
-      <ToastContainer></ToastContainer>
     </>
   );
 };

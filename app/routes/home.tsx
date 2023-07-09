@@ -49,19 +49,19 @@ const DashBoard = () => {
 
   const navigator = useNavigate();
 
-  const init = () => {
-    if (isAdmin) {
-      achangeindex(SideBarTabs.User);
-      navigator("/home/user");
-    } else {
-      if (asideindex === SideBarTabs.None) {
-        navigator("/home");
-      }
-    }
-  };
-  useEffect(() => {
-    init();
-  }, []);
+  // const init = () => {
+  //   if (isAdmin) {
+  //     achangeindex(SideBarTabs.User);
+  //     navigator("/home/user");
+  //   } else {
+  //     if (asideindex === SideBarTabs.None) {
+  //       navigator("/home");
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   init();
+  // }, []);
 
   const logoutHandle = () => {
     navigator("/logout");

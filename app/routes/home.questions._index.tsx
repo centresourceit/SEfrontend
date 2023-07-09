@@ -4,13 +4,8 @@ import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-import styles from "react-toastify/dist/ReactToastify.css";
-
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
@@ -300,7 +295,6 @@ const Compliance = () => {
           )}
         </div>
       </div>
-      <ToastContainer></ToastContainer>
     </>
   );
 };

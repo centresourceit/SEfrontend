@@ -86,17 +86,20 @@ const UserDashboard = () => {
   const [quelen, setQuelen] = useState<number>(0);
   const [error, setError] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (questiondata.totalScore == null || questiondata.totalScore == undefined) {
-      setError(true);
-    } else {
-      setTotalScore(questiondata.totalScore);
-    }
 
-    if (questiondata.assesement == null || questiondata.assesement == undefined) {
-      setError(true);
-    } else {
-      setQuelen(questiondata.assesement.result.length);
+  useEffect(() => {
+    if (!(questiondata == null || questiondata == undefined)) {
+      if (questiondata.totalScore == null || questiondata.totalScore == undefined) {
+        setError(true);
+      } else {
+        setTotalScore(questiondata.totalScore);
+      }
+
+      if (questiondata.assesement == null || questiondata.assesement == undefined) {
+        setError(true);
+      } else {
+        setQuelen(questiondata.assesement.result.length);
+      }
     }
   }, []);
 
@@ -158,287 +161,297 @@ const UserDashboard = () => {
           assessments here
         </h1>
         <div className="w-full bg-secondary h-[1px] my-2"></div>
-        <div className="flex items-center gap-6 my-6">
-          <div className="grow">
-            <p className="text-green-500 font-semibold text-xl rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
-              <span className="text-white px-2">
-                Show BOLD Status Of Assessment here:
-              </span>
-              {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-              {/* / Unaproved/ Approved verified */}
+        {questiondata == null ?
+          <div className=" my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
+            <p className="text-rose-500 font-semibold text-2xl">
+              You haven't given any test yet.
             </p>
-          </div>
-          <h1 className="text-white font-medium text-lg">
-            Application id: {questiondata == null ? "-" : questiondata.certificatedId.toString().toUpperCase()}
-          </h1>
-        </div>
-        <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
-          <div className="bg-white bg-opacity-10 rounded-md p-4">
-            <h1 className="text-white font-medium text-xl">Principle 1</h1>
-            <p className="text-secondary font-medium text-2xl">
-              Human Rights & Privacy
-            </p>
-          </div>
-          <div className="bg-white bg-opacity-10 rounded-md p-4">
-            <h1 className="text-white font-medium text-xl">Principle 2</h1>
-            <p className="text-secondary font-medium text-2xl">
-              Purpose Realisation
-            </p>
-          </div>
-          <div className="bg-white bg-opacity-10 rounded-md p-4">
-            <h1 className="text-white font-medium text-xl">Principle 3</h1>
-            <p className="text-secondary font-medium text-2xl">
-              Sustainability Management
-            </p>
-          </div>
-          <div className="bg-white bg-opacity-10 rounded-md p-4">
-            <h1 className="text-white font-medium text-xl">Principle 4</h1>
-            <p className="text-secondary font-medium text-2xl">
-              Risk Evaluation
-            </p>
-          </div>
-          <div className="bg-white bg-opacity-10 rounded-md p-4">
-            <h1 className="text-white font-medium text-xl">Principle 5</h1>
-            <p className="text-secondary font-medium text-2xl">
-              Accountable Redesign
-            </p>
-          </div>
-        </div>
-        <div className="w-full flex gap-6 my-6">
-          <div className="grow bg-gray-500 h-[2px]"></div>
-          <div className="w-10 bg-gray-300 h-[4px]"></div>
-          <div className="grow bg-gray-500 h-[2px]"></div>
-        </div>
-        <div className="flex flex-col overflow-x-auto">
-          <table className="table-fixed min-w-full">
-            <thead>
-              <tr>
-                <th className="w-60"></th>
-                <th className="w-60">
-                  <p className="text-secondary font-normal text-2xl">
-                    1<sup>st</sup> Attempt
-                  </p>
-                </th>
-                <th className="w-60">
-                  <p className="text-secondary font-normal  text-2xl">
-                    2<sup>st</sup> Attempt
-                  </p>
-                </th>
-                <th className="w-60">
-                  <p className="text-secondary font-normal  text-2xl">
-                    3<sup>st</sup> Attempt
-                  </p>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">
-                    Principle 1
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">
-                    Principle 2
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">
-                    Principle 3
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">
-                    Principle 4
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">
-                    Principle 5
-                  </p>
-                </td>
-                <td>
-                  <p className="text-yellow-500 font-semibold text-2xl text-center">
-                    {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="text-secondary font-semibold text-3xl">Score:</p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    {error ? "-" : ((totalScore / 10) / quelen).toFixed(2)}/10
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -/10
-                  </p>
-                </td>
-                <td>
-                  <p className="text-green-500 font-semibold text-2xl text-center">
-                    -/10
-                  </p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          </div> :
+          <>
 
-        <div className="flex my-4 flex-col sm:flex-row justify-around gap-8">
-          <div>
-            <button className="text-center py-2 px-4 text-white text-xl bg-emerald-500 font-semibold rounded">
-              Try the full version (Paid)
-            </button>
-          </div>
-          <div>
-            <Link to={"/home/taketest/"} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
-              Start Again
-            </Link>
-          </div>
-        </div>
-        <div className="w-full flex gap-6 my-6">
-          <div className="grow bg-gray-500 h-[2px]"></div>
-          <div className="w-10 bg-gray-300 h-[4px]"></div>
-          <div className="grow bg-gray-500 h-[2px]"></div>
-        </div>
+            <div className="flex items-center gap-6 my-6">
+              <div className="grow">
+                <p className="text-green-500 font-semibold text-xl rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
+                  <span className="text-white px-2">
+                    Show BOLD Status Of Assessment here:
+                  </span>
+                  {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                  {/* / Unaproved/ Approved verified */}
+                </p>
+              </div>
+              <h1 className="text-white font-medium text-lg">
+                Application id: {questiondata == null ? "-" : questiondata.certificatedId.toString().toUpperCase()}
+              </h1>
+            </div>
+            <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
+              <div className="bg-white bg-opacity-10 rounded-md p-4">
+                <h1 className="text-white font-medium text-xl">Principle 1</h1>
+                <p className="text-secondary font-medium text-2xl">
+                  Human Rights & Privacy
+                </p>
+              </div>
+              <div className="bg-white bg-opacity-10 rounded-md p-4">
+                <h1 className="text-white font-medium text-xl">Principle 2</h1>
+                <p className="text-secondary font-medium text-2xl">
+                  Purpose Realisation
+                </p>
+              </div>
+              <div className="bg-white bg-opacity-10 rounded-md p-4">
+                <h1 className="text-white font-medium text-xl">Principle 3</h1>
+                <p className="text-secondary font-medium text-2xl">
+                  Sustainability Management
+                </p>
+              </div>
+              <div className="bg-white bg-opacity-10 rounded-md p-4">
+                <h1 className="text-white font-medium text-xl">Principle 4</h1>
+                <p className="text-secondary font-medium text-2xl">
+                  Risk Evaluation
+                </p>
+              </div>
+              <div className="bg-white bg-opacity-10 rounded-md p-4">
+                <h1 className="text-white font-medium text-xl">Principle 5</h1>
+                <p className="text-secondary font-medium text-2xl">
+                  Accountable Redesign
+                </p>
+              </div>
+            </div>
+            <div className="w-full flex gap-6 my-6">
+              <div className="grow bg-gray-500 h-[2px]"></div>
+              <div className="w-10 bg-gray-300 h-[4px]"></div>
+              <div className="grow bg-gray-500 h-[2px]"></div>
+            </div>
+            <div className="flex flex-col overflow-x-auto">
+              <table className="table-fixed min-w-full">
+                <thead>
+                  <tr>
+                    <th className="w-60"></th>
+                    <th className="w-60">
+                      <p className="text-secondary font-normal text-2xl">
+                        1<sup>st</sup> Attempt
+                      </p>
+                    </th>
+                    <th className="w-60">
+                      <p className="text-secondary font-normal  text-2xl">
+                        2<sup>st</sup> Attempt
+                      </p>
+                    </th>
+                    <th className="w-60">
+                      <p className="text-secondary font-normal  text-2xl">
+                        3<sup>st</sup> Attempt
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">
+                        Principle 1
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">
+                        Principle 2
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">
+                        Principle 3
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">
+                        Principle 4
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">
+                        Principle 5
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-yellow-500 font-semibold text-2xl text-center">
+                        {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p className="text-secondary font-semibold text-3xl">Score:</p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        {error ? "-" : isNaN(((totalScore / 10) / quelen)) ? "-" : ((totalScore / 10) / quelen).toFixed(2)}/10
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -/10
+                      </p>
+                    </td>
+                    <td>
+                      <p className="text-green-500 font-semibold text-2xl text-center">
+                        -/10
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-        <div className="flex my-8 flex-wrap justify-around gap-8">
-          <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
-            <h1 className="text-secondary font-medium text-3xl text-center">
-              Get your Verified Certificate
-            </h1>
-            <p className="text-center text-secondary mt-2">
-              (Recommended for Commercial usage)
+            <div className="flex my-4 flex-col sm:flex-row justify-around gap-8">
+              <div>
+                <button className="text-center py-2 px-4 text-white text-xl bg-emerald-500 font-semibold rounded">
+                  Try the full version (Paid)
+                </button>
+              </div>
+              <div>
+                <Link to={"/home/taketest/"} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+                  Start Again
+                </Link>
+              </div>
+            </div>
+            <div className="w-full flex gap-6 my-6">
+              <div className="grow bg-gray-500 h-[2px]"></div>
+              <div className="w-10 bg-gray-300 h-[4px]"></div>
+              <div className="grow bg-gray-500 h-[2px]"></div>
+            </div>
+
+            <div className="flex my-8 flex-wrap justify-around gap-8">
+              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+                <h1 className="text-secondary font-medium text-3xl text-center">
+                  Get your Verified Certificate
+                </h1>
+                <p className="text-center text-secondary mt-2">
+                  (Recommended for Commercial usage)
+                </p>
+              </div>
+              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+                <h1 className="text-secondary font-medium text-3xl text-center">
+                  Get Recommendation
+                </h1>
+                <p className="text-center text-secondary mt-2">
+                  (Recommended for Commercial usage)
+                </p>
+              </div>
+              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+                <h1 className="text-secondary font-medium text-3xl text-center">
+                  Publish Free
+                </h1>
+                <p className="text-center text-secondary mt-2">
+                  (For research and design conceptualisation)
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full flex gap-6 my-6">
+              <div className="grow bg-gray-500 h-[2px]"></div>
+              <div className="w-10 bg-gray-300 h-[4px]"></div>
+              <div className="grow bg-gray-500 h-[2px]"></div>
+            </div>
+
+            <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
+              <span className="text-white">Certificate Status :</span>   {questiondata == null ? "-" : questiondata.certified.toString().toUpperCase()}
+              {/* /Commercial if Confidence / Confidential */}
             </p>
-          </div>
-          <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
-            <h1 className="text-secondary font-medium text-3xl text-center">
-              Get Recommendation
-            </h1>
-            <p className="text-center text-secondary mt-2">
-              (Recommended for Commercial usage)
-            </p>
-          </div>
-          <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
-            <h1 className="text-secondary font-medium text-3xl text-center">
-              Publish Free
-            </h1>
-            <p className="text-center text-secondary mt-2">
-              (For research and design conceptualisation)
-            </p>
-          </div>
-        </div>
 
-        <div className="w-full flex gap-6 my-6">
-          <div className="grow bg-gray-500 h-[2px]"></div>
-          <div className="w-10 bg-gray-300 h-[4px]"></div>
-          <div className="grow bg-gray-500 h-[2px]"></div>
-        </div>
-
-        <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
-          <span className="text-white">Certificate Status :</span>   {questiondata == null ? "-" : questiondata.certified.toString().toUpperCase()}
-          {/* /Commercial if Confidence / Confidential */}
-        </p>
-
-        <div className="flex gap-6 items-center">
-          <div className="text-rose-500 text-4xl">
-            <Fa6SolidHeart></Fa6SolidHeart>
-          </div>
-          <h1 className="text-white font-medium text-xl">
-            Please share our open framework, submit your feedback and contribute
-            to help us improve – your feedback matters, lets change the world!
-          </h1>
-          <div>
-            <Link
-              to={`/home/feedback/${userId}/`}
-              className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded"
-            >
-              Feedback
-            </Link>
-          </div>
-        </div>
+            <div className="flex gap-6 items-center">
+              <div className="text-rose-500 text-4xl">
+                <Fa6SolidHeart></Fa6SolidHeart>
+              </div>
+              <h1 className="text-white font-medium text-xl">
+                Please share our open framework, submit your feedback and contribute
+                to help us improve – your feedback matters, lets change the world!
+              </h1>
+              <div>
+                <Link
+                  to={`/home/feedback/${userId}/`}
+                  className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded"
+                >
+                  Feedback
+                </Link>
+              </div>
+            </div>
+          </>
+        }
       </div>
     </>
   );

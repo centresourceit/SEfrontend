@@ -2,14 +2,13 @@
 import { LoaderArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import React, { useEffect, useRef, useState } from "react";
+import { MCQQuestions, PercentQuestions, SliderQuestions } from "~/components/questions";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
-import { MCQQuestions, PercentQuestions, SliderQuestions } from "./home.taketest._index";
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
-
 
   const data = await ApiCall({
     query: `
@@ -74,9 +73,7 @@ export async function loader(params: LoaderArgs) {
 const AdminDashboard = () => {
   const result = useLoaderData().result;
   const questions = useLoaderData().questions;
-
   let count = 0;
-
   return (
     <div className="grow  p-4 w-full">
       <h1 className="text-white font-medium text-4xl">Your Result</h1>

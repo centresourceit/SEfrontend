@@ -37,7 +37,6 @@ const ResultStatus = () => {
     <div className="grow  p-4 w-full">
       <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
       <div className="w-full bg-secondary h-[1px] my-2"></div>
-
       {questiondata == null ?
         <h1 className="text-white font-medium text-2xl my-4">
           You haven't given any test yet.
@@ -51,7 +50,7 @@ const ResultStatus = () => {
               <div className="rounded-full bg-[#865fe5] grid place-items-center shrink-0 w-80 h-80">
                 <div>
                   <p className="text-white font-bold text-7xl text-center">
-                    {((Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length).toFixed(2)}/10
+                    {((Number(questiondata.totalScore) / 10) / questiondata.assesement.result.length).toFixed(1)}/10
                   </p>
                   <p className="text-white font-bold text-3xl text-center">
                     Your Score

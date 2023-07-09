@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import { ChangeEvent, useRef, useState } from "react";
 import { z } from "zod";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Fa6SolidEnvelope, Fa6SolidUser } from "./icons/Icons";
 
 export default function Contact(): JSX.Element {
@@ -82,7 +82,6 @@ export default function Contact(): JSX.Element {
                     </div>
                 </div>
             </section>
-            <ToastContainer></ToastContainer>
         </>
     );
 }

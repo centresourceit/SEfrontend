@@ -1,7 +1,7 @@
 import { Form, Link, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { ApiCall } from "~/services/api";
 import { Fa6SolidEye, Fa6SolidEyeSlash, Fa6SolidUser } from "./icons/Icons";
 
@@ -138,7 +138,6 @@ export default function Login(): JSX.Element {
           </Form>
         </div>
       </section>
-      <ToastContainer></ToastContainer>
     </>
   );
 }
