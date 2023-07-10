@@ -66,7 +66,7 @@ const answersStore = create<AnswerState>()((set) => ({
       return { answers: updatedAnswers };
     });
   },
-  cacheAnswer: [[], [], [], [], []],
+  cacheAnswer: [[], [], [], [], [], []],
   addCacheAnswer: (value) => {
     const ans: AnswerStructure = {
       id: value.id,
@@ -99,7 +99,7 @@ const answersStore = create<AnswerState>()((set) => ({
   },
   clearCache: () => {
     set((state) => {
-      return { ...state, cacheAnswer: [[], [], [], [], []] };
+      return { ...state, cacheAnswer: [[], [], [], [], [], []] };
     });
   },
 }));

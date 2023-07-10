@@ -164,7 +164,7 @@ const UserDashboard = () => {
         {questiondata == null ?
           <div className=" my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
             <p className="text-rose-500 font-semibold text-2xl">
-              You haven't given any test yet.
+              You haven't completed any test yet.
             </p>
           </div> :
           <>

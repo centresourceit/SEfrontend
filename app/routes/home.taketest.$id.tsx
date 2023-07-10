@@ -104,18 +104,22 @@ const TakeTest = () => {
       quenum += questions[i].question_bank.length;
     }
     setQuecount((val) => quenum);
+    if (!(result == null || result == undefined)) {
 
 
-    for (let i = 0; i < result.assesement.result.length; i++) {
-      addCacheAnswer({
-        id: result.assesement.result[i].id,
-        question: result.assesement.result[i].question,
-        answer: result.assesement.result[i].answer,
-        mark: result.assesement.result[i].mark,
-        rec: result.assesement.result[i].rec,
-        version: 1,
-        page: 0
-      })
+      if (result.totalScore == 0) {
+        for (let i = 0; i < result.assesement.result.length; i++) {
+          addCacheAnswer({
+            id: result.assesement.result[i].id,
+            question: result.assesement.result[i].question,
+            answer: result.assesement.result[i].answer,
+            mark: result.assesement.result[i].mark,
+            rec: result.assesement.result[i].rec,
+            version: 1,
+            page: 5
+          })
+        }
+      }
     }
   };
 
@@ -125,7 +129,7 @@ const TakeTest = () => {
 
 
   const saveAndExit = async () => {
-    const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4]];
+    const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
 
 
 
@@ -229,20 +233,9 @@ const TakeTest = () => {
   };
 
   const submit = async () => {
-    let sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4]];
+    const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
 
-    for (let i = 0; i < result.assesement.result; i++) {
-      sendanswer.push({
-        id: result.assesement.result[i].id,
-        question: result.assesement.result[i].question,
-        answer: result.assesement.result[i].answer,
-        mark: result.assesement.result[i].mark,
-        rec: result.assesement.result[i].rec,
-        version: 1,
-        status: false,
-        updatedAt: new Date().toLocaleString(),
-      })
-    }
+
     let totalScore = 0;
     cacheAnswer.flat().forEach((ans) => {
       totalScore += Number(ans.mark) || 0;
@@ -398,7 +391,7 @@ const TakeTest = () => {
             SAVE AND EXIT
           </button>
 
-          {page == 4 && cacheAnswer.flat().length == 40 ?
+          {page == 4 && cacheAnswer.flat().length == 8 ?
             <button
               onClick={submit}
               className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded-full hover:scale-105 transition-all"
@@ -428,7 +421,7 @@ const TakeTest = () => {
           </p>
         </div>
         <div className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500 my-4 flex">
-          <p className="">Attempted : {cacheAnswer.flat().length}/40</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 40)} % Completed</p>
+          <p className="">Attempted : {cacheAnswer.flat().length}/8</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 8)} % Completed</p>
         </div>
         {questions == null || questions == undefined ? (
           <>
@@ -452,174 +445,202 @@ const TakeTest = () => {
               questions[page].question_bank.map((que: any, ind: number) => {
                 count++;
                 const question = cacheAnswer[page].filter((val: any) => val.id == que.id);
+                const selectedquestion = cacheAnswer[5].filter((val: any) => val.id == que.id);
                 const data = (result == null || result == undefined) ? null : result.assesement.result.findIndex((val: any) => val.id == que.id);
-                if (data !== -1) {
-                  return <></>;
-                };
-                return (
-                  <div key={ind}>
-                    {que.questionType == "MCQ" ||
-                      que.questionType == "TANDF" ? (
-                      <MCQQuestions
-                        queNumber={count}
-                        question={que}
-                        pagenumber={page}
-                        selected={question[0]}
-                      ></MCQQuestions>
-                    ) : (
-                      ""
-                    )}
-                    {que.questionType == "SLIDER" ? (
-                      <SliderQuestions
-                        queNumber={count}
-                        question={que}
-                        maxnumber={100}
-                        step={10}
-                        pagenumber={page}
-                        selected={question[0]}
-                      ></SliderQuestions>
-                    ) : (
-                      ""
-                    )}
-                    {que.questionType == "PERCENTAGE" ? (
-                      <PercentQuestions
-                        queNumber={count}
-                        question={que}
-                        pagenumber={page}
-                        selected={question[0]}
-                      ></PercentQuestions>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
+                if (!(result == null || result == undefined)) {
+                  if (result.totalScore != 0) {
+                    return (
+                      <div key={ind}>
+                        {que.questionType == "MCQ" ||
+                          que.questionType == "TANDF" ? (
+                          <MCQQuestions
+                            queNumber={count}
+                            question={que}
+                            pagenumber={page}
+                            selected={question[0]}
+                          ></MCQQuestions>
+                        ) : (
+                          ""
+                        )}
+                        {que.questionType == "SLIDER" ? (
+                          <SliderQuestions
+                            queNumber={count}
+                            question={que}
+                            maxnumber={100}
+                            step={10}
+                            pagenumber={page}
+                            selected={question[0]}
+                          ></SliderQuestions>
+                        ) : (
+                          ""
+                        )}
+                        {que.questionType == "PERCENTAGE" ? (
+                          <PercentQuestions
+                            queNumber={count}
+                            question={que}
+                            pagenumber={page}
+                            selected={question[0]}
+                          ></PercentQuestions>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    );
+                  } else {
+                    if (data == null || data == undefined) {
+                      return (
+                        <div key={ind}>
+                          {que.questionType == "MCQ" ||
+                            que.questionType == "TANDF" ? (
+                            <MCQQuestions
+                              queNumber={count}
+                              question={que}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></MCQQuestions>
+                          ) : (
+                            ""
+                          )}
+                          {que.questionType == "SLIDER" ? (
+                            <SliderQuestions
+                              queNumber={count}
+                              question={que}
+                              maxnumber={100}
+                              step={10}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></SliderQuestions>
+                          ) : (
+                            ""
+                          )}
+                          {que.questionType == "PERCENTAGE" ? (
+                            <PercentQuestions
+                              queNumber={count}
+                              question={que}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></PercentQuestions>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    } else if (data !== -1) {
+                      if (selectedquestion[0] == undefined || selectedquestion[0] == undefined) {
+                        return <></>
+                      } else {
+                        return <AnswerBox question={selectedquestion[0].question} answer={selectedquestion[0].answer} index={count}></AnswerBox>;
+                      }
+                    } else {
+                      return (
+                        <div key={ind}>
+                          {que.questionType == "MCQ" ||
+                            que.questionType == "TANDF" ? (
+                            <MCQQuestions
+                              queNumber={count}
+                              question={que}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></MCQQuestions>
+                          ) : (
+                            ""
+                          )}
+                          {que.questionType == "SLIDER" ? (
+                            <SliderQuestions
+                              queNumber={count}
+                              question={que}
+                              maxnumber={100}
+                              step={10}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></SliderQuestions>
+                          ) : (
+                            ""
+                          )}
+                          {que.questionType == "PERCENTAGE" ? (
+                            <PercentQuestions
+                              queNumber={count}
+                              question={que}
+                              pagenumber={page}
+                              selected={question[0]}
+                            ></PercentQuestions>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    }
+                  }
+                } else {
+                  return (
+                    <div key={ind}>
+                      {que.questionType == "MCQ" ||
+                        que.questionType == "TANDF" ? (
+                        <MCQQuestions
+                          queNumber={count}
+                          question={que}
+                          pagenumber={page}
+                          selected={question[0]}
+                        ></MCQQuestions>
+                      ) : (
+                        ""
+                      )}
+                      {que.questionType == "SLIDER" ? (
+                        <SliderQuestions
+                          queNumber={count}
+                          question={que}
+                          maxnumber={100}
+                          step={10}
+                          pagenumber={page}
+                          selected={question[0]}
+                        ></SliderQuestions>
+                      ) : (
+                        ""
+                      )}
+                      {que.questionType == "PERCENTAGE" ? (
+                        <PercentQuestions
+                          queNumber={count}
+                          question={que}
+                          pagenumber={page}
+                          selected={question[0]}
+                        ></PercentQuestions>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  );
+                }
+
               })
             )}
           </div>
-
-
-          // questions.map((val: any, index: number) => (
-          //   <div key={index}>
-          //     <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500">
-          //       {val.name}
-          //     </p>
-          //     {val.question_bank == null || val.question_bank == undefined ? (
-          //       <>
-          //         <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500">
-          //           There is no questions.
-          //         </p>
-          //       </>
-          //     ) : (
-          //       val.question_bank.map((que: any, ind: number) => {
-          //         count++;
-          //         return (
-          //           <div key={ind}>
-          //             {que.questionType == "MCQ" ||
-          //               que.questionType == "TANDF" ? (
-          //               <MCQQuestions
-          //                 questionsId={que.id}
-          //                 queNumber={count}
-          //                 question={que.question}
-          //                 description={que.description}
-          //                 Options={que.answer}
-          //               ></MCQQuestions>
-          //             ) : (
-          //               ""
-          //             )}
-          //             {que.questionType == "SLIDER" ? (
-          //               <SliderQuestions
-          //                 questionsId={que.id}
-          //                 queNumber={count}
-          //                 question={que.question}
-          //                 description={que.description}
-          //                 maxnumber={100}
-          //                 step={10}
-          //                 Options={que.answer}
-          //               ></SliderQuestions>
-          //             ) : (
-          //               ""
-          //             )}
-          //             {que.questionType == "PERCENTAGE" ? (
-          //               <PercentQuestions
-          //                 questionsId={que.id}
-          //                 queNumber={count}
-          //                 question={que.question}
-          //                 description={que.description}
-          //                 option={que.answer}
-          //               ></PercentQuestions>
-          //             ) : (
-          //               ""
-          //             )}
-          //           </div>
-          //         );
-          //       })
-          //     )}
-          //   </div>
-          // ))
         )}
-
-
-        {/* <div className="flex gap-4">
-          {
-            page != 0 ?
-              <button
-                onClick={prevpage}
-                className="text-center py-2 px-4 text-white bg-rose-500 font-semibold rounded hover:scale-105 transition-all"
-              >
-                Back
-              </button>
-              :
-              null
-          }
-
-          {page != 4 ?
-            <button
-              onClick={nextpage}
-              className="text-center py-2 px-4 text-white bg-green-500 font-semibold rounded hover:scale-105 transition-all"
-            >
-              Next
-            </button>
-            :
-            <>
-              <button
-                onClick={saveAndExit}
-                className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
-              >
-                SAVE AND EXIT
-              </button>
-
-              {answers.length == quecount ? (
-                <button
-                  onClick={submit}
-                  className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
-                >
-                  SUBMIT
-                </button>
-              ) : null}
-            </>
-          }
- */}
-
-
-        {/* <button
-            onClick={saveAndExit}
-            className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded hover:scale-105 transition-all"
-          >
-            SAVE AND EXIT
-          </button>
-
-          {answers.length == quecount ? (
-            <button
-              onClick={submit}
-              className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded hover:scale-105 transition-all"
-            >
-              SUBMIT
-            </button>
-          ) : null} */}
-        {/* </div> */}
       </div>
     </>
   );
 };
 
 export default TakeTest;
+
+
+
+interface AnswerBoxProps {
+  index: number;
+  question: string;
+  answer: string;
+}
+
+const AnswerBox: React.FC<AnswerBoxProps> = (props: AnswerBoxProps): JSX.Element => {
+  return (
+    <>
+      <div className="bg-secondary px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-20 border-2 border-secondary">
+        <h2 className="text-secondary font-medium text-3xl mb-2">
+          {props.index}. {props.question}
+        </h2>
+        <h4 className="text-white font-normal text-2xl mb-2">
+          Answer: {props.answer}
+        </h4>
+      </div>
+    </>
+  );
+}

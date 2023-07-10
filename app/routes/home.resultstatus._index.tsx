@@ -39,7 +39,7 @@ const ResultStatus = () => {
       <div className="w-full bg-secondary h-[1px] my-2"></div>
       {questiondata == null ?
         <h1 className="text-white font-medium text-2xl my-4">
-          You haven't given any test yet.
+          You haven't Completed any test yet.
         </h1>
         : <>
           <h1 className="text-white font-medium text-4xl">
@@ -94,9 +94,6 @@ const ResultStatus = () => {
             </div>
             <div className="grow">
               <div className="grid place-items-center">
-                <Link to={"/home/taketest/"} className="bg-[#865fe5] text-2xl font-semibold py-2 px-4 text-white">
-                  Start Again
-                </Link>
                 <h1 className="text-secondary font-medium text-2xl my-4">
                   Want to improve your Score?
                 </h1>
