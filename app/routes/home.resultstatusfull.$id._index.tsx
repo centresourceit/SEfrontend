@@ -1,4 +1,5 @@
-import { Link } from "@remix-run/react";
+import { LoaderArgs, json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,8 @@ import {
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+import { userPrefs } from "~/cookies";
+import { ApiCall } from "~/services/api";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,15 +23,90 @@ ChartJS.register(
   Legend
 );
 
+export async function loader(params: LoaderArgs) {
+  const id = params.params.id;
+  const cookieHeader = params.request.headers.get("Cookie");
+  const cookie: any = await userPrefs.parse(cookieHeader);
+  const data = await ApiCall({
+    query: `
+    query searchResult($searchResultInput:SearchResultInput!){
+      searchResult(searchResultInput:$searchResultInput){
+        id,
+        certificatedId,
+        resultStatus,
+        totalScore,
+        certified,
+        projectId,
+        assesement{
+          result{
+            id,
+            principleid,
+            principlename,
+            question,
+            answer,
+            mark,
+            rec,
+            version,
+            license,
+            questioncode,
+            questiontype
+          }
+        }
+      },
+    }
+  `,
+    veriables: {
+      searchResultInput: {
+        id: parseInt(id!),
+      }
+    },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+
+
+  return json({
+    result: data.data.searchResult,
+    token: cookie.token,
+    id: id
+  });
+}
+
 const ResultStatus = () => {
+
+  const loader = useLoaderData();
+  const result = loader.result[0];
+  const id = loader.id;
+
+
   const options: any = {
+    scales: {
+      x: {
+        barThickness: 10,
+        categoryPercentage: 0.8,
+        barPercentage: 0.9,
+        ticks: {
+          font: {
+            size: 18,
+          },
+          precision: 0,
+          color: 'white',
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 18,
+          },
+          color: 'white',
+        },
+      },
+    },
     indexAxis: "y",
     elements: {
       bar: {
         borderWidth: 2,
       },
     },
-    // scaleFontColor: "#FFFFFF",
     responsive: true,
     plugins: {
       legend: {
@@ -43,83 +121,48 @@ const ResultStatus = () => {
     },
   };
 
-  const labels = [
-    ["Human First", "Automation level", "Displacement Protection"],
-    ["Purpose", "Benefits", "Stakeholder Onboarding"],
-    ["Disruption Management", "Measure of Displacement", "Skills Managment"],
-    ["Socio Economic Balance", "Needs & wellbeing secured", "Skills Learning"],
-    [
-      "Trust in Data",
-      "Transparently Build",
-      "Real World Ready",
-      "Seamless & Sustainable",
-      "Secure by desing",
+  const groupedData: Array<{ principleid: number, principlename: string, totalMark: number, questions: Array<any> }> = Object.values(result.assesement.result.reduce((result: any, obj: any) => {
+
+    const { principleid, principlename, mark, ...questionData } = obj;
+    if (!result[principleid]) {
+      result[principleid] = {
+        principleid,
+        principlename,
+        totalMark: 0,
+        questions: []
+      };
+    }
+    result[principleid].totalMark += mark;
+    result[principleid].questions.push(obj);
+    return result;
+  }, {}));
+
+
+  let titles: string[] = [];
+  let labels: string[][] = [];
+  let mark: number[][] = [];
+
+
+  groupedData.forEach((val: any, index: number) => {
+    titles[index] = val.principlename;
+    labels[index] = val.questions.map((val: any) => val.questioncode);
+    mark[index] = val.questions.map((val: any) => val.mark);
+  });
+
+
+
+
+  const data = titles.map((val: any, index: number) => ({
+    labels: labels[index].map((value: any) => value),
+    datasets: [
+      {
+        data: mark[index].map((value: any) => value),
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
     ],
-  ];
+  }));
 
-  // const data: ChartData<"line">[] = [
-
-  // ];
-  const data = [
-    {
-      labels: labels[0],
-      datasets: [
-        {
-          data: [5, 6, 3],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-      ],
-    },
-    {
-      labels: labels[1],
-      datasets: [
-        {
-          data: [5, 6, 3],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-      ],
-    },
-    {
-      labels: labels[2],
-      datasets: [
-        {
-          data: [5, 6, 3],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-      ],
-    },
-    {
-      labels: labels[3],
-      datasets: [
-        {
-          data: [5, 6, 3],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-      ],
-    },
-    {
-      labels: labels[4],
-      datasets: [
-        {
-          data: [5, 6, 3, 6, 3],
-          borderColor: "rgb(53, 162, 235)",
-          backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-      ],
-    },
-  ];
-
-  const titles = [
-    "Right to Intelligence",
-    "Purpose Driven",
-    "Disruption Prevention",
-    "Risk Evaluated",
-    "Accountable Re-design",
-  ];
   return (
     <div className="grow  p-4 w-full">
       <h1 className="text-secondary font-medium text-2xl">Result Stauts</h1>
@@ -129,7 +172,7 @@ const ResultStatus = () => {
           <div className="grow shrink-0">
             <div className="rounded-full bg-[#865fe5] grid place-items-center w-80 h-80">
               <p className="text-white font-bold text-7xl">
-                3.1<span className="text-3xl font-normal">/5</span>
+                {((Number(result.totalScore) / 10) / result.assesement.result.length).toFixed(1)}/10
               </p>
             </div>
             <button className="text-white text-center font-medium text-md rounded-full px-4 my-4 py-2 bg-[#865fe5]">
@@ -146,7 +189,7 @@ const ResultStatus = () => {
             <p className="text-white text-md my-6">
               Here is your Unique ID. Use your unique to see your result again
             </p>
-            <p className="text-[#865fe5] font-medium text-3xl">4DF674</p>
+            <p className="text-[#865fe5] font-medium text-3xl">{result.certificatedId.toString().toUpperCase()}</p>
             <div className="flex gap-4 my-4">
               <Link to={"/home/taketest"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Start Again
@@ -162,15 +205,15 @@ const ResultStatus = () => {
               <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Contact us
               </button>
-              <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Publish
-              </button>
+              </a>
             </div>
           </div>
         </div>
         {labels.map((val: any, index: number) => (
           <div className="grid place-items-center" key={index}>
-            <div className="bg-primary-800 rounded-lg p-4">
+            <div className="bg-primary-800 rounded-lg p-4 w-[28rem]">
               <div className="flex gap-x-2">
                 <img src="/images/brand/task.png" alt="task" className="w-14" />
                 <div>

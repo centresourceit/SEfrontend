@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 enum SideBarTabs {
   None,
-  MyProfile,
+  EditProfile,
   TakeTesk,
   RresultStatus,
   User,
@@ -14,7 +14,7 @@ enum SideBarTabs {
   Questions,
   LicenseSlave,
   UserCompany,
-  UserProject
+  UserProject,
 }
 
 interface SideBarState {

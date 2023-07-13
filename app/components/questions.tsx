@@ -6,6 +6,8 @@ interface MCQQuestionsProps {
     queNumber: number;
     pagenumber: number;
     selected: undefined | { [key: string]: any };
+    principleid: number;
+    principlename: string;
 }
 
 const MCQQuestions: React.FC<MCQQuestionsProps> = (
@@ -29,12 +31,17 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
                                 onClick={() =>
                                     addCacheAnswer({
                                         question: props.question.question,
+                                        principleid: props.principleid,
+                                        principlename: props.principlename,
                                         answer: value.answer,
                                         mark: value.mark,
                                         rec: value.rec,
                                         id: props.question.id,
                                         version: props.question.version,
-                                        page: props.pagenumber
+                                        page: props.pagenumber,
+                                        questioncode: props.question.questioncode,
+                                        questiontype: props.question.questionType,
+                                        license: props.question.licensesId,
                                     })
                                 }
                                 className="flex items-center gap-4 border-2 border-[#3d3f49] border-dashed hover:border-gray-300  w-full py-2 px-4"
@@ -69,6 +76,8 @@ interface SliderQuestionsProps {
     step: number;
     pagenumber: number;
     selected: undefined | { [key: string]: any };
+    principleid: number;
+    principlename: string;
 }
 
 const SliderQuestions: React.FC<SliderQuestionsProps> = (
@@ -112,12 +121,17 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
                             setValue(value => parseInt(val.target.value));
                             addCacheAnswer({
                                 question: props.question.question,
+                                principleid: props.principleid,
+                                principlename: props.principlename,
                                 answer: props.question.answer[val.target.value].answer,
                                 mark: props.question.answer[val.target.value].mark,
                                 rec: props.question.answer[val.target.value].rec,
                                 id: props.question.id,
                                 version: props.question.version,
-                                page: props.pagenumber
+                                page: props.pagenumber,
+                                questioncode: props.question.questioncode,
+                                questiontype: props.question.questionType,
+                                license: props.question.licensesId,
                             });
                         }}
                     />
@@ -149,6 +163,8 @@ interface PercentQuestionsProps {
     queNumber: number;
     pagenumber: number;
     selected: undefined | { [key: string]: any };
+    principleid: number;
+    principlename: string;
 }
 
 const PercentQuestions: React.FC<PercentQuestionsProps> = (
@@ -159,6 +175,7 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
     const handleIndex = (index: number) => {
         setSelected((val) => index);
     };
+
     const addCacheAnswer = answersStore((state) => state.addCacheAnswer);
 
     useEffect(() => {
@@ -186,12 +203,17 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
                                 handleIndex(index);
                                 addCacheAnswer({
                                     question: props.question.question,
+                                    principleid: props.principleid,
+                                    principlename: props.principlename,
                                     answer: value.answer,
                                     mark: value.mark,
                                     rec: value.rec,
                                     id: props.question.id,
                                     page: props.pagenumber,
-                                    version: props.question.version
+                                    version: props.question.version,
+                                    questioncode: props.question.questioncode,
+                                    questiontype: props.question.questionType,
+                                    license: props.question.licensesId,
                                 });
                             }}
                             className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${index == selected

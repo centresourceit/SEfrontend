@@ -3,21 +3,31 @@ import { create } from "zustand";
 export interface AnswerInputStructure {
   id: number;
   question: string;
+  principleid: number;
+  principlename: string;
   answer: string;
   mark: string;
   rec: string;
   page: number;
   version: number;
+  license: number;
+  questiontype: string;
+  questioncode: string;
 }
 
 export interface AnswerStructure {
   id: number;
   question: string;
+  principleid: number;
+  principlename: string;
   answer: string;
   mark: string;
   rec: string;
   version: number;
   status: boolean;
+  license: number;
+  questiontype: string;
+  questioncode: string;
   updatedAt: string;
 }
 
@@ -36,10 +46,15 @@ const answersStore = create<AnswerState>()((set) => ({
     const ans: AnswerStructure = {
       id: value.id,
       question: value.question,
+      principleid: value.principleid,
+      principlename: value.principlename,
       answer: value.answer,
       mark: value.mark,
       rec: value.rec,
       version: value.version,
+      license: value.license,
+      questiontype: value.questiontype,
+      questioncode: value.questioncode,
       status: false,
       updatedAt: new Date().toLocaleString(),
     };
@@ -71,13 +86,19 @@ const answersStore = create<AnswerState>()((set) => ({
     const ans: AnswerStructure = {
       id: value.id,
       question: value.question,
+      principleid: value.principleid,
+      principlename: value.principlename,
       answer: value.answer,
       mark: value.mark,
       rec: value.rec,
       version: value.version,
+      license: value.license,
+      questiontype: value.questiontype,
+      questioncode: value.questioncode,
       status: false,
       updatedAt: new Date().toLocaleString(),
     };
+
 
     set((state) => {
       const existingAnswerIndex = state.cacheAnswer[value.page].findIndex(

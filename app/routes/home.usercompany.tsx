@@ -49,7 +49,6 @@ export async function loader(params: LoaderArgs) {
 
 
 const UserCompany = (): JSX.Element => {
-
     const loader = useLoaderData();
     const user = loader.user;
     return (

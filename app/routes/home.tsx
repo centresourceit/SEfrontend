@@ -4,7 +4,7 @@ import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
-import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
+import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidUserLarge, Fa6SolidXmark, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
 import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
@@ -38,7 +38,6 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
 };
 
 const DashBoard = () => {
-
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   const asideindex = sideBarStore((state) => state.currentIndex);
@@ -48,20 +47,6 @@ const DashBoard = () => {
   const username = useLoaderData().username;
 
   const navigator = useNavigate();
-
-  const init = () => {
-    if (isAdmin) {
-      achangeindex(SideBarTabs.User);
-      navigator("/home/user");
-    } else {
-      if (asideindex === SideBarTabs.None) {
-        navigator("/home");
-      }
-    }
-  };
-  useEffect(() => {
-    init();
-  }, []);
 
   const logoutHandle = () => {
     navigator("/logout");
@@ -228,7 +213,7 @@ const DashBoard = () => {
                         active={asideindex === SideBarTabs.RresultStatus}
                       ></SidebarTab>
                     </Link> */}
-                    <Link
+                    {/* <Link
                       to={"/home/usercompany/"}
                       onClick={() => {
                         achangeindex(SideBarTabs.UserCompany);
@@ -240,8 +225,8 @@ const DashBoard = () => {
                         title="Company"
                         active={asideindex === SideBarTabs.UserCompany}
                       ></SidebarTab>
-                    </Link>
-                    <Link
+                    </Link> */}
+                    {/* <Link
                       to={"/home/userproject/"}
                       onClick={() => {
                         achangeindex(SideBarTabs.UserProject);
@@ -253,10 +238,22 @@ const DashBoard = () => {
                         title="Project"
                         active={asideindex === SideBarTabs.UserProject}
                       ></SidebarTab>
-                    </Link>
+                    </Link> */}
                   </>
                 )}
-
+                <Link
+                  to={`/home/editprofile/`}
+                  onClick={() => {
+                    achangeindex(SideBarTabs.EditProfile);
+                    changeMobile(false);
+                  }}
+                >
+                  <SidebarTab
+                    icon={Fa6SolidUserLarge}
+                    title="Profile"
+                    active={asideindex === SideBarTabs.EditProfile}
+                  ></SidebarTab>
+                </Link>
                 {/* <div className="grow"></div> */}
                 <button onClick={logoutHandle}>
                   <SidebarTab
@@ -323,7 +320,7 @@ const TopNavBar = (props: TopNavBarProps) => {
   const isMobile = sideBarStore((state) => state.isOpen);
   const changeMobile = sideBarStore((state) => state.change);
   return (
-    <div className="bg-primary-800  text-2xl w-full text-center text-white p-4 font-medium flex gap-4 rounded-md">
+    <div className="bg-primary-800  text-2xl w-full text-center text-white p-4 font-medium flex gap-4 rounded-md items-center">
       <div className="px md:hidden" onClick={() => changeMobile(!isMobile)}>
         <Fa6SolidBars></Fa6SolidBars>
       </div>
@@ -332,7 +329,8 @@ const TopNavBar = (props: TopNavBarProps) => {
       </div>
       <div className="text-center hidden md:block">Home</div>
       <div className="grow"></div>
-      <div></div>
+      <div className="h-8 w-[2px] bg-white"></div>
+      {/* 
       <div className="flex gap-2 relative group  items-center">
         <div className="cursor-pointer">
           <img
@@ -341,9 +339,10 @@ const TopNavBar = (props: TopNavBarProps) => {
             className="w-8 h-8 rounded-sm object-cover object-center"
           />
         </div>
-        <div className="text-white font-medium text-2xl text-center cursor-pointer">
-          {props.name}
-        </div>
+      </div>
+         */}
+      <div className="text-white font-medium text-2xl text-center cursor-pointer">
+        {props.name}
       </div>
     </div>
   );

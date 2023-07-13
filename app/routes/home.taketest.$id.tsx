@@ -17,12 +17,16 @@ export async function loader(params: LoaderArgs) {
     query: `
     query getPrinciple{
       getPrinciple{
+        id,
         name,
         question_bank{
           id,
           questionType,
           question,
           description,
+          version,
+          questioncode,
+          licensesId,
           answer{
             answer,
             mark,
@@ -50,10 +54,16 @@ export async function loader(params: LoaderArgs) {
     		assesement{
           result{
             id,
+            principleid,
+            principlename,
             question,
             answer,
             mark,
             rec,
+            version,
+            license,
+            questioncode,
+            questiontype
           }
         }
       }
@@ -69,6 +79,7 @@ export async function loader(params: LoaderArgs) {
       authorization: `Bearer ${cookie.token}`,
     },
   });
+
 
   return json({
     questions: data.data.getPrinciple,
@@ -111,11 +122,16 @@ const TakeTest = () => {
         for (let i = 0; i < result.assesement.result.length; i++) {
           addCacheAnswer({
             id: result.assesement.result[i].id,
+            principleid: result.assesement.result[i].principleid,
+            principlename: result.assesement.result[i].principlename,
             question: result.assesement.result[i].question,
             answer: result.assesement.result[i].answer,
             mark: result.assesement.result[i].mark,
             rec: result.assesement.result[i].rec,
-            version: 1,
+            version: result.assesement.result[i].version,
+            license: result.assesement.result[i].license,
+            questioncode: result.assesement.result[i].questioncode,
+            questiontype: result.assesement.result[i].questiontype,
             page: 5
           })
         }
@@ -235,19 +251,14 @@ const TakeTest = () => {
   const submit = async () => {
     const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
 
-
     let totalScore = 0;
-    cacheAnswer.flat().forEach((ans) => {
+    sendanswer.forEach((ans) => {
       totalScore += Number(ans.mark) || 0;
     });
 
+
     //if user don't done any exam then it's create new save exist
     if (result == null || result == undefined) {
-      let totalScore = 0;
-      answers.forEach((ans) => {
-        totalScore += Number(ans.mark) || 0;
-      });
-
       const data = await ApiCall({
         query: `
       mutation createResults($createAnswerInput:CreateAnswerInput!,$createResultInput:CreateResultInput!){
@@ -272,7 +283,7 @@ const TakeTest = () => {
       });
       if (data.status) {
         clearCache();
-        navigator("/home/resultstatus");
+        navigator(`/home/resultstatus/${data.data.createResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -308,7 +319,7 @@ const TakeTest = () => {
 
       if (data.status) {
         clearCache();
-        navigator("/home/resultstatus");
+        navigator(`/home/resultstatus/${data.data.updateResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -338,7 +349,7 @@ const TakeTest = () => {
       });
       if (data.status) {
         clearCache();
-        navigator("/home/resultstatus");
+        navigator(`/home/resultstatus/${data.data.createResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -391,7 +402,7 @@ const TakeTest = () => {
             SAVE AND EXIT
           </button>
 
-          {page == 4 && cacheAnswer.flat().length == 25 ?
+          {page == 4 && cacheAnswer.flat().length == 8 ?
             <button
               onClick={submit}
               className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded-full hover:scale-105 transition-all"
@@ -421,7 +432,7 @@ const TakeTest = () => {
           </p>
         </div>
         <div className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500 my-4 flex">
-          <p className="">Attempted : {cacheAnswer.flat().length}/25</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 25)} % Completed</p>
+          <p className="">Attempted : {cacheAnswer.flat().length}/8</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 8)} % Completed</p>
         </div>
         {questions == null || questions == undefined ? (
           <>
@@ -458,6 +469,8 @@ const TakeTest = () => {
                             question={que}
                             pagenumber={page}
                             selected={question[0]}
+                            principleid={questions[page].id}
+                            principlename={questions[page].name}
                           ></MCQQuestions>
                         ) : (
                           ""
@@ -470,6 +483,8 @@ const TakeTest = () => {
                             step={10}
                             pagenumber={page}
                             selected={question[0]}
+                            principleid={questions[page].id}
+                            principlename={questions[page].name}
                           ></SliderQuestions>
                         ) : (
                           ""
@@ -480,6 +495,8 @@ const TakeTest = () => {
                             question={que}
                             pagenumber={page}
                             selected={question[0]}
+                            principleid={questions[page].id}
+                            principlename={questions[page].name}
                           ></PercentQuestions>
                         ) : (
                           ""
@@ -497,6 +514,8 @@ const TakeTest = () => {
                               question={que}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></MCQQuestions>
                           ) : (
                             ""
@@ -509,6 +528,8 @@ const TakeTest = () => {
                               step={10}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></SliderQuestions>
                           ) : (
                             ""
@@ -519,6 +540,8 @@ const TakeTest = () => {
                               question={que}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></PercentQuestions>
                           ) : (
                             ""
@@ -541,6 +564,8 @@ const TakeTest = () => {
                               question={que}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></MCQQuestions>
                           ) : (
                             ""
@@ -553,6 +578,8 @@ const TakeTest = () => {
                               step={10}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></SliderQuestions>
                           ) : (
                             ""
@@ -563,6 +590,8 @@ const TakeTest = () => {
                               question={que}
                               pagenumber={page}
                               selected={question[0]}
+                              principleid={questions[page].id}
+                              principlename={questions[page].name}
                             ></PercentQuestions>
                           ) : (
                             ""
@@ -581,6 +610,8 @@ const TakeTest = () => {
                           question={que}
                           pagenumber={page}
                           selected={question[0]}
+                          principleid={questions[page].id}
+                          principlename={questions[page].name}
                         ></MCQQuestions>
                       ) : (
                         ""
@@ -593,6 +624,8 @@ const TakeTest = () => {
                           step={10}
                           pagenumber={page}
                           selected={question[0]}
+                          principleid={questions[page].id}
+                          principlename={questions[page].name}
                         ></SliderQuestions>
                       ) : (
                         ""
@@ -603,6 +636,8 @@ const TakeTest = () => {
                           question={que}
                           pagenumber={page}
                           selected={question[0]}
+                          principleid={questions[page].id}
+                          principlename={questions[page].name}
                         ></PercentQuestions>
                       ) : (
                         ""
