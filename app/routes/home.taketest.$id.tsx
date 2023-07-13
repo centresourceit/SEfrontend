@@ -402,7 +402,7 @@ const TakeTest = () => {
             SAVE AND EXIT
           </button>
 
-          {page == 4 && cacheAnswer.flat().length == 8 ?
+          {page == 4 && cacheAnswer.flat().length == 25 ?
             <button
               onClick={submit}
               className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded-full hover:scale-105 transition-all"
@@ -432,7 +432,7 @@ const TakeTest = () => {
           </p>
         </div>
         <div className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500 my-4 flex">
-          <p className="">Attempted : {cacheAnswer.flat().length}/8</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 8)} % Completed</p>
+          <p className="">Attempted : {cacheAnswer.flat().length}/25</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 25)} % Completed</p>
         </div>
         {questions == null || questions == undefined ? (
           <>

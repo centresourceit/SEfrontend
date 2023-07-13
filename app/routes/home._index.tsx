@@ -12,7 +12,7 @@ export async function loader(params: LoaderArgs) {
     const cookie: any = await userPrefs.parse(cookieHeader);
 
     if (cookie.role == "ADMIN") {
-        redirect("/home/user")
+        return redirect("/home/user")
     }
 
     const data = await ApiCall({
