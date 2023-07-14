@@ -92,7 +92,8 @@ export async function loader(params: LoaderArgs) {
 
 
     return json({
-        project: data.data,
+        isProject: data.status,
+        project: data.data.searchProject,
         token: cookie.token,
         license: license.data.searchLicenseslave,
         isLicense: license.status,
@@ -108,14 +109,18 @@ const UserProject = () => {
     const license = isLicense ? loader.license[0] : null;
     const user = loader.user;
     const navigator = useNavigate();
+    const isProject = loader.isProject;
 
     const addProject = () => {
+        if (!isProject) {
+            return navigator("/home/addproject");
+        }
         if (isLicense) {
-            if (license.licenseType.projectPerLicense <= project.searchProject.length) return toast.error("Your project limit is reached.");
-            navigator("/home/addproject");
+            if (license.licenseType.projectPerLicense <= project.length) return toast.error("Your project limit is reached.");
+            return navigator("/home/addproject");
         }
     }
-    const projectdata = project.searchProject;
+    // const projectdata = project.searchProject;
 
     const achangeindex = sideBarStore((state) => state.changeTab);
 
@@ -216,14 +221,14 @@ const UserProject = () => {
                 }
                 <div className="flex gap-6 flex-wrap my-6">
 
-                    {projectdata == null || projectdata == undefined ? (
+                    {project == null || project == undefined ? (
                         <>
                             <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
                                 There is no project.
                             </p>
                         </>
                     ) : (
-                        projectdata.map((val: any, index: number) => {
+                        project.map((val: any, index: number) => {
                             return (
                                 <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
                                     <div className="flex gap-6">
