@@ -24,6 +24,9 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
                 <h4 className="text-white font-normal text-xl mb-2">
                     {props.question.description}
                 </h4>
+                <h4 className="text-white font-normal text-xl mb-2">
+                    Compliance: {props.question.complince.name}
+                </h4>
                 <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     {props.question.answer.map((value: any, index: number) => {
                         return (
@@ -107,6 +110,9 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
                 </h2>
                 <h4 className="text-white font-normal text-xl mb-2">
                     {props.question.description}
+                </h4>
+                <h4 className="text-white font-normal text-xl mb-2">
+                    Compliance: {props.question.complince.name}
                 </h4>
                 <div className=" mt-6 w-full flex gap-4 items-center">
                     <input
@@ -194,6 +200,9 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
                 </h2>
                 <h4 className="text-white font-medium text-xl mb-2">
                     {props.question.description}
+                </h4>
+                <h4 className="text-white font-normal text-xl mb-2">
+                    Compliance: {props.question.complince.name}
                 </h4>
                 <div className="flex items-center justify-center">
                     {props.question.answer.map((value: any, index: number) => (

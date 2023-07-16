@@ -21,6 +21,7 @@ const AddLicense: React.FC = (): JSX.Element => {
     const navigator = useNavigate();
 
 
+    const lName = useRef<HTMLInputElement>(null);
     const lType = useRef<HTMLSelectElement>(null);
     const paymentamount = useRef<HTMLInputElement>(null);
     const discountamount = useRef<HTMLInputElement>(null);
@@ -39,6 +40,9 @@ const AddLicense: React.FC = (): JSX.Element => {
     const addLicense = async () => {
         const LicenseScheme = z
             .object({
+                name: z
+                    .string()
+                    .nonempty("License name is required."),
                 licenseType: z
                     .string()
                     .nonempty("License Type is required."),
@@ -54,8 +58,6 @@ const AddLicense: React.FC = (): JSX.Element => {
                     }),
                 discountValidTill: z
                     .date({ required_error: "Discount Till Valid is required", invalid_type_error: "Discount Till Valid Should be a valid date" }),
-                // .datetime("Discount Till Valid Should be a valid date")
-                // .nonempty("Discount Till Valid is required"),
                 questionAllowed: z
                     .number({
                         required_error: "License Question Allowed is required.",
@@ -72,6 +74,7 @@ const AddLicense: React.FC = (): JSX.Element => {
         type LicenseScheme = z.infer<typeof LicenseScheme>;
 
         const licenseScheme: LicenseScheme = {
+            name: lName!.current!.value,
             licenseType: lType!.current!.value,
             paymentAmount: parseInt(paymentamount!.current!.value),
             discountAmount: parseInt(discountamount!.current!.value),
@@ -112,7 +115,15 @@ const AddLicense: React.FC = (): JSX.Element => {
             <h1 className="text-white font-medium text-2xl">Add New License</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
 
-
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                License Name
+            </h2>
+            <input
+                ref={lName}
+                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                placeholder="Enter License name"
+            />
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>
                 License Type

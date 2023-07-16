@@ -36,6 +36,10 @@ export async function loader(params: LoaderArgs) {
           questionAllowed,
           projectPerLicense,
           discountValidTill,
+        },
+        complince{
+          name,
+          description
         }
       }
     }
@@ -243,6 +247,13 @@ const Compliance = () => {
                   </p>
                   <p className="text-gray-200 font-normal text-lg">
                     {val.principle.description}
+                  </p>
+                  <div className="w-full h-[2px] bg-gray-300 my-2"></div>
+                  <p className="text-gray-200 font-semibold text-2lx mt-2">
+                    {val.complince.name}
+                  </p>
+                  <p className="text-gray-200 font-normal text-lg">
+                    {val.complince.description}
                   </p>
                   <div className="w-full h-[2px] bg-gray-300 my-2"></div>
                   <p className="text-gray-200 text-2lx mt-2">

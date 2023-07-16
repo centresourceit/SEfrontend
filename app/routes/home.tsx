@@ -60,13 +60,13 @@ const DashBoard = () => {
               }`}
           >
             <div className="md:flex flex-col md:h-full">
-              <div className="text-white text-center mb-4">
+              <Link to={'/home'} className="text-white text-center mb-4">
                 <img
                   src="/images/logo.png"
                   alt="logo"
                   className="w-80 md:w-40 inline-block"
                 />
-              </div>
+              </Link>
               <div className="flex flex-col grow">
                 {isAdmin ? (
                   <>
@@ -324,10 +324,10 @@ const TopNavBar = (props: TopNavBarProps) => {
       <div className="px md:hidden" onClick={() => changeMobile(!isMobile)}>
         <Fa6SolidBars></Fa6SolidBars>
       </div>
-      <div className="px hidden md:block">
+      <Link to={"/home"} className="px hidden md:block">
         <Fa6SolidHouse></Fa6SolidHouse>
-      </div>
-      <div className="text-center hidden md:block">Home</div>
+      </Link>
+      <Link to={"/home"} className="text-center hidden md:block">Home</Link>
       <div className="grow"></div>
       <div className="h-8 w-[2px] bg-white"></div>
       {/* 

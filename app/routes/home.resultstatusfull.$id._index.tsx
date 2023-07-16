@@ -1,5 +1,5 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -162,10 +162,15 @@ const ResultStatus = () => {
       },
     ],
   }));
+  const navigator = useNavigate();
 
   return (
     <div className="grow  p-4 w-full">
-      <h1 className="text-secondary font-medium text-2xl">Result Stauts</h1>
+      <div className="flex gap-4 flex-wrap">
+        <h1 className="text-secondary font-medium text-2xl">Result Status</h1>
+        <div className="grow"></div>
+        <button onClick={() => { navigator(-1); }} className="text-white text-center font-medium text-xl rounded-full px-4 py-1 bg-cyan-500">Back To Result</button>
+      </div>
       <div className="w-full bg-secondary h-[1px] my-2"></div>
       <div className="flex w-full flex-col md:flex-row justify-between my-5 gap-y-8 flex-wrap">
         <div className="grow  flex flex-col lg:flex-row gap-6">
@@ -191,7 +196,7 @@ const ResultStatus = () => {
             </p>
             <p className="text-[#865fe5] font-medium text-3xl">{result.certificatedId.toString().toUpperCase()}</p>
             <div className="flex gap-4 my-4">
-              <Link to={"/home/taketest"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={`/home/taketest/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Start Again
               </Link>
               <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">

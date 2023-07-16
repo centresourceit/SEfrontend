@@ -105,6 +105,11 @@ export default function Login(): JSX.Element {
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    submit()
+                  }
+                }}
               />
             </div>
             <button

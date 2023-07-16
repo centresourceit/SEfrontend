@@ -76,12 +76,14 @@ const AddQuestion: React.FC = (): JSX.Element => {
     const navigator = useNavigate();
 
     const question = useRef<HTMLInputElement>(null);
+    const questionCode = useRef<HTMLInputElement>(null);
     const qDescription = useRef<HTMLTextAreaElement>(null);
     const qPlan = useRef<HTMLSelectElement>(null);
 
 
     useEffect(() => {
         question!.current!.value = fatchquestion.question;
+        questionCode!.current!.value = fatchquestion.questioncode;
         qDescription!.current!.value = fatchquestion.description;
         qPlan!.current!.value = fatchquestion.questionPlan.id;
         setAnswers(val => fatchquestion.answer);
@@ -210,7 +212,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
             principleId: fatchquestion.principle.id,
             version: fatchquestion.version + 1,
             questionRefId: fatchquestion.questionRefId,
-            questioncode: fatchquestion.questioncode,
+            questioncode: questionCode!.current!.value,
         };
         const parsed = QuestionScheme.safeParse(answerScheme);
         if (parsed.success) {
@@ -275,6 +277,15 @@ const AddQuestion: React.FC = (): JSX.Element => {
                 className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300 resize-none h-28"
                 placeholder="Enter Question Description"
             ></textarea>
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                Question Code
+            </h2>
+            <input
+                ref={questionCode}
+                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                placeholder="Enter Question"
+            />
 
             <div>
                 <button

@@ -41,27 +41,47 @@ export async function loader({ params, request }: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const compliance = await ApiCall({
+        query: `
+        query getAllCompliances{
+            getAllCompliances{
+              id,
+              name
+            },
+          }
+        `,
+        veriables: {},
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+
     return json({
         principle: data.data.getPrinciple,
         licenses: licenses.data.getAllLicense,
-        token: cookie.token, userId: cookie.id
+        token: cookie.token,
+        userId: cookie.id,
+        compliance: compliance.data.getAllCompliances
     });
 }
 
 
 const AddQuestion: React.FC = (): JSX.Element => {
-    const userId = useLoaderData().userId;
-    const token = useLoaderData().token;
+    const loader = useLoaderData();
+    const userId = loader.userId;
+    const token = loader.token;
     const navigator = useNavigate();
-    const principels = useLoaderData().principle;
-    const licenses = useLoaderData().licenses;
+    const principels = loader.principle;
+    const licenses = loader.licenses;
+    const compliance = loader.compliance;
 
     const question = useRef<HTMLInputElement>(null);
     const qDescription = useRef<HTMLTextAreaElement>(null);
 
+    const questionCode = useRef<HTMLInputElement>(null);
+
     const qPrinciple = useRef<HTMLSelectElement>(null);
     const qType = useRef<HTMLSelectElement>(null);
     const qPlan = useRef<HTMLSelectElement>(null);
+    const qCompliance = useRef<HTMLSelectElement>(null);
 
     type answer = {
         answer: string;
@@ -154,6 +174,12 @@ const AddQuestion: React.FC = (): JSX.Element => {
                         invalid_type_error: "Select valid the principle"
                     })
                     .refine(val => val != 0, { message: "Select the principle" }),
+                complianceId: z
+                    .number({
+                        required_error: "Select the compliance",
+                        invalid_type_error: "Select valid the compliance"
+                    })
+                    .refine(val => val != 0, { message: "Select the compliance" }),
                 questionType: z
                     .string()
                     .nonempty("Select the question type")
@@ -189,10 +215,11 @@ const AddQuestion: React.FC = (): JSX.Element => {
             question: question!.current!.value,
             description: qDescription!.current!.value,
             principleId: parseInt(qPrinciple!.current!.value),
+            complianceId: parseInt(qCompliance!.current!.value),
             questionType: qType!.current!.value,
             licensesId: parseInt(qPlan!.current!.value),
             answer: answers,
-            questioncode: nanoid(10),
+            questioncode: questionCode!.current!.value,
             version: 1
         };
 
@@ -249,6 +276,20 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                         );
                                     })}
                                 </select>
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question compliance
+                                </h2>
+                                <select ref={qCompliance} defaultValue={"0"} className="px-4 bg-primary-700 fill-none outline-none border-2 border-white text-white py-2 w-96 my-2">
+                                    <option value="0" className=" text-white text-lg " disabled>Select Question compliance</option>
+                                    {
+                                        compliance.map((val: any, index: number) => {
+                                            return (
+                                                <option key={index} className=" text-white text-lg" value={val.id}>{val.name}</option>
+                                            );
+                                        })
+                                    }
+                                </select>
 
                                 <h2 className="text-white font-semibold text-md">
                                     <span className="text-green-500 pr-2">&#x2666;</span>
@@ -294,7 +335,15 @@ const AddQuestion: React.FC = (): JSX.Element => {
                                     className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300 resize-none h-28"
                                     placeholder="Enter Question Description"
                                 ></textarea>
-
+                                <h2 className="text-white font-semibold text-md">
+                                    <span className="text-green-500 pr-2">&#x2666;</span>
+                                    Question Code
+                                </h2>
+                                <input
+                                    ref={questionCode}
+                                    className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                                    placeholder="Enter Question Code"
+                                />
                                 <div>
                                     <button
                                         onClick={addAnserField}

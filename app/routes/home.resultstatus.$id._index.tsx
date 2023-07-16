@@ -1,5 +1,5 @@
 import { LinksFunction, LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
@@ -35,17 +35,25 @@ export async function loader(params: LoaderArgs) {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
-  return json({ result: data.data.searchResult, token: cookie.token });
+  return json({ result: data.data.searchResult, token: cookie.token, project: id });
 }
 
 const ResultStatus = () => {
   const loader = useLoaderData();
   const result = loader.result[0];
+  const project = loader.project;
+  const navigator = useNavigate();
 
 
   return (
     <div className="grow  p-4 w-full">
-      <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
+      <div className="flex gap-4 flex-wrap">
+
+        <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
+        <div className="grow"></div>
+        <Link to={`/userresult/${project}`} className="text-white text-center font-medium text-xl rounded-full px-4 py-1 bg-cyan-500">Back To Result</Link>
+      </div>
+
       <div className="w-full bg-secondary h-[1px] my-2"></div>
       {result == null || result == undefined ?
         <h1 className="text-white font-medium text-2xl my-4">
@@ -109,11 +117,11 @@ const ResultStatus = () => {
                 </h1>
                 <div className="bg-white bg-opacity-10 py-2 px-4 pb-6">
                   <h1 className="text-secondary font-medium text-2xl my-2 text-center">
-                    Get your (Paid)
+                    Improve with Recommendations &
                     <br />
-                    Recommendation
+                    Get a Certified Badge
                   </h1>
-                  <p className="text-gray-200 text-md">
+                  <p className="text-gray-200 text-md text-center">
                     (Recommended for Commercial usage)
                   </p>
                 </div>
@@ -130,11 +138,6 @@ const ResultStatus = () => {
             to the following requirements
           </p>
           <div className="flex gap-8 my-6 flex-wrap justify-evenly">
-            <img
-              src="/images/brand/logo11.jpeg"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
             <img
               src="/images/brand/logo12.jpg"
               alt="logo1"

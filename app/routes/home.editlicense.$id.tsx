@@ -3,7 +3,7 @@ import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import { date, z } from "zod";
+import { z } from "zod";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
@@ -17,6 +17,7 @@ export async function loader({ params, request }: LoaderArgs) {
                 getAllLicenseById(id:$id){
                     id,
                     licenseType,
+                    name,
                     paymentAmount,
                     discountAmount,
                     questionAllowed,
@@ -45,6 +46,7 @@ const AddLicense: React.FC = (): JSX.Element => {
 
 
 
+    const lName = useRef<HTMLInputElement>(null);
     const lType = useRef<HTMLSelectElement>(null);
     const paymentamount = useRef<HTMLInputElement>(null);
     const discountamount = useRef<HTMLInputElement>(null);
@@ -53,6 +55,7 @@ const AddLicense: React.FC = (): JSX.Element => {
     const projectperlicense = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+        lName!.current!.value = license.name;
         lType!.current!.value = license.licenseType;
         paymentamount!.current!.value = license.paymentAmount;
         discountamount!.current!.value = license.discountAmount;
@@ -78,6 +81,9 @@ const AddLicense: React.FC = (): JSX.Element => {
                         required_error: "License Id is required.",
                         invalid_type_error: "License Id should be valid."
                     }),
+                name: z
+                    .string()
+                    .nonempty("License Name is required."),
                 licenseType: z
                     .string()
                     .nonempty("License Type is required."),
@@ -110,6 +116,7 @@ const AddLicense: React.FC = (): JSX.Element => {
 
         const licenseScheme: LicenseScheme = {
             id: license.id,
+            name: lName!.current!.value,
             licenseType: lType!.current!.value,
             paymentAmount: parseInt(paymentamount!.current!.value),
             discountAmount: parseInt(discountamount!.current!.value),
@@ -150,7 +157,15 @@ const AddLicense: React.FC = (): JSX.Element => {
             <h1 className="text-white font-medium text-2xl">Edit License</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
 
-
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                License Name
+            </h2>
+            <input
+                ref={lName}
+                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                placeholder="Enter License Name"
+            />
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>
                 License Type

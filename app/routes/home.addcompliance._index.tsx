@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { z } from "zod";
 import { userPrefs } from "~/cookies";
-import { ApiCall } from "~/services/api";
+import { ApiCall, UploadFile } from "~/services/api";
 
 export async function loader({ params, request }: LoaderArgs) {
     const cookieHeader = request.headers.get("Cookie");
@@ -23,7 +23,28 @@ const AddCompliance: React.FC = (): JSX.Element => {
     const cDesciption = useRef<HTMLTextAreaElement>(null);
     const cLink = useRef<HTMLInputElement>(null);
 
+    const [logo, setLogo] = useState<File | null>(null);
+    const cLogo = useRef<HTMLInputElement>(null);
+
+    const handleLogoChange = (value: React.ChangeEvent<HTMLInputElement>) => {
+        let file_size = parseInt(
+            (value!.target.files![0].size / 1024 / 1024).toString()
+        );
+        if (file_size < 4) {
+            if (value!.target.files![0].type.startsWith("image/")) {
+                setLogo((val) => value!.target.files![0]);
+            } else {
+                toast.error("Please select an image file.", { theme: "light" });
+            }
+        } else {
+            toast.error("Image file size must be less then 4 mb", { theme: "light" });
+        }
+    }
+
     const addCompliance = async () => {
+
+        if (logo == null) return toast.error("Select compliance Logo", { theme: "light" });
+
         const ComplianceScheme = z
             .object({
                 name: z
@@ -34,19 +55,24 @@ const AddCompliance: React.FC = (): JSX.Element => {
                     .nonempty("Compliance Description is required"),
                 LearnMoreLink: z
                     .string()
+                    .nonempty("Compliance url is required"),
+                logo: z
+                    .string()
                     .nonempty("Compliance url is required")
             })
             .strict();
 
         type ComplianceScheme = z.infer<typeof ComplianceScheme>;
 
+        const image = await UploadFile(logo);
+        if (!image.status) return toast.error("Unable to upload logo", { theme: "light" });
+
         const complianceScheme: ComplianceScheme = {
             name: cName!.current!.value,
             description: cDesciption!.current!.value,
             LearnMoreLink: cLink!.current!.value,
+            logo: image.data!.toString()
         };
-
-
 
         const parsed = ComplianceScheme.safeParse(complianceScheme);
 
@@ -63,7 +89,8 @@ const AddCompliance: React.FC = (): JSX.Element => {
                     createComplianceInput: {
                         name: complianceScheme.name,
                         description: complianceScheme.description,
-                        LearnMoreLink: complianceScheme.LearnMoreLink
+                        LearnMoreLink: complianceScheme.LearnMoreLink,
+                        logo: complianceScheme.logo
                     }
                 },
                 headers: { authorization: `Bearer ${token}` },
@@ -84,6 +111,19 @@ const AddCompliance: React.FC = (): JSX.Element => {
         <div className="grow w-full  p-4  ">
             <h1 className="text-white font-medium text-2xl">Add New Compliance</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                Logo
+            </h2>
+            {logo != null ?
+                <div className="my-4">
+                    <img src={URL.createObjectURL(logo!)} alt="logo" className="w-80 rounded-md" />
+                </div>
+                : null}
+            <button onClick={() => cLogo.current?.click()} className="text-white font-semibold text-md py-1 my-2 inline-block px-4 rounded-md bg-green-500">{logo == null ? "Add Logo" : "Change Logo"}</button>
+            <div className="hidden">
+                <input type="file" ref={cLogo} accept="image/*" onChange={handleLogoChange} />
+            </div>
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>
                 Compliance Name

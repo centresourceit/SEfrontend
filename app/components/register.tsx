@@ -178,6 +178,11 @@ export default function Register(): JSX.Element {
                 type={showRePassword ? "text" : "password"}
                 placeholder="Re-Password"
                 className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    submit()
+                  }
+                }}
               />
             </div>
             <button

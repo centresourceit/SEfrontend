@@ -193,7 +193,7 @@ const UserDashboard = () => {
                 Application id: {questiondata.certificatedId.toString().toUpperCase()}
               </h1>
             </div>
-            <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
+            {/* <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
               {
                 principle.map((val: any, index: number) => {
                   return (
@@ -206,17 +206,19 @@ const UserDashboard = () => {
                   );
                 })
               }
-            </div>
+            </div> */}
             <div className="w-full flex gap-6 my-6">
               <div className="grow bg-gray-500 h-[2px]"></div>
               <div className="w-10 bg-gray-300 h-[4px]"></div>
               <div className="grow bg-gray-500 h-[2px]"></div>
             </div>
-            <div className="flex flex-col overflow-x-auto">
+            <div className="flex flex-col overflow-x-auto border-spacing-10">
               <table className="table-fixed min-w-full">
                 <thead>
                   <tr>
-                    <th className="w-60"></th>
+                    <th className="w-60 text-secondary font-normal text-3xl">
+                      Principles
+                    </th>
                     <th className="w-60">
                       <p className="text-secondary font-normal text-2xl">
                         1<sup>st</sup> Attempt
@@ -237,7 +239,7 @@ const UserDashboard = () => {
                 <tbody>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">
+                      <p className="text-secondary font-semibold text-2xl  text-center">
                         {principle[0].name}
                       </p>
                     </td>
@@ -259,7 +261,7 @@ const UserDashboard = () => {
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">
+                      <p className="text-secondary font-semibold text-2xl text-center">
                         {principle[1].name}
                       </p>
                     </td>
@@ -281,7 +283,7 @@ const UserDashboard = () => {
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">
+                      <p className="text-secondary font-semibold text-2xl  text-center">
                         {principle[2].name}
                       </p>
                     </td>
@@ -304,7 +306,7 @@ const UserDashboard = () => {
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">
+                      <p className="text-secondary font-semibold text-2xl  text-center">
                         {principle[3].name}
                       </p>
                     </td>
@@ -326,7 +328,7 @@ const UserDashboard = () => {
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">
+                      <p className="text-secondary font-semibold text-2xl  text-center">
                         {principle[4].name}
                       </p>
                     </td>
@@ -346,9 +348,9 @@ const UserDashboard = () => {
                       </p>
                     </td>
                   </tr>
-                  <tr>
+                  <tr className="pt-10">
                     <td>
-                      <p className="text-secondary font-semibold text-3xl">Score:</p>
+                      <p className="text-secondary font-semibold text-3xl  text-center">Score:</p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
@@ -372,11 +374,11 @@ const UserDashboard = () => {
                     <td className="text-center py-4">
                       {isFirst ?
                         result[0].totalScore == 0 ?
-                          <Link to={`/home/taketest/${result[0].projectId}`} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+                          <Link to={`/home/taketest/${result[0].projectId}`} className="text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
                             Complete test
                           </Link>
                           :
-                          <Link to={`/home/resultstatus/${result[0].id}`} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+                          <Link to={`/home/resultstatus/${result[0].id}`} className="text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
                             View Result
                           </Link>
                         :
@@ -385,14 +387,14 @@ const UserDashboard = () => {
                     </td>
                     <td className="text-center py-4">
                       {isSecond ?
-                        <Link to={`/home/resultstatus/${result[1].id}`} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+                        <Link to={`/home/resultstatus/${result[1].id}`} className="text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
                           View Result
                         </Link>
                         : null}
                     </td>
                     <td className="text-center py-4">
                       {isThird ?
-                        <Link to={`/home/resultstatus/${result[2].projectId}`} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
+                        <Link to={`/home/resultstatus/${result[2].projectId}`} className="text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
                           View Result
                         </Link>
                         : null}
@@ -402,17 +404,13 @@ const UserDashboard = () => {
               </table>
             </div>
 
-            <div className="flex my-4 flex-col sm:flex-row justify-around gap-8">
-              <div>
-                <button className="text-center py-2 px-4 text-white text-xl bg-emerald-500 font-semibold rounded">
-                  Try the full version (Paid)
-                </button>
-              </div>
-              <div>
-                <Link to={`/home/taketest/${projectid}`} className="text-center text-xl py-2 px-4 text-white bg-emerald-500 font-semibold rounded">
-                  Start Again
-                </Link>
-              </div>
+            <div className="mt-10 grow grid place-items-center relative">
+              <button className="text-center py-2 px-4 text-white text-xl bg-cyan-500 font-semibold rounded">
+                Try the full version (Paid)
+              </button>
+              <Link to={`/home/taketest/${projectid}`} className="absolute right-0 top-0 inline-block text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
+                Start Again
+              </Link>
             </div>
             <div className="w-full flex gap-6 my-6">
               <div className="grow bg-gray-500 h-[2px]"></div>
@@ -468,8 +466,8 @@ const UserDashboard = () => {
               </h1>
               <div>
                 <Link
-                  to={`/home/feedback/${userId}/`}
-                  className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded"
+                  to={`/home/feedback/`}
+                  className="text-center py-2 px-4 text0 text-white text-xl bg-cyan-500 font-semibold rounded"
                 >
                   Feedback
                 </Link>

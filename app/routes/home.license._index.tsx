@@ -18,6 +18,7 @@ export async function loader(params: LoaderArgs) {
         id,
         licenseType,
         paymentAmount,
+        name,
         discountAmount,
         discountValidTill,
         questionAllowed,
@@ -34,10 +35,10 @@ export async function loader(params: LoaderArgs) {
 }
 
 const License = () => {
-  const loaderlicense = useLoaderData().license;
-  const token = useLoaderData().token;
+  const loader = useLoaderData();
+  const loaderlicense = loader.license;
+  const token = loader.token;
   const [license, setLicense] = useState<any[]>(loaderlicense);
-
   const navigator = useNavigate();
 
   const [delBox, setDelBox] = useState<boolean>(false);
@@ -76,6 +77,7 @@ const License = () => {
         getAllLicense{
           id,
           licenseType,
+          name,
           paymentAmount,
           discountAmount,
           discountValidTill,
@@ -161,7 +163,7 @@ const License = () => {
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
-                      {val.licenseType}
+                      {val.name}
                     </p>
                     <div className="grow"></div>
                     <div className="cursor-pointer">
@@ -182,6 +184,9 @@ const License = () => {
                       )}
                     </div>
                   </div>
+                  <p className="text-gray-200 font-normal text-md my-1">
+                    License Type : {val.licenseType}
+                  </p>
                   <p className="text-gray-200 font-normal text-md my-1">
                     Payment Amount : {val.paymentAmount}
                   </p>

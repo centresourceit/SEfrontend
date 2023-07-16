@@ -10,15 +10,13 @@ export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
 
-
-
-
   const data = await ApiCall({
     query: `
     query getAllCompliance{
       getAllCompliances{
         id,
         name,
+        logo,
         description,
         status,
         LearnMoreLink
@@ -33,8 +31,9 @@ export async function loader(params: LoaderArgs) {
 }
 
 const Compliance = () => {
-  const loadercompliance = useLoaderData().compliance;
-  const token = useLoaderData().token;
+  const loader = useLoaderData();
+  const loadercompliance = loader.compliance;
+  const token = loader.token;
   const [compliance, setCompliance] = useState<any[]>(loadercompliance);
 
   const navigator = useNavigate();
@@ -75,6 +74,7 @@ const Compliance = () => {
         getAllCompliances{
           id,
           name,
+          logo,
           description,
           status,
           LearnMoreLink
@@ -153,7 +153,7 @@ const Compliance = () => {
           ) : (
             compliance.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
+                <div key={index} className="bg-primary-800 w-96 p-4 flex flex-col">
                   <div className="flex gap-6">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -177,6 +177,9 @@ const Compliance = () => {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <div className="my-4">
+                    <img src={val.logo} alt="logo" className="w-44 h-44 rounded-md object-cover" />
                   </div>
                   <p className="text-gray-200 font-normal text-md my-1">
                     Description : {val.description}

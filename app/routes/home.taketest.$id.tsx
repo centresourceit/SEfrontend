@@ -27,6 +27,10 @@ export async function loader(params: LoaderArgs) {
           version,
           questioncode,
           licensesId,
+          complince{
+            name,
+            description
+          },
           answer{
             answer,
             mark,
@@ -98,11 +102,9 @@ const TakeTest = () => {
   const result = loader.result;
   const projectid = loader.projectid;
 
-  const answers = answersStore((state) => state.answers);
-  const addAnswer = answersStore((state) => state.addAnswer);
+
   const cacheAnswer = answersStore((state) => state.cacheAnswer);
   const addCacheAnswer = answersStore((state) => state.addCacheAnswer);
-  const changeAnswerStatue = answersStore((state) => state.changeAnswerStatue);
   const clearCache = answersStore((state) => state.clearCache);
 
   const [quecount, setQuecount] = useState<number>(0);
@@ -283,7 +285,7 @@ const TakeTest = () => {
       });
       if (data.status) {
         clearCache();
-        navigator(`/home/resultstatus/${data.data.createResults.id}`);
+        navigator(`/home/quefeedback/${data.data.createResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -319,7 +321,7 @@ const TakeTest = () => {
 
       if (data.status) {
         clearCache();
-        navigator(`/home/resultstatus/${data.data.updateResults.id}`);
+        navigator(`/home/quefeedback/${data.data.updateResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -349,7 +351,7 @@ const TakeTest = () => {
       });
       if (data.status) {
         clearCache();
-        navigator(`/home/resultstatus/${data.data.createResults.id}`);
+        navigator(`/home/quefeedback/${data.data.createResults.id}`);
       } else {
         toast.error(data.message, { theme: "light" });
       }
@@ -362,11 +364,13 @@ const TakeTest = () => {
     if (page < 4) {
       setPage(val => val + 1);
     }
+    window.scrollTo(0, 0);
   }
   const prevpage = () => {
     if (page > 0) {
       setPage(val => val - 1);
     }
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -377,7 +381,7 @@ const TakeTest = () => {
             page != 0 ?
               <button
                 onClick={prevpage}
-                className="text-center py-2 px-4 text-white bg-rose-500 font-semibold rounded-full hover:scale-105 transition-all"
+                className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
               >
                 Back
               </button>
@@ -388,7 +392,7 @@ const TakeTest = () => {
           {page != 4 ?
             <button
               onClick={nextpage}
-              className="text-center py-2 px-4 text-white bg-green-500 font-semibold rounded-full hover:scale-105 transition-all"
+              className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
             >
               Next
             </button>
@@ -399,21 +403,21 @@ const TakeTest = () => {
             onClick={saveAndExit}
             className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
           >
-            SAVE AND EXIT
+            COMMIT AND EXIT
           </button>
 
-          {page == 4 && cacheAnswer.flat().length == 25 ?
+          {page == 4 && cacheAnswer.flat().length == quecount ?
             <button
               onClick={submit}
-              className="text-center py-2 px-4 text-white bg-emerald-500 font-semibold rounded-full hover:scale-105 transition-all"
+              className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
             >
               SUBMIT
             </button>
             : null}
 
           <Link
-            to={`/home/feedback/${userId}/`}
-            className="text-center py-2 px-4 text0 text-white text-xl bg-emerald-500 font-semibold rounded-full"
+            to={`/home/feedback/`}
+            className="text-center py-2 px-4 text0 text-white text-xl bg-cyan-500 font-semibold rounded-full"
           >
             Feedback
           </Link>
@@ -432,7 +436,7 @@ const TakeTest = () => {
           </p>
         </div>
         <div className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500 my-4 flex">
-          <p className="">Attempted : {cacheAnswer.flat().length}/25</p><div className="grow"></div> <p>{100 * (cacheAnswer.flat().length / 25)} % Completed</p>
+          <p className="">Attempted : {cacheAnswer.flat().length}/{quecount}</p><div className="grow"></div> <p>{Number(100 * (cacheAnswer.flat().length / quecount)).toFixed(0)} % Completed</p>
         </div>
         {questions == null || questions == undefined ? (
           <>

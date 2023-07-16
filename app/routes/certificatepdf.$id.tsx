@@ -74,10 +74,27 @@ export async function loader(params: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const project = await ApiCall({
+        query: `
+        query getAllProjectById($id:Int!){
+            getAllProjectById(id:$id){
+                id,
+                name,
+                description
+            },
+        }
+      `,
+        veriables: {
+            id: parseInt(data.data.searchResult[0].projectId)
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+
     return json({
         result: data.data.searchResult,
         token: cookie.token,
-        user: user.data.getUserById
+        user: user.data.getUserById,
+        project: project.data.getAllProjectById
     });
 }
 
@@ -86,6 +103,7 @@ const PetroleumPdfView = (): JSX.Element => {
     const loader = useLoaderData();
     const result = loader.result[0];
     const user = loader.user;
+    const project = loader.project;
 
     const groupedData: Array<{ principleid: number, principlename: string, totalMark: number, questions: Array<any> }> = Object.values(result.assesement.result.reduce((result: any, obj: any) => {
 
@@ -143,7 +161,7 @@ const PetroleumPdfView = (): JSX.Element => {
             width: "100%"
         },
         divider: {
-            height: "40px"
+            height: "30px"
         },
         dividertwo: {
             height: "25px"
@@ -182,7 +200,6 @@ const PetroleumPdfView = (): JSX.Element => {
             display: "flex",
             flexDirection: "row",
             width: "100%",
-            marginTop: "55px"
         },
         flexbox1: {
             flex: 4,
@@ -210,6 +227,18 @@ const PetroleumPdfView = (): JSX.Element => {
     const Certificate = () => (
         <Document>
             <Page style={styles.body} size={'A4'} >
+
+                <View style={styles.flexbox}>
+                    <View style={styles.flexbox1}>
+                    </View>
+                    <View style={styles.flexbox2}>
+                        <Text style={styles.signtext}>
+                            Certificate Id: {result.certificatedId}
+                        </Text>
+
+                    </View>
+                </View>
+
                 <View>
                     <Text style={styles.heading}>Certificate</Text>
                 </View>
@@ -221,6 +250,13 @@ const PetroleumPdfView = (): JSX.Element => {
                 </View>
                 <View>
                     <Text style={styles.subtitle}>Email: {user.email}</Text>
+                </View>
+                <View style={styles.divider}></View>
+                <View>
+                    <Text style={styles.subtitle}>Project Name: {project.name}</Text>
+                </View>
+                <View>
+                    <Text style={styles.subtitle}>Project Description: {project.description}</Text>
                 </View>
                 <View style={styles.divider}></View>
                 {groupedData.map((val: any, index: number) => {
@@ -251,21 +287,9 @@ const PetroleumPdfView = (): JSX.Element => {
                         <Text style={styles.signtext}>
                             Total Score: {result.totalScore}
                         </Text>
-                        {/* <Image src={"/images/signone.jpg"} style={styles.img}></Image> */}
-                        {/* <Text style={styles.signtext}>
-                            {result.totalScore}
-                        </Text> */}
                     </View>
                     <View style={styles.flexbox2}>
-                        <Text style={styles.signtext}>
-                            Certificate Id: {result.certificatedId}
-                        </Text>
-                        {/* <Image src={"/images/signone.jpg"} style={styles.img}></Image> */}
-                        {/* <Text style={styles.signtext}>
-                            {result.certificatedId}
-                        </Text> */}
                     </View>
-
                 </View>
             </Page>
         </Document >
