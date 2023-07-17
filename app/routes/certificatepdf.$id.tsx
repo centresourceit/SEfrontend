@@ -90,11 +90,41 @@ export async function loader(params: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const license = await ApiCall({
+        query: `
+        query searchLicenseslave($searchLicenseslaveInput:SearchLicenseslaveInput!){
+            searchLicenseslave(searchLicenseslaveInput:$searchLicenseslaveInput){
+            licenseTypeId,
+            paymentStatus,
+            licenseValidity,
+            paymentReference,
+            paymentAmount,
+            createdAt,
+                licenseType{
+                name,
+                paymentAmount,
+              licenseType,
+              questionAllowed,
+              projectPerLicense,
+              discountValidTill,          
+              }
+            }
+        }
+            `,
+        veriables: {
+            searchLicenseslaveInput: {
+                userId: Number(cookie.id)
+            }
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+
     return json({
         result: data.data.searchResult,
         token: cookie.token,
         user: user.data.getUserById,
-        project: project.data.getAllProjectById
+        project: project.data.getAllProjectById,
+        license: license.data.searchLicenseslave,
     });
 }
 
@@ -104,6 +134,7 @@ const PetroleumPdfView = (): JSX.Element => {
     const result = loader.result[0];
     const user = loader.user;
     const project = loader.project;
+    const license = loader.license[0];
 
     const groupedData: Array<{ principleid: number, principlename: string, totalMark: number, questions: Array<any> }> = Object.values(result.assesement.result.reduce((result: any, obj: any) => {
 
@@ -227,7 +258,6 @@ const PetroleumPdfView = (): JSX.Element => {
     const Certificate = () => (
         <Document>
             <Page style={styles.body} size={'A4'} >
-
                 <View style={styles.flexbox}>
                     <View style={styles.flexbox1}>
                     </View>
@@ -235,29 +265,44 @@ const PetroleumPdfView = (): JSX.Element => {
                         <Text style={styles.signtext}>
                             Certificate Id: {result.certificatedId}
                         </Text>
-
                     </View>
                 </View>
-
                 <View>
                     <Text style={styles.heading}>Certificate</Text>
                 </View>
                 <View>
-                    <Text style={styles.title}>Your certificate by smart etitcs</Text>
+                    <Text style={styles.title}>Your certificate by Smart Ethics</Text>
                 </View>
-                <View>
-                    <Text style={styles.subtitle}>Name: {user.name}</Text>
-                </View>
-                <View>
-                    <Text style={styles.subtitle}>Email: {user.email}</Text>
+
+                <View style={styles.flexbox}>
+                    <View style={styles.flexbox1}>
+                        <View>
+                            <Text style={styles.subtitle}>Name: {user.name}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.subtitle}>Email: {user.email}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.flexbox2}>
+                        <View>
+                            <Text style={styles.subtitle}>License Name: {license.licenseType.name}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.subtitle}>Type: {license.licenseType.licenseType}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.subtitle}>Valid Till: {new Date(license.licenseType.discountValidTill).toDateString().slice(3)}</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.divider}></View>
                 <View>
                     <Text style={styles.subtitle}>Project Name: {project.name}</Text>
                 </View>
                 <View>
-                    <Text style={styles.subtitle}>Project Description: {project.description}</Text>
+                    <Text style={styles.subtitle}>Description: {project.description}</Text>
                 </View>
+
                 <View style={styles.divider}></View>
                 {groupedData.map((val: any, index: number) => {
                     return (

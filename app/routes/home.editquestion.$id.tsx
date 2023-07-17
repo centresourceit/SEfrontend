@@ -40,6 +40,9 @@ export async function loader({ params, request }: LoaderArgs) {
                 principle{
                   id
                 },
+                complince{
+                    id
+                },
                 answer{
                   mark,
                   rec,
@@ -67,11 +70,12 @@ export async function loader({ params, request }: LoaderArgs) {
 
 
 const AddQuestion: React.FC = (): JSX.Element => {
-    const userId = useLoaderData().userId;
-    const token = useLoaderData().token;
+    const loader = useLoaderData();
+    const userId = loader.userId;
+    const token = loader.token;
 
-    const licenses = useLoaderData().licenses;
-    const fatchquestion = useLoaderData().question;
+    const licenses = loader.licenses;
+    const fatchquestion = loader.question;
 
     const navigator = useNavigate();
 
@@ -184,6 +188,12 @@ const AddQuestion: React.FC = (): JSX.Element => {
                         invalid_type_error: "Select valid the principle"
                     })
                     .refine(val => val != 0, { message: "Select the principle" }),
+                complianceId: z
+                    .number({
+                        required_error: "Select the compliance",
+                        invalid_type_error: "Select valid the compliance"
+                    })
+                    .refine(val => val != 0, { message: "Select the compliance" }),
                 version: z
                     .number({
                         required_error: "Question",
@@ -213,6 +223,7 @@ const AddQuestion: React.FC = (): JSX.Element => {
             version: fatchquestion.version + 1,
             questionRefId: fatchquestion.questionRefId,
             questioncode: questionCode!.current!.value,
+            complianceId: fatchquestion.complince.id
         };
         const parsed = QuestionScheme.safeParse(answerScheme);
         if (parsed.success) {

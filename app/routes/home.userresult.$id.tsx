@@ -111,7 +111,6 @@ const UserDashboard = () => {
 
   const getMark = (valuepass: any): number[] => {
     const groupedData: Array<{ principleid: number, principlename: string, totalMark: number, questions: Array<any> }> = Object.values(valuepass.assesement.result.reduce((result: any, obj: any) => {
-
       const { principleid, principlename, mark, ...questionData } = obj;
       if (!result[principleid]) {
         result[principleid] = {
@@ -123,10 +122,28 @@ const UserDashboard = () => {
       }
       result[principleid].totalMark += mark;
       result[principleid].questions.push(obj);
-
       return result;
     }, {}));
     return groupedData.map((val: any) => val.totalMark);
+  }
+
+  const getPrincipleLength = (valuepass: any, index: number): number => {
+    const groupedData: number[] = Object.values(valuepass.assesement.result.reduce((result: any, obj: any) => {
+      const { principleid, principlename, mark, ...questionData } = obj;
+      if (!result[principleid]) {
+        result[principleid] = {
+          questions: []
+        };
+      }
+      result[principleid].questions.push(obj);
+      return result;
+    }, {}));
+
+    const principle: any = groupedData[index];
+    if (principle && principle.questions) {
+      return principle.questions.length;
+    }
+    return 0;
   }
 
   const getresult = (val: number): string => {
@@ -192,6 +209,9 @@ const UserDashboard = () => {
               <h1 className="text-white font-medium text-lg">
                 Application id: {questiondata.certificatedId.toString().toUpperCase()}
               </h1>
+              <Link to={`/home/taketest/${projectid}`} className="inline-block text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
+                Start Again
+              </Link>
             </div>
             {/* <div className="flex gap-6 flex-wrap items-center justify-evenly my-8">
               {
@@ -239,112 +259,112 @@ const UserDashboard = () => {
                 <tbody>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-2xl  text-center">
+                      <p className="text-blue-500 font-semibold text-2xl  text-center">
                         {principle[0].name}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[0]) : "-"}
+                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[0] / getPrincipleLength(result[0], 0)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? getresult(getMark(result[1])[0]) : "-"}
+                        {isSecond ? getresult(getMark(result[1])[0] / getPrincipleLength(result[1], 0)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? getresult(getMark(result[2])[0]) : "-"}
+                        {isThird ? getresult(getMark(result[2])[0] / getPrincipleLength(result[2], 0)) : "-"}
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-2xl text-center">
+                      <p className="text-blue-500 font-semibold text-2xl text-center">
                         {principle[1].name}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[1]) : "-"}
+                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[1] / getPrincipleLength(result[0], 1)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? getresult(getMark(result[1])[1]) : "-"}
+                        {isSecond ? getresult(getMark(result[1])[1] / getPrincipleLength(result[1], 1)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? getresult(getMark(result[2])[1]) : "-"}
+                        {isThird ? getresult(getMark(result[2])[1] / getPrincipleLength(result[2], 1)) : "-"}
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-2xl  text-center">
+                      <p className="text-blue-500 font-semibold text-2xl  text-center">
                         {principle[2].name}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[2]) : "-"}
+                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[2] / getPrincipleLength(result[0], 2)) : "-"}
 
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? getresult(getMark(result[1])[2]) : "-"}
+                        {isSecond ? getresult(getMark(result[1])[2] / getPrincipleLength(result[1], 2)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? getresult(getMark(result[2])[2]) : "-"}
+                        {isThird ? getresult(getMark(result[2])[2] / getPrincipleLength(result[2], 2)) : "-"}
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-2xl  text-center">
+                      <p className="text-blue-500 font-semibold text-2xl  text-center">
                         {principle[3].name}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[3]) : "-"}
+                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[3] / getPrincipleLength(result[0], 3)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? getresult(getMark(result[1])[3]) : "-"}
+                        {isSecond ? getresult(getMark(result[1])[3] / getPrincipleLength(result[1], 3)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? getresult(getMark(result[2])[3]) : "-"}
+                        {isThird ? getresult(getMark(result[2])[3] / getPrincipleLength(result[2], 3)) : "-"}
                       </p>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <p className="text-secondary font-semibold text-2xl  text-center">
+                      <p className="text-blue-500 font-semibold text-2xl  text-center">
                         {principle[4].name}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[4]) : "-"}
+                        {isFirst ? result[0].totalScore == 0 ? "-" : getresult(getMark(result[0])[4] / getPrincipleLength(result[0], 4)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? getresult(getMark(result[1])[4]) : "-"}
+                        {isSecond ? getresult(getMark(result[1])[4] / getPrincipleLength(result[1], 4)) : "-"}
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? getresult(getMark(result[2])[4]) : "-"}
+                        {isThird ? getresult(getMark(result[2])[4] / getPrincipleLength(result[2], 4)) : "-"}
                       </p>
                     </td>
                   </tr>
@@ -354,17 +374,17 @@ const UserDashboard = () => {
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isFirst ? result[0].totalScore == 0 ? 0 : ((totalscoreone / 10) / quelenone).toFixed(2) : "-"}/10
+                        {isFirst ? result[0].totalScore == 0 ? 0 : (totalscoreone / quelenone).toFixed(2) : "-"}/10
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isSecond ? ((totalscoretwo / 10) / quelentwo).toFixed(2) : "-"}/10
+                        {isSecond ? (totalscoretwo / quelentwo).toFixed(2) : "-"}/10
                       </p>
                     </td>
                     <td>
                       <p className="text-green-500 font-semibold text-2xl text-center">
-                        {isThird ? ((totalscorethree / 10) / quelenthird).toFixed(2) : "-"}/10
+                        {isThird ? (totalscorethree / quelenthird).toFixed(2) : "-"}/10
                       </p>
                     </td>
                   </tr>
@@ -404,14 +424,7 @@ const UserDashboard = () => {
               </table>
             </div>
 
-            <div className="mt-10 grow grid place-items-center relative">
-              <button className="text-center py-2 px-4 text-white text-xl bg-cyan-500 font-semibold rounded">
-                Try the full version (Paid)
-              </button>
-              <Link to={`/home/taketest/${projectid}`} className="absolute right-0 top-0 inline-block text-center text-xl py-2 px-4 text-white bg-cyan-500 font-semibold rounded">
-                Start Again
-              </Link>
-            </div>
+
             <div className="w-full flex gap-6 my-6">
               <div className="grow bg-gray-500 h-[2px]"></div>
               <div className="w-10 bg-gray-300 h-[4px]"></div>

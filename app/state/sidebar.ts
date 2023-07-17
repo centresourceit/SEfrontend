@@ -6,6 +6,7 @@ enum SideBarTabs {
   TakeTesk,
   RresultStatus,
   User,
+  UserLicense,
   Company,
   Project,
   Principle,

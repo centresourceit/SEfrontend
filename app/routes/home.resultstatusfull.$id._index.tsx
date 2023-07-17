@@ -177,12 +177,12 @@ const ResultStatus = () => {
           <div className="grow shrink-0">
             <div className="rounded-full bg-[#865fe5] grid place-items-center w-80 h-80">
               <p className="text-white font-bold text-7xl">
-                {((Number(result.totalScore) / 10) / result.assesement.result.length).toFixed(1)}/10
+                {(result.totalScore / result.assesement.result.length).toFixed(1)}/10
               </p>
             </div>
-            <button className="text-white text-center font-medium text-md rounded-full px-4 my-4 py-2 bg-[#865fe5]">
+            <Link to={"/home/userlicense/"} className="inline-block text-white text-center font-medium text-md rounded-full px-4 my-4 py-2 bg-[#865fe5]">
               Improve with custom Recommendation
-            </button>
+            </Link>
           </div>
           <div className="grow px-4 py-2">
             <p className="text-white text-md font-bold">
@@ -207,9 +207,9 @@ const ResultStatus = () => {
               For a detailed review from our expert team
             </p>
             <div className="flex gap-4 my-4">
-              <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Contact us
-              </button>
+              </Link>
               <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Publish
               </a>

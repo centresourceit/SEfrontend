@@ -133,7 +133,6 @@ const UserProject = () => {
             <div className="grow  p-4 w-full overflow-x-hidden">
                 {
                     user.companyId == null ?
-
                         <div className=" my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
                             <p className="text-rose-500 font-semibold text-2xl">
                                 You haven't created your company.
@@ -181,10 +180,13 @@ const UserProject = () => {
                                         Address: {user.company.address}
                                     </p>
                                 </div>
-                                <div className="grow bg-white bg-opacity-5 p-4 rounded-md">
-                                    <p className="text-gray-200 font-semibold text-xl text-center">
-                                        License Details
-                                    </p>
+                                <div className="grow bg-white bg-opacity-5 p-4 rounded-md items-center">
+                                    <div className="flex gap-4 flex-wrap">
+                                        <p className="text-gray-200 font-semibold text-xl text-left grow">
+                                            License Details
+                                        </p>
+                                        <Link to={"/home/userlicense/"} className="px-4 py-1 grid place-items-center text-white text-xs bg-cyan-500 text-center rounded-md font-medium">Update License</Link>
+                                    </div>
                                     <p className="text-gray-200 font-semibold text-md">
                                         License Type: {license.licenseType.licenseType}
                                     </p>
@@ -198,7 +200,7 @@ const UserProject = () => {
                                         License Start: {new Date(license.createdAt).toDateString()}
                                     </p>
                                     <p className="text-gray-200 font-semibold text-md">
-                                        License end: {new Date(license.licenseValidity).toDateString()}
+                                        License end: {new Date(license.licenseValidity).toDateString()} [{((new Date(license.licenseValidity).getTime() - new Date().getTime()) / (1000 * 3600 * 24)).toFixed(0)} Days Left.]
                                     </p>
                                 </div>
                             </div>

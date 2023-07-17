@@ -18,14 +18,14 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
     return (
         <>
             <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-                <h2 className="text-secondary font-medium text-3xl mb-2">
+                <h2 className="text-secondary font-medium text-2xl mb-2">
                     {props.queNumber}. {props.question.question}
                 </h2>
-                <h4 className="text-white font-normal text-xl mb-2">
+                <h4 className="text-white font-normal text-lg mb-2">
                     {props.question.description}
                 </h4>
-                <h4 className="text-white font-normal text-xl mb-2">
-                    Compliance: {props.question.complince.name}
+                <h4 className="text-white font-normal text-lg mb-2">
+                    Compliance:  <a target="_blank" href={props.question.complince.LearnMoreLink} className="text-secondary text-md font-normal">{props.question.complince.name}</a>
                 </h4>
                 <div className="grid place-items-start grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     {props.question.answer.map((value: any, index: number) => {
@@ -59,7 +59,7 @@ const MCQQuestions: React.FC<MCQQuestionsProps> = (
                                 />
                                 <label
                                     htmlFor={`opt${index}_${props.queNumber}`}
-                                    className="text-white text-2xl"
+                                    className="text-white text-xl"
                                 >
                                     {props.question.answer[index].answer}
                                 </label>
@@ -105,14 +105,14 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
     return (
         <>
             <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-                <h2 className="text-secondary font-medium text-3xl mb-2">
+                <h2 className="text-secondary font-medium text-2xl mb-2">
                     {props.queNumber}. {props.question.question}
                 </h2>
-                <h4 className="text-white font-normal text-xl mb-2">
+                <h4 className="text-white font-normal text-lg mb-2">
                     {props.question.description}
                 </h4>
-                <h4 className="text-white font-normal text-xl mb-2">
-                    Compliance: {props.question.complince.name}
+                <h4 className="text-white font-normal text-lg mb-2">
+                    Compliance: <a target="_blank" href={props.question.complince.LearnMoreLink} className="text-secondary text-md font-normal">{props.question.complince.name}</a>
                 </h4>
                 <div className=" mt-6 w-full flex gap-4 items-center">
                     <input
@@ -150,7 +150,7 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
                         return (
                             <div key={index}>
                                 <p
-                                    className={`text-white font-semibold text-xl p-2 py-1 rounded-md  text-center ${value == index ? "bg-green-500" : ""
+                                    className={`text-white font-semibold text-lg p-2 py-1 rounded-md  text-center ${value == index ? "bg-green-500" : ""
                                         }`}
                                 >
                                     {props.question.answer[index].answer}
@@ -195,14 +195,14 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
     return (
         <>
             <div className="bg-white px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-10">
-                <h2 className="text-secondary font-medium text-3xl mb-2">
+                <h2 className="text-secondary font-medium text-2xl mb-2">
                     {props.queNumber}. {props.question.question}
                 </h2>
-                <h4 className="text-white font-medium text-xl mb-2">
+                <h4 className="text-white font-medium text-lg mb-2">
                     {props.question.description}
                 </h4>
-                <h4 className="text-white font-normal text-xl mb-2">
-                    Compliance: {props.question.complince.name}
+                <h4 className="text-white font-normal text-lg mb-2">
+                    Compliance:  <a target="_blank" href={props.question.complince.LearnMoreLink} className="text-secondary text-md font-normal">{props.question.complince.name}</a>
                 </h4>
                 <div className="flex items-center justify-center">
                     {props.question.answer.map((value: any, index: number) => (
@@ -225,7 +225,7 @@ const PercentQuestions: React.FC<PercentQuestionsProps> = (
                                     license: props.question.licensesId,
                                 });
                             }}
-                            className={`grid place-items-center w-14 h-14 text-white font-medium text-lg border-2 ${index == selected
+                            className={`grid place-items-center w-14 h-14 text-white font-medium text-md border-2 ${index == selected
                                 ? "bg-green-500 bg-opacity-50"
                                 : "bg-transparent"
                                 }`}

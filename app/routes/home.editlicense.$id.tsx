@@ -201,7 +201,7 @@ const AddLicense: React.FC = (): JSX.Element => {
             />
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>
-                Discorunt Valid Till Date
+                Discount Valid Till Date
             </h2>
             <input
                 type="date"

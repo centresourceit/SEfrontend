@@ -248,3 +248,11 @@ export function Fa6SolidUserLarge(props: SVGProps<SVGSVGElement>) {
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M256 288a144 144 0 1 0 0-288a144 144 0 1 0 0 288zm-94.7 32C72.2 320 0 392.2 0 481.3c0 17 13.8 30.7 30.7 30.7h450.6c17 0 30.7-13.8 30.7-30.7c0-89.1-72.2-161.3-161.3-161.3H161.3z"></path></svg>
     )
 }
+
+
+
+export function MaterialSymbolsDiamondOutline(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="currentColor" d="M12 21L2 9l3-6h14l3 6l-10 12ZM9.625 8h4.75l-1.5-3h-1.75l-1.5 3ZM11 16.675V10H5.45L11 16.675Zm2 0L18.55 10H13v6.675ZM16.6 8h2.65l-1.5-3H15.1l1.5 3ZM4.75 8H7.4l1.5-3H6.25l-1.5 3Z"></path></svg>
+    )
+}

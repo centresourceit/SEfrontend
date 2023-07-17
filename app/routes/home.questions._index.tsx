@@ -115,6 +115,10 @@ const Compliance = () => {
             questionAllowed,
             projectPerLicense,
             discountValidTill,
+          },
+          complince{
+            name,
+            description
           }
         }
       }

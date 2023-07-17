@@ -35,14 +35,14 @@ export async function loader(params: LoaderArgs) {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
-  return json({ result: data.data.searchResult, token: cookie.token, project: id });
+  return json({ result: data.data.searchResult, token: cookie.token });
 }
 
 const ResultStatus = () => {
   const loader = useLoaderData();
   const result = loader.result[0];
-  const project = loader.project;
   const navigator = useNavigate();
+
 
 
   return (
@@ -51,7 +51,7 @@ const ResultStatus = () => {
 
         <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
         <div className="grow"></div>
-        <Link to={`/userresult/${project}`} className="text-white text-center font-medium text-xl rounded-full px-4 py-1 bg-cyan-500">Back To Result</Link>
+        <Link to={`/home/userresult/${result.projectId}`} className="text-white text-center font-medium text-xl rounded-full px-4 py-1 bg-cyan-500">Back To Result</Link>
       </div>
 
       <div className="w-full bg-secondary h-[1px] my-2"></div>
@@ -68,7 +68,7 @@ const ResultStatus = () => {
               <div className="rounded-full bg-[#865fe5] grid place-items-center shrink-0 w-80 h-80">
                 <div>
                   <p className="text-white font-bold text-7xl text-center">
-                    {((Number(result.totalScore) / 10) / result.assesement.result.length).toFixed(1)}/10
+                    {(result.totalScore / result.assesement.result.length).toFixed(1)}/10
                   </p>
                   <p className="text-white font-bold text-3xl text-center">
                     Your Score
@@ -98,9 +98,9 @@ const ResultStatus = () => {
                   For a detailed review from our expert team
                 </p>
                 <div className="flex gap-4 my-4">
-                  <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+                  <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                     Contact us
-                  </button>
+                  </Link>
                   <Link
                     to={`/home/resultstatusfull/${result.id}`}
                     className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]"

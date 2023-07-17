@@ -28,10 +28,39 @@ export async function loader(params: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const license = await ApiCall({
+        query: `
+        query searchLicenseslave($searchLicenseslaveInput:SearchLicenseslaveInput!){
+            searchLicenseslave(searchLicenseslaveInput:$searchLicenseslaveInput){
+            licenseTypeId,
+            paymentStatus,
+            licenseValidity,
+            paymentReference,
+            paymentAmount,
+            createdAt,
+                licenseType{
+                    paymentAmount,
+              licenseType,
+              questionAllowed,
+              projectPerLicense,
+              discountValidTill,          
+              }
+            }
+        }
+            `,
+        veriables: {
+            searchLicenseslaveInput: {
+                userId: Number(cookie.id)
+            }
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+
     return json({
         license: data.data.getAllLicense,
         token: cookie.token,
-        user: cookie
+        user: cookie,
+        userlicense: license.data.searchLicenseslave
     });
 }
 
@@ -41,6 +70,7 @@ const license: React.FC = (): JSX.Element => {
     const user = loader.user;
     const token = loader.token;
     const license = loader.license;
+    const userlicense = loader.userlicense[0];
     const [licenseBox, setLicenseBox] = useState<boolean>(false);
     const [licenaseid, setLicenaseid] = useState<any>(null);
 
@@ -101,14 +131,32 @@ const license: React.FC = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <div className="min-h-screen w-full bg-primary-800 pt-40">
-                <h1 className="mx-auto text-white font-medium text-center w-4/5 text-6xl">Choose the plan according to your need.</h1>
-                <div className="w-4/5 flex gap-2 mx-auto mt-6">
-                    <div className="h-[2px] w-full mx-auto bg-white rounded-full"></div>
-                    <div className="h-[2px] w-20 mx-auto bg-white rounded-full"></div>
-                    <div className="h-[2px] w-full mx-auto bg-white rounded-full"></div>
+            <div className="min-h-screen w-full grow  p-4">
+                <h1 className="text-secondary font-medium text-2xl text-center my-4">My License</h1>
+                <div className="w-full bg-secondary h-[1px] my-2"></div>
+                <div className="grow bg-primary-800 p-4 rounded-md mx-auto w-96">
+                    <p className="text-gray-200 font-semibold text-xl text-center">
+                        License Details
+                    </p>
+                    <p className="text-gray-200 font-semibold text-md">
+                        License Type: {userlicense.licenseType.licenseType}
+                    </p>
+                    <p className="text-gray-200 font-semibold text-md">
+                        Question Allowed: {userlicense.licenseType.questionAllowed}
+                    </p>
+                    <p className="text-gray-200 font-semibold text-md">
+                        Project Per License: {userlicense.licenseType.projectPerLicense}
+                    </p>
+                    <p className="text-gray-200 font-semibold text-md">
+                        License Start: {new Date(userlicense.createdAt).toDateString()}
+                    </p>
+                    <p className="text-gray-200 font-semibold text-md">
+                        License end: {new Date(userlicense.licenseValidity).toDateString()} [{((new Date(userlicense.licenseValidity).getTime() - new Date().getTime()) / (1000 * 3600 * 24)).toFixed(0)} Days Left.]
+                    </p>
                 </div>
-                <p className="w-4/5 mx-auto my-6 text-gray-200 text-lg text-center">Our sales team can help you find the best solutions to meet the unique needs of your business.</p>
+                <div className="h-10"></div>
+                <h1 className="text-secondary font-medium text-2xl text-center my-4">Available License(s)</h1>
+                <div className="w-full bg-secondary h-[1px] my-2"></div>
                 <div className="flex sm:w-4/5 mx-auto justify-center my-8 flex-wrap gap-10">
                     {license == null || license == undefined ? (
                         <>

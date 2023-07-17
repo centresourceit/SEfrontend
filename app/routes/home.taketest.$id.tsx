@@ -29,7 +29,8 @@ export async function loader(params: LoaderArgs) {
           licensesId,
           complince{
             name,
-            description
+            description,
+            LearnMoreLink
           },
           answer{
             answer,
