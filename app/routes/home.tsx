@@ -361,8 +361,19 @@ const TopNavBar = (props: TopNavBarProps) => {
 const Footer = () => {
   const year = new Date().getFullYear();
   return (
-    <div className="w-full h-14 bg-primary-800 text-center grid place-items-center text-white font-light text-2xl rounded-md">
-      &copy; {year} Smart Ethics - All rights reserved.
+    <div className="flex flex-wrap gap-2 h-14 bg-primary-800  rounded-md px-4 items-center">
+      <div className=" text-center grid place-items-center text-white font-light text-2xl">
+        &copy; {year} Smart Ethics - All rights reserved.
+      </div>
+      <div className="grow"></div>
+      <Link to="/cookies" className="text-white font-semibold text-lg">COOKIES</Link>
+      <div className="h-6 w-[2px] bg-gray-300"></div>
+      <Link to="/disclaimer" className="text-white font-semibold text-lg">DISCLAIMER</Link>
+      <div className="h-6 w-[2px] bg-gray-300"></div>
+      <Link to="/privacypolicy" className="text-white font-semibold text-lg">PRIVACY POLICY</Link>
+      <div className="h-6 w-[2px] bg-gray-300"></div>
+      <Link to="/usagesterms" className="text-white font-semibold text-lg">USAGES TERMS</Link>
+      <div></div>
     </div>
   );
 };

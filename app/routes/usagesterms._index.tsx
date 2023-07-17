@@ -1,6 +1,8 @@
-const UserTerms: React.FC = (): JSX.Element => {
-    return (
+import { useNavigate } from "@remix-run/react";
 
+const UserTerms: React.FC = (): JSX.Element => {
+    const navigator = useNavigate();
+    return (
         <div className="bg-[#181136] h-screen w-full py-14 lg:p-28 p-4 z-20">
             <h3 className="text-center text-4xl font-semibold text-white">User Terms</h3>
             <div className="w-full flex gap-6 my-6">
@@ -14,7 +16,9 @@ const UserTerms: React.FC = (): JSX.Element => {
             <p className="text-xl font-normal text-white my-4">
                 minus ut odio beatae? Pariatur nam soluta accusamus consequatur, dolorum ullam? Earum corporis est dolorem architecto, consequuntur veritatis rem, sequi voluptatibus non fugit reprehenderit. Deleniti praesentium consequuntur beatae nesciunt nihil ex, iure, accusamus qui dignissimos tempora facere vero placeat quo ullam aperiam, dolorum natus commodi officiis! Voluptate itaque numquam sunt fugit laboriosam nesciunt consequatur atque tempora, aspernatur illo quis officiis voluptatem exercitationem nemo ratione ea animi ducimus expedita non eveniet architecto? Maiores et labore officia a deleniti tenetur delectus ullam dolor repudiandae similique amet perspiciatis cupiditate iste minima accusamus qui, repellat adipisci ipsam id! Eaque quam quaerat debitis ea eligendi possimus? Vero recusandae voluptatibus vel, soluta assumenda facilis saepe architecto illo similique, veniam reiciendis. Quos modi laudantium deserunt aperiam dicta sed nesciunt totam unde recusandae iusto. Qui quaerat nisi dolor sequi!
             </p>
-            <button className="bg-cyan-500 py-1 px-4 text-white font-normal">Back To Home</button>
+            <button
+                onClick={() => navigator(-1)}
+                className="bg-cyan-500 py-1 px-4 text-white font-normal">Back To Home</button>
         </div>
     );
 }

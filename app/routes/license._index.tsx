@@ -4,9 +4,11 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
+import Stripe from "stripe";
 
 
 export async function loader(params: LoaderArgs) {
+    const baseUrl = params.request.url.split("/").slice(0, 3).join("/");
     const cookieHeader = params.request.headers.get("Cookie");
     const cookie: any = await userPrefs.parse(cookieHeader);
     const data = await ApiCall({
@@ -31,7 +33,8 @@ export async function loader(params: LoaderArgs) {
     return json({
         license: data.data.getAllLicense,
         token: cookie.token,
-        user: cookie
+        user: cookie,
+        baseUrl: baseUrl
     });
 }
 
@@ -41,6 +44,8 @@ const license: React.FC = (): JSX.Element => {
     const user = loader.user;
     const token = loader.token;
     const license = loader.license;
+    const baseUrl = loader.baseUrl;
+
     const [licenseBox, setLicenseBox] = useState<boolean>(false);
     const [licenaseid, setLicenaseid] = useState<any>(null);
 
@@ -78,6 +83,41 @@ const license: React.FC = (): JSX.Element => {
             toast.error(data.message, { theme: "light" });
         }
     }
+
+
+
+    const stripkey = loader.strip_key;
+
+
+    const stripe = new Stripe(
+        stripkey,
+        { apiVersion: "2022-11-15" }
+    );
+
+    const handlepayment = async (amount: number, license: number) => {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: "Example Product",
+                            images: [
+                                "https://plus.unsplash.com/premium_photo-1684952849219-5a0d76012ed2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80",
+                            ],
+                        },
+                        unit_amount: amount * 100, // Amount in cents
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `${baseUrl}/success/${license}`,
+            cancel_url: `${baseUrl}/cancel`,
+        });
+        window.location.assign(session.url == null ? "" : session.url);
+    };
 
     return (
         <>
@@ -151,15 +191,26 @@ const license: React.FC = (): JSX.Element => {
                                     }
                                     <div className="grow"></div>
                                     <div className="flex w-full gap-4 mt-2">
-                                        <button
-                                            onClick={() => {
-                                                setLicenseBox(value => true);
-                                                setLicenaseid((value: any) => val);
-                                            }}
-                                            className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
-                                        >
-                                            Select
-                                        </button>
+                                        {val.licenseType == "FREE" ?
+                                            <button
+                                                onClick={() => {
+                                                    setLicenseBox(value => true);
+                                                    setLicenaseid((value: any) => val);
+                                                }}
+                                                className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+                                            >
+                                                Select
+                                            </button>
+                                            :
+                                            <button
+                                                onClick={() => {
+                                                    handlepayment(val.paymentAmount, val.id);
+                                                }}
+                                                className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+                                            >
+                                                Select
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             );

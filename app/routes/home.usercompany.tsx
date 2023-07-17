@@ -52,9 +52,7 @@ const UserCompany = (): JSX.Element => {
     const loader = useLoaderData();
     const user = loader.user;
     return (
-
         <div className="grow  p-4 w-full">
-
             {
                 user.companyId == null ?
                     <div className=" my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">

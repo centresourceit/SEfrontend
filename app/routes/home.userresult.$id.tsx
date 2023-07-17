@@ -153,7 +153,6 @@ const UserDashboard = () => {
     if (7.1 <= val && 9 >= val) return "Met";
     if (9.1 <= val) return "Excellent";
     return "Not Met"
-
   }
   const handlepayment = async () => {
     const session = await stripe.checkout.sessions.create({
