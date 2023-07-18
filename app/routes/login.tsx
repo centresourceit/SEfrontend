@@ -11,8 +11,8 @@ export function links() {
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
-  const cookie: any = await userPrefs.parse(cookieHeader);
-  if (cookie != null || cookie != undefined) {
+  const cookie = await userPrefs.parse(cookieHeader);
+  if (!(cookie == null || cookie == undefined || Object.keys(cookie).length == 0)) {
     return redirect("/home");
   }
   return null;
