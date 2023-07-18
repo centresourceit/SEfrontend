@@ -16,6 +16,7 @@ enum SideBarTabs {
   LicenseSlave,
   UserCompany,
   UserProject,
+  Gallery,
 }
 
 interface SideBarState {

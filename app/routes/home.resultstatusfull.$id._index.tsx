@@ -199,9 +199,9 @@ const ResultStatus = () => {
               <Link to={`/home/taketest/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Start Again
               </Link>
-              <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Share
-              </button>
+              </a>
             </div>
             <p className="text-gray-300 font-medium text-xs">
               For a detailed review from our expert team

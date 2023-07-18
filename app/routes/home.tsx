@@ -4,7 +4,7 @@ import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
-import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidUserLarge, Fa6SolidXmark, MaterialSymbolsDiamondOutline, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
+import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidImages, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidUserLarge, Fa6SolidXmark, MaterialSymbolsDiamondOutline, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
 import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
@@ -197,6 +197,16 @@ const DashBoard = () => {
                         active={asideindex === SideBarTabs.UserLicense}
                       ></SidebarTab>
                     </Link>
+                    {/* <Link
+                      to={"/home/gallery"}
+                      onClick={() => achangeindex(SideBarTabs.Gallery)}
+                    >
+                      <SidebarTab
+                        icon={Fa6SolidImages}
+                        title="GALLERY"
+                        active={asideindex === SideBarTabs.Gallery}
+                      ></SidebarTab>
+                    </Link> */}
                     {/* <Link
                       to={"/home/taketest/"}
                       onClick={() => {

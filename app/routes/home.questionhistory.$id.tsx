@@ -1,113 +1,24 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
-import React, { useEffect, useState } from "react";
+import { Link, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
-import { toast } from "react-toastify";
-
-
 export async function loader(params: LoaderArgs) {
+  const id = params.params.id;
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
   const data = await ApiCall({
     query: `
-    query getAllQuestion{
-      getAllQuestion{
-        id,
-        question,
-        description,
-        questionType,
-        questioncode,
-        questionRefId,
-        status,
-        version,
-        answer{
-          mark,
-          rec,
-          answer,
-        },
-        principle{
-          name,
-          description,
-        },
-        questionPlan{
-          licenseType,
-          paymentAmount,
-          discountAmount,
-          questionAllowed,
-          projectPerLicense,
-          discountValidTill,
-        },
-        complince{
-          name,
-          description
-        }
-      }
-    }
-  `,
-    veriables: {},
-    headers: { authorization: `Bearer ${cookie.token}` },
-  });
-
-  return json({ questions: data.data.getAllQuestion, token: cookie.token });
-}
-
-const Compliance = () => {
-  const loaderquestions = useLoaderData().questions;
-  const token = useLoaderData().token;
-  const [questions, setQuestions] = useState<any[]>(loaderquestions);
-  const [quelen, setQuelen] = useState<boolean[]>([])
-
-
-  useEffect(() => {
-    setQuelen(Array.from({ length: questions.length }, () => false));
-  }, [questions]);
-
-  const navigator = useNavigate();
-
-
-  const [delBox, setDelBox] = useState<boolean>(false);
-  const [id, setId] = useState<number>(0);
-
-  const updateStatus = async (id: number, status: string) => {
-    const data = await ApiCall({
-      query: `
-      mutation updateQuestionById($updateQuestionbankInput:UpdateQuestionbankInput!){
-        updateQuestionById(updateQuestionbankInput:$updateQuestionbankInput){
-          id
-        }
-      }
-      `,
-      veriables: {
-        updateQuestionbankInput: {
-          id: id,
-          status: status,
-        },
-      },
-      headers: { authorization: `Bearer ${token}` },
-    });
-
-    if (data.status) {
-      await updateQuestions();
-      toast.success("Status updated successfully", { theme: "light" });
-    } else {
-      toast.error(data.message, { theme: "light" });
-    }
-  };
-
-  const updateQuestions = async () => {
-    const data = await ApiCall({
-      query: `
-      query getAllQuestion{
-        getAllQuestion{
+      query getQuestionHistory($id:Int!){
+        getQuestionHistory(id:$id){
           id,
           question,
           description,
           questionType,
           questioncode,
-          questionRefId,
           status,
+          version,
           answer{
             mark,
             rec,
@@ -132,68 +43,33 @@ const Compliance = () => {
         }
       }
     `,
-      veriables: {},
-      headers: { authorization: `Bearer ${token}` },
-    });
-    setQuestions((val) => data.data.getAllQuestion);
-  };
+    veriables: {
+      id: parseInt(id!)
+    },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+  console.log(data);
+
+  return json({ questions: data.data.getQuestionHistory, token: cookie.token });
+}
+const Questionhistory: React.FC = (): JSX.Element => {
+  const loader = useLoaderData()
+  const loaderquestions = loader.questions;
+  const token = loader.token;
+  const [questions, setQuestions] = useState<any[]>(loaderquestions);
+  const [quelen, setQuelen] = useState<boolean[]>([])
 
 
-  const deleteQuestion = async () => {
-    const data = await ApiCall({
-      query: `
-      mutation deleteQuestionById($updateQuestionbankInput:UpdateQuestionbankInput!){
-        deleteQuestionById(updateQuestionbankInput:$updateQuestionbankInput){
-          id
-        }
-      }
-      `,
-      veriables: {
-        updateQuestionbankInput: {
-          id: id,
-          deletedAt: Date.now(),
-        },
-      },
-      headers: { authorization: `Bearer ${token}` },
-    });
+  useEffect(() => {
+    setQuelen(Array.from({ length: questions.length }, () => false));
+  }, [questions]);
 
-    if (data.status) {
-      await updateQuestions();
-      toast.success("Question deleted successfully", { theme: "light" });
-      setDelBox(val => false);
-    } else {
-      toast.error(data.message, { theme: "light" });
-    }
-  };
-
+  console.log(loaderquestions);
 
   return (
     <>
-      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
-        <div className="bg-white rounded-md p-4">
-          <h1 className="text-center text-2xl font-semibold">Delete</h1>
-          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
-          <div className="flex w-full gap-4 mt-2">
-            <button
-              onClick={() => deleteQuestion()}
-              className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
-            >
-              Delete
-            </button>
-            <button
-              onClick={() => setDelBox(val => false)}
-              className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
       <div className="grow  p-4 w-full overflow-x-hidden">
-        <div className="flex w-full justify-between">
-          <h1 className="text-white font-medium text-2xl">Questions</h1>
-          <Link to={"/home/addquestion/"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Questions</Link>
-        </div>
+        <h1 className="text-white font-medium text-2xl">Questions</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="my-6">
           {questions == null || questions == undefined ? (
@@ -215,14 +91,12 @@ const Compliance = () => {
                     <div className="cursor-pointer">
                       {val.status == "ACTIVE" ? (
                         <div
-                          onClick={() => updateStatus(val.id, "INACTIVE")}
                           className="w-16 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium"
                         >
                           ACTIVE
                         </div>
                       ) : (
                         <div
-                          onClick={() => updateStatus(val.id, "ACTIVE")}
                           className="w-16 py-1 text-white text-xs bg-rose-500 text-center rounded-md font-medium"
                         >
                           INACTIVE
@@ -308,31 +182,6 @@ const Compliance = () => {
                       {val.complince.description}
                     </p>
                   </> : null}
-
-                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
-                  <p className="text-gray-200 font-semibold text-md text-center w-96">
-                    Action
-                  </p>
-                  <div className="flex gap-4 mt-2 w-96">
-                    <button
-                      onClick={() => { setId(val.id); setDelBox(val => true); }}
-                      className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      onClick={() => navigator(`/home/editquestion/${val.id}`)}
-                      className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => navigator(`/home/questionhistory/${val.questionRefId}`)}
-                      className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
-                    >
-                      History
-                    </button>
-                  </div>
                 </div>
               );
             })
@@ -341,6 +190,6 @@ const Compliance = () => {
       </div>
     </>
   );
-};
+}
 
-export default Compliance;
+export default Questionhistory;

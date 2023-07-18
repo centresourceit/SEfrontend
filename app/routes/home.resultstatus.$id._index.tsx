@@ -35,14 +35,34 @@ export async function loader(params: LoaderArgs) {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
-  return json({ result: data.data.searchResult, token: cookie.token });
+
+  const compliance = await ApiCall({
+    query: `
+    query getAllCompliance{
+      getAllCompliances{
+        logo,
+      }
+    }
+      `,
+    veriables: {
+      id: Number(cookie.id)
+    },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
+  return json({
+    result: data.data.searchResult,
+    token: cookie.token,
+    compliance: compliance.data.getAllCompliances,
+    id: id
+  });
 }
 
 const ResultStatus = () => {
   const loader = useLoaderData();
+  const id = loader.id;
   const result = loader.result[0];
   const navigator = useNavigate();
-
+  const compliance = loader.compliance;
 
 
   return (
@@ -90,9 +110,9 @@ const ResultStatus = () => {
                   <Link to={`/home/taketest/${result.projectId}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                     Start Again
                   </Link>
-                  <button className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+                  <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                     Share
-                  </button>
+                  </a>
                 </div>
                 <p className="text-gray-300 font-medium text-xs">
                   For a detailed review from our expert team
@@ -134,45 +154,16 @@ const ResultStatus = () => {
             <div className="grow bg-gray-500 h-[2px]"></div>
           </div>
           <p className="text-3xl text-white font-semibold">
-            Congratulations! Great Start! Try the full version to see if are aligned
-            to the following requirements
+            “Congratulations, great start! Try the full version to explore which alignment matters the most to you.”
           </p>
-          <div className="flex gap-8 my-6 flex-wrap justify-evenly">
-            <img
-              src="/images/brand/logo12.jpg"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo13.png"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo14.png"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo15.jpg"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo16.png"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo17.png"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
-            <img
-              src="/images/brand/logo18.png"
-              alt="logo1"
-              className="shrink-0 w-40 h-24 object-fill object-center bg-white"
-            />
+          <div className="flex gap-8 my-6 flex-wrap ">
+            {
+              compliance.map((val: any, index: number) => (<img
+                src={val.logo}
+                alt="logo1"
+                className="shrink-0 w-40 h-24 object-cover object-top bg-white"
+              />))
+            }
           </div>
         </>}
     </div>

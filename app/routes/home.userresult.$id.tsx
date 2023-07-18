@@ -53,6 +53,8 @@ export async function loader(params: LoaderArgs) {
   });
 
 
+
+
   const principle = await ApiCall({
     query: `
     query getPrinciple{
@@ -66,6 +68,8 @@ export async function loader(params: LoaderArgs) {
     },
     headers: { authorization: `Bearer ${cookie.token}` },
   });
+
+
 
 
   return json({
@@ -85,6 +89,7 @@ const UserDashboard = () => {
   const isResult = loader.isResult;
   const result = loader.result;
   const projectid = loader.projectid;
+
 
   const isFirst = isResult ? result.length >= 1 : false;
   const isSecond = isResult ? result.length >= 2 : false;
@@ -431,30 +436,30 @@ const UserDashboard = () => {
             </div>
 
             <div className="flex my-8 flex-wrap justify-around gap-8">
-              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+              <Link to={"/home/userlicense"} className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
                 <h1 className="text-secondary font-medium text-3xl text-center">
                   Get your Verified Certificate
                 </h1>
                 <p className="text-center text-secondary mt-2">
                   (Recommended for Commercial usage)
                 </p>
-              </div>
-              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+              </Link>
+              <Link to={"/home/userlicense"} className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
                 <h1 className="text-secondary font-medium text-3xl text-center">
                   Get Recommendation
                 </h1>
                 <p className="text-center text-secondary mt-2">
                   (Recommended for Commercial usage)
                 </p>
-              </div>
-              <div className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
+              </Link>
+              <Link to={"/home/userlicense"} className="bg-primary-800 rounded-md p-4 w-80 cursor-pointer">
                 <h1 className="text-secondary font-medium text-3xl text-center">
                   Publish Free
                 </h1>
                 <p className="text-center text-secondary mt-2">
                   (For research and design conceptualisation)
                 </p>
-              </div>
+              </Link>
             </div>
 
             <div className="w-full flex gap-6 my-6">
@@ -473,8 +478,7 @@ const UserDashboard = () => {
                 <Fa6SolidHeart></Fa6SolidHeart>
               </div>
               <h1 className="text-white font-medium text-xl">
-                Please share our open framework, submit your feedback and contribute
-                to help us improve – your feedback matters, lets change the world!
+                "Let's Collaborate, Contribute, & Create Ethical Innovation Together."
               </h1>
               <div>
                 <Link
