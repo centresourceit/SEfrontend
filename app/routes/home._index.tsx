@@ -185,7 +185,7 @@ const UserProject = () => {
                                         <p className="text-gray-200 font-semibold text-xl text-left grow">
                                             License Details
                                         </p>
-                                        <Link to={"/home/userlicense/"} className="px-4 py-1 grid place-items-center text-white text-xs bg-cyan-500 text-center rounded-md font-medium">Update License</Link>
+                                        <Link to={"/home/userlicense/"} className="px-4 py-1 grid place-items-center text-white text-xs bg-cyan-500 text-center rounded-md font-medium">Upgrade License</Link>
                                     </div>
                                     <p className="text-gray-200 font-semibold text-md">
                                         License Type: {license.licenseType.licenseType}

@@ -204,7 +204,7 @@ const UserDashboard = () => {
               <div className="grow">
                 <p className="text-green-500 font-semibold text-xl rounded-md border-l-4 border-r-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500 text-center">
                   <span className="text-white px-2">
-                    Show BOLD Status Of Assessment here:
+                    Status Of Assessment:
                   </span>
                   {questiondata == null ? "-" : questiondata.resultStatus.toString().toUpperCase()}
                   {/* / Unaproved/ Approved verified */}

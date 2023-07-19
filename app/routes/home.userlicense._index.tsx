@@ -115,7 +115,6 @@ const license: React.FC = (): JSX.Element => {
 
     const stripkey = loader.strip_key;
 
-
     const stripe = new Stripe(
         stripkey,
         { apiVersion: "2022-11-15" }

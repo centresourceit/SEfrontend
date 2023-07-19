@@ -158,11 +158,13 @@ const ResultStatus = () => {
           </p>
           <div className="flex gap-8 my-6 flex-wrap ">
             {
-              compliance.map((val: any, index: number) => (<img
-                src={val.logo}
-                alt="logo1"
-                className="shrink-0 w-40 h-24 object-cover object-top bg-white"
-              />))
+              compliance.map((val: any, index: number) => (
+                <img key={index}
+                  src={val.logo}
+                  alt="logo1"
+                  className="shrink-0 w-40 h-24 object-cover object-top bg-white"
+                />
+              ))
             }
           </div>
         </>}

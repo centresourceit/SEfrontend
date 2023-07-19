@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+import { toast } from "react-toastify";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 ChartJS.register(
@@ -76,6 +77,7 @@ const ResultStatus = () => {
   const loader = useLoaderData();
   const result = loader.result[0];
   const id = loader.id;
+  const token = loader.token;
 
 
   const options: any = {
@@ -164,6 +166,30 @@ const ResultStatus = () => {
   }));
   const navigator = useNavigate();
 
+  const publish = async () => {
+    console.log(id);
+    const data = await ApiCall({
+      query: `
+      mutation publicCertificate($updateResultInput:UpdateResultInput!){
+        publicCertificate(updateResultInput:$updateResultInput){
+          id,
+        }
+      }
+    `,
+      veriables: {
+        updateResultInput: {
+          id: parseInt(id)
+        },
+      },
+      headers: { authorization: `Bearer ${token}` },
+    });
+    if (data.status) {
+      toast.success("Your certificate published successfully.", { theme: "light" });
+    } else {
+      toast.error(data.message, { theme: "light" });
+    }
+  }
+
   return (
     <div className="grow  p-4 w-full">
       <div className="flex gap-4 flex-wrap">
@@ -210,9 +236,9 @@ const ResultStatus = () => {
               <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Contact us
               </Link>
-              <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <button onClick={publish} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
                 Publish
-              </a>
+              </button>
             </div>
           </div>
         </div>

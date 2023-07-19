@@ -197,7 +197,7 @@ const DashBoard = () => {
                         active={asideindex === SideBarTabs.UserLicense}
                       ></SidebarTab>
                     </Link>
-                    {/* <Link
+                    <Link
                       to={"/home/gallery"}
                       onClick={() => achangeindex(SideBarTabs.Gallery)}
                     >
@@ -206,7 +206,7 @@ const DashBoard = () => {
                         title="GALLERY"
                         active={asideindex === SideBarTabs.Gallery}
                       ></SidebarTab>
-                    </Link> */}
+                    </Link>
                     {/* <Link
                       to={"/home/taketest/"}
                       onClick={() => {
