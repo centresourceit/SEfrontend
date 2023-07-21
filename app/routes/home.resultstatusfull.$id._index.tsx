@@ -167,7 +167,6 @@ const ResultStatus = () => {
   const navigator = useNavigate();
 
   const publish = async () => {
-    console.log(id);
     const data = await ApiCall({
       query: `
       mutation publicCertificate($updateResultInput:UpdateResultInput!){

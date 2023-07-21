@@ -32,16 +32,16 @@ export async function loader(params: LoaderArgs) {
 
     const license = await ApiCall({
         query: `
-        query searchLicenseslave($searchLicenseslaveInput:SearchLicenseslaveInput!){
-            searchLicenseslave(searchLicenseslaveInput:$searchLicenseslaveInput){
+        query getUserLicenseSlave($id:Int!){
+            getUserLicenseSlave(id:$id){
             licenseTypeId,
             paymentStatus,
             licenseValidity,
             paymentReference,
             paymentAmount,
             createdAt,
-                licenseType{
-                    paymentAmount,
+            licenseType{
+              paymentAmount,
               licenseType,
               questionAllowed,
               projectPerLicense,
@@ -51,9 +51,7 @@ export async function loader(params: LoaderArgs) {
         }
             `,
         veriables: {
-            searchLicenseslaveInput: {
-                userId: Number(cookie.id)
-            }
+            id: Number(cookie.id)
         },
         headers: { authorization: `Bearer ${cookie.token}` },
     });
@@ -62,7 +60,7 @@ export async function loader(params: LoaderArgs) {
         license: data.data.getAllLicense,
         token: cookie.token,
         user: cookie,
-        userlicense: license.data.searchLicenseslave,
+        userlicense: license.data.getUserLicenseSlave,
         strip_key: process.env.STRIP_KEY,
         baseUrl: baseUrl
     });
@@ -74,7 +72,7 @@ const license: React.FC = (): JSX.Element => {
     const token = loader.token;
     const license = loader.license;
     const baseUrl = loader.baseUrl;
-    const userlicense = loader.userlicense[0];
+    const userlicense = loader.userlicense;
     const [licenseBox, setLicenseBox] = useState<boolean>(false);
     const [licenaseid, setLicenaseid] = useState<any>(null);
 

@@ -19,6 +19,7 @@ export default function Register(): JSX.Element {
   const emaliRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const rePassRef = useRef<HTMLInputElement>(null);
+  const [tandc, setTandC] = useState<boolean>(false)
 
   const iref = useRef<HTMLInputElement>(null);
   const eref = useRef<HTMLInputElement>(null);
@@ -97,6 +98,8 @@ export default function Register(): JSX.Element {
 
     const parsed = RegisterScheme.safeParse(register);
     if (parsed.success) {
+      if (!tandc) return toast.error("Accept terms and conditions", { theme: "light" });
+
       const data = await ApiCall({
         query: `
         mutation signup($signUpUser:SignUpUserInput!){
@@ -184,6 +187,10 @@ export default function Register(): JSX.Element {
                   }
                 }}
               />
+            </div>
+            <div className="flex items-center gap-4 mt-4">
+              <input type="checkbox" checked={tandc} onChange={(e) => { setTandC(!tandc) }} className="text-blue-600 bg-gray-100 border-gray-300 rounded" />
+              <p className="text-md text-white font-normal">I accept <Link to={"/usagesterms/"} className="text-secondary">terms and conditions</Link> </p>
             </div>
             <button
               onClick={submit}

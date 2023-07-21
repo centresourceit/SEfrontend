@@ -92,8 +92,8 @@ export async function loader(params: LoaderArgs) {
 
     const license = await ApiCall({
         query: `
-        query searchLicenseslave($searchLicenseslaveInput:SearchLicenseslaveInput!){
-            searchLicenseslave(searchLicenseslaveInput:$searchLicenseslaveInput){
+        query getUserLicenseSlave($id:Int!){
+            getUserLicenseSlave(id:$id){
             licenseTypeId,
             paymentStatus,
             licenseValidity,
@@ -112,9 +112,7 @@ export async function loader(params: LoaderArgs) {
         }
             `,
         veriables: {
-            searchLicenseslaveInput: {
-                userId: Number(cookie.id)
-            }
+            id: Number(cookie.id)
         },
         headers: { authorization: `Bearer ${cookie.token}` },
     });
@@ -124,7 +122,7 @@ export async function loader(params: LoaderArgs) {
         token: cookie.token,
         user: user.data.getUserById,
         project: project.data.getAllProjectById,
-        license: license.data.searchLicenseslave,
+        license: license.data.getUserLicenseSlave,
     });
 }
 

@@ -18,6 +18,7 @@ export async function loader(params: LoaderArgs) {
         totalScore,
         certified,
         projectId,
+        adminComments,
         assesement{
           result{
             question,
@@ -61,7 +62,6 @@ const ResultStatus = () => {
   const loader = useLoaderData();
   const id = loader.id;
   const result = loader.result[0];
-  const navigator = useNavigate();
   const compliance = loader.compliance;
 
 
@@ -148,6 +148,11 @@ const ResultStatus = () => {
               </div>
             </div>
           </div>
+          {result.adminComments == null || result.adminComments == undefined || result.adminComments == "" ? null :
+            <p className="text-xl text-white font-semibold">
+              Admin Comment : <span className="text-secondary">{result.adminComments}</span>
+            </p>
+          }
           <div className="w-full flex gap-6 my-6">
             <div className="grow bg-gray-500 h-[2px]"></div>
             <div className="w-10 bg-gray-300 h-[4px]"></div>

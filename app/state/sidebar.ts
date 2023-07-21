@@ -17,6 +17,7 @@ enum SideBarTabs {
   UserCompany,
   UserProject,
   Gallery,
+  Result,
 }
 
 interface SideBarState {

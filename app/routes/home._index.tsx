@@ -36,16 +36,16 @@ export async function loader(params: LoaderArgs) {
     });
     const license = await ApiCall({
         query: `
-        query searchLicenseslave($searchLicenseslaveInput:SearchLicenseslaveInput!){
-            searchLicenseslave(searchLicenseslaveInput:$searchLicenseslaveInput){
+        query getUserLicenseSlave($id:Int!){
+            getUserLicenseSlave(id:$id){
             licenseTypeId,
             paymentStatus,
             licenseValidity,
             paymentReference,
             paymentAmount,
             createdAt,
-                licenseType{
-                    paymentAmount,
+            licenseType{
+            paymentAmount,
               licenseType,
               questionAllowed,
               projectPerLicense,
@@ -55,9 +55,7 @@ export async function loader(params: LoaderArgs) {
         }
             `,
         veriables: {
-            searchLicenseslaveInput: {
-                userId: Number(cookie.id)
-            }
+            id: Number(cookie.id)
         },
         headers: { authorization: `Bearer ${cookie.token}` },
     });
@@ -95,7 +93,7 @@ export async function loader(params: LoaderArgs) {
         isProject: data.status,
         project: data.data.searchProject,
         token: cookie.token,
-        license: license.data.searchLicenseslave,
+        license: license.data.getUserLicenseSlave,
         isLicense: license.status,
         user: user.data.getUserById,
     });
@@ -106,7 +104,7 @@ const UserProject = () => {
     const project = loader.project;
     const token = loader.token;
     const isLicense = loader.isLicense;
-    const license = isLicense ? loader.license[0] : null;
+    const license = isLicense ? loader.license : null;
     const user = loader.user;
     const navigator = useNavigate();
     const isProject = loader.isProject;
