@@ -142,7 +142,7 @@ const AdminResult: React.FC = (): JSX.Element => {
                     <div className="w-full h-[2px] bg-gray-800 my-4"></div>
                     <textarea
                         ref={adminComment}
-                        className="fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300 w-full"
+                        className="fill-none outline-none bg-transparent my-2 border-2 border-gray-200 p-2 text-white placeholder:text-gray-300 w-full h-28"
                         placeholder="Enter Your Comment"
                     >
                     </textarea>
@@ -176,14 +176,16 @@ const AdminResult: React.FC = (): JSX.Element => {
                         </>
                     ) : (
                         result.map((val: any, index: number) => {
+                            if (val.totalScore == 0) return null;
                             return (
-                                <div key={index} className="bg-primary-800 p-4 w-96">
+                                <div key={index} className="bg-primary-800 p-4 w-96 flex flex-col">
                                     <div className="flex gap-6 items-center">
                                         <p className="text-white font-semibold text-lg">{index + 1}</p>
                                         <p className="text-white font-semibold text-xl">
                                             {val.user.name} <span className="text-md">[ID: {val.certificatedId}]</span>
                                         </p>
-                                        <button className="bg-primary-500 py-1 text-white text-md font-normal flex-1 rounded-md text-center">View</button>
+                                        <div className="grow"></div>
+                                        <Link to={`/home/adminresultdata/${val.id}`} className="bg-primary-500 py-1 text-white text-md font-normal rounded-md text-center w-16">View</Link>
                                     </div>
                                     <p className="text-gray-200 font-semibold text-md">
                                         Total Score : {val.totalScore}
@@ -211,6 +213,7 @@ const AdminResult: React.FC = (): JSX.Element => {
                                     <p className="text-gray-200 font-normal text-md my-1">
                                         Questions Per License : {val.license.licenseType.questionAllowed}
                                     </p>
+                                    <div className="grow"></div>
                                     <div className="w-full h-[2px] bg-white my-2"></div>
                                     <div className="flex gap-4">
                                         <button

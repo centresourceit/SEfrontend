@@ -16,6 +16,8 @@ export async function loader(params: LoaderArgs) {
     query getAllLicense{
       getAllLicense{
         id,
+        description,
+        licenseValidTill,
         licenseType,
         paymentAmount,
         name,
@@ -78,6 +80,8 @@ const License = () => {
           id,
           licenseType,
           name,
+          description,
+          licenseValidTill,
           paymentAmount,
           discountAmount,
           discountValidTill,
@@ -184,6 +188,12 @@ const License = () => {
                       )}
                     </div>
                   </div>
+                  <p className="text-gray-200 font-normal text-md my-1">
+                    License Description : {val.description}
+                  </p>
+                  <p className="text-gray-200 font-normal text-md my-1">
+                    License Till Valid : {val.licenseValidTill}
+                  </p>
                   <p className="text-gray-200 font-normal text-md my-1">
                     License Type : {val.licenseType}
                   </p>

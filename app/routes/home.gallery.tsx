@@ -59,7 +59,6 @@ export async function loader(params: LoaderArgs) {
 const Gallery: React.FC = (): JSX.Element => {
     const loader = useLoaderData();
     const gallery = loader.gallery;
-    console.log(gallery);
     return (
         <div className="grow  p-4 w-full overflow-x-hidden">
             <h1 className="text-white font-medium text-2xl">Certificate Gallery</h1>

@@ -83,12 +83,6 @@ const AddQuestion: React.FC = (): JSX.Element => {
     const qPlan = useRef<HTMLSelectElement>(null);
     const qCompliance = useRef<HTMLSelectElement>(null);
 
-    type answer = {
-        answer: string;
-        mark: string;
-        rec: string;
-    }
-
     const [answers, setAnswers] = useState<{ answer: string; mark: number; rec: string; }[]>([
         {
             answer: "",

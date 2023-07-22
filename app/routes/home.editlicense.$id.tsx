@@ -18,6 +18,8 @@ export async function loader({ params, request }: LoaderArgs) {
                     id,
                     licenseType,
                     name,
+                    description,
+                    licenseValidTill,
                     paymentAmount,
                     discountAmount,
                     questionAllowed,
@@ -53,15 +55,23 @@ const AddLicense: React.FC = (): JSX.Element => {
     const discountvalid = useRef<HTMLInputElement>(null);
     const questionallowed = useRef<HTMLInputElement>(null);
     const projectperlicense = useRef<HTMLInputElement>(null);
+    const description = useRef<HTMLInputElement>(null);
+    const licenseValidTill = useRef<HTMLInputElement>(null);
+
 
     useEffect(() => {
         lName!.current!.value = license.name;
         lType!.current!.value = license.licenseType;
         paymentamount!.current!.value = license.paymentAmount;
         discountamount!.current!.value = license.discountAmount;
-        discountvalid!.current!.value = license.discountValidTill.slice(0, 10);
         questionallowed!.current!.value = license.questionAllowed;
         projectperlicense!.current!.value = license.projectPerLicense;
+        description!.current!.value = license.description;
+        licenseValidTill!.current!.value = license.licenseValidTill;
+
+        if (!(license.discountValidTill == null || license.discountValidTill == undefined)) {
+            discountvalid!.current!.value = license.discountValidTill.slice(0, 10);
+        }
     }, []);
 
 
@@ -87,6 +97,14 @@ const AddLicense: React.FC = (): JSX.Element => {
                 licenseType: z
                     .string()
                     .nonempty("License Type is required."),
+                description: z
+                    .string()
+                    .nonempty("License description is required."),
+                licenseValidTill: z
+                    .number({
+                        required_error: "License valid till is required.",
+                        invalid_type_error: "License valid till should be valid number."
+                    }),
                 paymentAmount: z
                     .number({
                         required_error: "License Payment Amount is required.",
@@ -118,6 +136,8 @@ const AddLicense: React.FC = (): JSX.Element => {
             id: license.id,
             name: lName!.current!.value,
             licenseType: lType!.current!.value,
+            description: description!.current!.value,
+            licenseValidTill: parseInt(licenseValidTill!.current!.value),
             paymentAmount: parseInt(paymentamount!.current!.value),
             discountAmount: parseInt(discountamount!.current!.value),
             discountValidTill: new Date(discountvalid!.current!.value),
@@ -178,6 +198,27 @@ const AddLicense: React.FC = (): JSX.Element => {
                 <option className=" text-white text-lg" value="PREMIUM">PREMIUM</option>
                 <option className=" text-white text-lg" value="PLATINUM">PLATINUM</option>
             </select>
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                License Description
+            </h2>
+            <input
+                ref={description}
+                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                placeholder="Enter License Description"
+            />
+
+            <h2 className="text-white font-semibold text-md">
+                <span className="text-green-500 pr-2">&#x2666;</span>
+                License validity (In Days)
+            </h2>
+            <input
+                ref={licenseValidTill}
+                disabled
+                className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
+                placeholder="Enter License Till Valid"
+                onInput={handleNumberInput}
+            />
 
             <h2 className="text-white font-semibold text-md">
                 <span className="text-green-500 pr-2">&#x2666;</span>

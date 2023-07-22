@@ -27,7 +27,6 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
 
 const verifyuser: React.FC = (): JSX.Element => {
     const loader = useLoaderData();
-    console.log(loader);
     return (
         <>
             <div className="w-full bg-[#eeeeee] grid place-content-center h-screen">

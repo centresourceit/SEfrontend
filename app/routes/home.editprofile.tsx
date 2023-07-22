@@ -1,5 +1,5 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { userPrefs } from "~/cookies";
@@ -135,9 +135,13 @@ const EditProfile = () => {
     return (
         <>
             <div className="grow  p-4 w-full">
-                <h1 className="text-secondary font-medium text-3xl">
-                    Edit your profile
-                </h1>
+                <div className="flex">
+                    <h1 className="text-secondary font-medium text-3xl">
+                        Edit your profile
+                    </h1>
+                    <div className="grow"></div>
+                    <Link to="/home/changepassword/" className="text-white text-center font-medium text-md rounded-full px-4 py-1 bg-cyan-500 grid place-items-center">Change Password</Link>
+                </div>
                 <div className="w-full bg-secondary h-[1px] my-2"></div>
                 <h2 className="text-white font-semibold text-md">
                     <span className="text-green-500 pr-2">&#x2666;</span>
@@ -193,7 +197,7 @@ const EditProfile = () => {
                         UPDATE
                     </button>
                 </div>
-            </div>
+            </div >
         </>
     );
 };

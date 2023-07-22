@@ -48,7 +48,6 @@ export async function loader(params: LoaderArgs) {
     },
     headers: { authorization: `Bearer ${cookie.token}` },
   });
-  console.log(data);
 
   return json({ questions: data.data.getQuestionHistory, token: cookie.token });
 }
@@ -64,7 +63,6 @@ const Questionhistory: React.FC = (): JSX.Element => {
     setQuelen(Array.from({ length: questions.length }, () => false));
   }, [questions]);
 
-  console.log(loaderquestions);
 
   return (
     <>

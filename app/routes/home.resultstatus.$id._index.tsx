@@ -58,7 +58,7 @@ export async function loader(params: LoaderArgs) {
   });
 }
 
-const ResultStatus = () => {
+const ResultStatus: React.FC = (): JSX.Element => {
   const loader = useLoaderData();
   const id = loader.id;
   const result = loader.result[0];
@@ -68,7 +68,6 @@ const ResultStatus = () => {
   return (
     <div className="grow  p-4 w-full">
       <div className="flex gap-4 flex-wrap">
-
         <h1 className="text-secondary font-medium text-3xl">Result Status</h1>
         <div className="grow"></div>
         <Link to={`/home/userresult/${result.projectId}`} className="text-white text-center font-medium text-xl rounded-full px-4 py-1 bg-cyan-500">Back To Result</Link>
