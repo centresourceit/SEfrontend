@@ -117,22 +117,38 @@ export async function loader(params: LoaderArgs) {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
 
+    const compliance = await ApiCall({
+        query: `
+        query getAllCompliance{
+          getAllCompliances{
+            logo,
+          }
+        }
+          `,
+        veriables: {
+            id: Number(cookie.id)
+        },
+        headers: { authorization: `Bearer ${cookie.token}` },
+    });
+
     return json({
         result: data.data.searchResult,
         token: cookie.token,
         user: user.data.getUserById,
         project: project.data.getAllProjectById,
         license: license.data.getUserLicenseSlave,
+        compliance: compliance.data.getAllCompliances,
     });
 }
 
 const PetroleumPdfView = (): JSX.Element => {
-
     const loader = useLoaderData();
     const result = loader.result[0];
     const user = loader.user;
     const project = loader.project;
-    const license = loader.license[0];
+    const license = loader.license;
+    const compliance = loader.compliance;
+
 
     const groupedData: Array<{ principleid: number, principlename: string, totalMark: number, questions: Array<any> }> = Object.values(result.assesement.result.reduce((result: any, obj: any) => {
 
@@ -177,8 +193,7 @@ const PetroleumPdfView = (): JSX.Element => {
             paddingHorizontal: 35,
         },
         heading: {
-            fontSize: 14,
-            textAlign: 'center',
+            fontSize: 16,
             fontFamily: 'Oswald'
         },
         title: {
@@ -196,9 +211,17 @@ const PetroleumPdfView = (): JSX.Element => {
             height: "25px"
         },
         subtitle: {
+            marginTop: "15px",
+            marginBottom: "6px",
             fontSize: 16,
             textAlign: 'left',
-            color: 'grey',
+            color: 'black',
+            width: "100%"
+        },
+        subtitletwo: {
+            fontSize: 14,
+            textAlign: 'left',
+            color: 'black',
             width: "100%"
         },
         header: {
@@ -251,11 +274,31 @@ const PetroleumPdfView = (): JSX.Element => {
             color: "#374151",
             marginTop: "10px"
         },
+        footertext: {
+            fontSize: "10px",
+            fontWeight: 'normal',
+            color: "#374151",
+        },
+        bottomimg: {
+            width: "80px",
+            height: "80px",
+            objectFit: "cover",
+            objectPosition: "center",
+        },
+        topimage: {
+            width: "100px",
+            height: "100px",
+            objectFit: "cover",
+            objectPosition: "center",
+        },
     });
 
     const Certificate = () => (
         <Document>
             <Page style={styles.body} size={'A4'} >
+                <View>
+                    <Text style={styles.heading}>SMART ETHICS - ASSESMENT CERTIFICATE</Text>
+                </View>
                 <View style={styles.flexbox}>
                     <View style={styles.flexbox1}>
                     </View>
@@ -265,73 +308,104 @@ const PetroleumPdfView = (): JSX.Element => {
                         </Text>
                     </View>
                 </View>
-                <View>
-                    <Text style={styles.heading}>Certificate</Text>
-                </View>
-                <View>
-                    <Text style={styles.title}>Your certificate by Smart Ethics</Text>
-                </View>
+
+
+
 
                 <View style={styles.flexbox}>
                     <View style={styles.flexbox1}>
                         <View>
-                            <Text style={styles.subtitle}>Name: {user.name}</Text>
+                            <Text style={styles.subtitletwo}>Project Name: {project.name}</Text>
                         </View>
                         <View>
-                            <Text style={styles.subtitle}>Email: {user.email}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.flexbox2}>
-                        <View>
-                            <Text style={styles.subtitle}>License Name: {license.licenseType.name}</Text>
+                            <Text style={styles.subtitletwo}>Company Name: {user.company.name}</Text>
                         </View>
                         <View>
-                            <Text style={styles.subtitle}>Type: {license.licenseType.licenseType}</Text>
+                            <Text style={styles.subtitletwo}>Owner Name: {user.name}</Text>
                         </View>
                         <View>
-                            <Text style={styles.subtitle}>Valid Till: {new Date(license.licenseType.discountValidTill).toDateString().slice(3)}</Text>
+                            <Text style={styles.subtitletwo}>Description: {project.description}</Text>
                         </View>
-                    </View>
-                </View>
-                <View style={styles.divider}></View>
-                <View>
-                    <Text style={styles.subtitle}>Project Name: {project.name}</Text>
-                </View>
-                <View>
-                    <Text style={styles.subtitle}>Description: {project.description}</Text>
-                </View>
-
-                <View style={styles.divider}></View>
-                {groupedData.map((val: any, index: number) => {
-                    return (
-                        <>
-                            <View>
-                                <Text style={styles.subtitle} fixed>
-                                    Principle {index + 1}
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={styles.subtitle} fixed>
-                                    {val.principlename}
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={styles.subtitle} fixed>
-                                    Mark: {val.totalMark}
-                                </Text>
-                            </View>
-                            <View style={styles.divider}></View>
-                        </>
-                    );
-                })}
-
-                <View style={styles.flexbox}>
-                    <View style={styles.flexbox1}>
-                        <Text style={styles.signtext}>
-                            Total Score: {result.totalScore}
+                        <View>
+                            <Text style={styles.subtitletwo}>License Name: {license.licenseType.name}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.subtitletwo}>License Type: {license.licenseType.licenseType}</Text>
+                        </View>
+                        <Text style={styles.subtitle} fixed>
+                            Overall Score: {result.totalScore}
                         </Text>
+                        {groupedData.map((val: any, index: number) => {
+                            return (
+                                <View>
+                                    <Text style={styles.signtext} fixed>
+                                        {val.principlename} : {val.totalMark}/10
+                                    </Text>
+                                </View>
+                            );
+                        })}
                     </View>
                     <View style={styles.flexbox2}>
+                        <Image src={"/favicon.png"} style={styles.topimage} ></Image>
+                    </View>
+                </View>
+
+
+                <View>
+                    <Text style={styles.subtitle}>Aligned Compliances</Text>
+                </View>
+                <View>
+                    <Text style={styles.subtitletwo}>{result.assesement.result[0].rec}</Text>
+                </View>
+                <View>
+                    <Text style={styles.subtitletwo}>{result.assesement.result[2].rec}</Text>
+                </View>
+                <View>
+                    <Text style={styles.subtitletwo}>{result.assesement.result[6].rec}</Text>
+                </View>
+
+                <View>
+                    <Text style={styles.subtitle}>KEY RECOMMENDATIONS</Text>
+                </View>
+                <View style={{ display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row" }}>
+                    {compliance.map((val: any, index: number) => {
+                        return (
+                            <View>
+                                <Image src={val.logo} style={styles.bottomimg} ></Image>;
+                            </View>
+                        );
+                    })}
+                </View>
+
+                <View style={{ height: "30px" }}></View>
+                <View>
+                    <Text style={styles.footertext}>Disclaimer: This test result date in prepared based on the online assessment test altended by the respective project owner. This certificate cannot be used for any other purposes whice is not indented or mentioned in the terms and conditions.</Text>
+                </View>
+                <View style={styles.flexbox}>
+                    <View style={styles.flexbox1}>
+                    </View>
+                    <View style={styles.flexbox2}>
+                        <View style={styles.flexbox}>
+                            <View style={styles.flexbox1}>
+                                <Text style={styles.signtext}>
+                                    Team Smart Ethics
+                                </Text>
+                            </View>
+                            <View style={styles.flexbox2}>
+                                <Image src={"/favicon.png"} style={styles.bottomimg} ></Image>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View>
+                    <Text style={styles.footertext}>For any Issues, false claims or disputes get in touch with us to report. Contact Us /Feedback link</Text>
+                </View>
+                <View style={{ position: 'relative', marginTop: "30px" }}>
+                    <View style={{ position: 'absolute', right: "0", bottom: "0", display: "flex", width: "100%", justifyContent: "center" }}>
+                        <Text style={{ fontSize: "10px", fontWeight: 'normal', color: "#374151", textAlign: 'center' }}>Copyright 2023 Open Ethics. All Rights Reserved</Text>
+                    </View>
+                    <View style={{ position: 'absolute', right: "0", bottom: "0" }}>
+                        <Text style={styles.footertext}>T. & C. Usage Policy.</Text>
                     </View>
                 </View>
             </Page>

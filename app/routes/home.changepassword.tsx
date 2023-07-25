@@ -126,6 +126,7 @@ const ChnagePassword: React.FC = (): JSX.Element => {
                 Old Password
             </h2>
             <input
+                type="password"
                 ref={oldPasswordRef}
                 className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
                 placeholder="Enter your old password"
@@ -135,6 +136,7 @@ const ChnagePassword: React.FC = (): JSX.Element => {
                 New Password
             </h2>
             <input
+                type="password"
                 ref={newPasswordRef}
                 className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
                 placeholder="Enter your password"
@@ -144,6 +146,7 @@ const ChnagePassword: React.FC = (): JSX.Element => {
                 Re-Password
             </h2>
             <input
+                type="password"
                 ref={rePasswordRef}
                 className="w-96 fill-none outline-none bg-transparent my-2 border-2 border-gray-200 py-2 px-4 text-white placeholder:text-gray-300"
                 placeholder="Enter Re-Password"

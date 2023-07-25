@@ -190,7 +190,7 @@ export default function Register(): JSX.Element {
             </div>
             <div className="flex items-center gap-4 mt-4">
               <input type="checkbox" checked={tandc} onChange={(e) => { setTandC(!tandc) }} className="text-blue-600 bg-gray-100 border-gray-300 rounded" />
-              <p className="text-md text-white font-normal">I accept <Link to={"/usagesterms/"} className="text-secondary">terms and conditions</Link> </p>
+              <p className="text-md text-white font-normal">I accept <Link target="_blank" to={"/usagesterms/"} className="text-secondary">Terms and Conditions</Link> </p>
             </div>
             <button
               onClick={submit}

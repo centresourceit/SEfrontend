@@ -176,7 +176,7 @@ const license: React.FC = (): JSX.Element => {
                                     </p>
 
                                     <p className="text-xl font-normal my-1">
-                                        <span className="text-secondary pr">&#x2756;</span> {val.questionAllowed} Question(s)
+                                        <span className="text-secondary pr">&#x2756;</span> {val.questionAllowed} Ethical Criteria(s)
                                     </p>
                                     {val.id == 1 ? null :
                                         <div className="bg-secondary bg-opacity-20 border-2 border-secondary rounded-md p px-4 mt-4">
