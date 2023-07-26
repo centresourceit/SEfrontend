@@ -1,4 +1,4 @@
-import { LoaderArgs, json } from "@remix-run/node";
+import { LoaderArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -29,6 +29,28 @@ export async function loader(params: LoaderArgs) {
         veriables: {},
         headers: { authorization: `Bearer ${cookie.token}` },
     });
+
+    // const user = await ApiCall({
+    //     query: `
+    //     query getUserById($id:Int!){
+    //       getUserById(id:$id){
+    //         id,
+    //         name,
+    //             email,
+    //         status
+    //       },
+    //     }
+    //   `,
+    //     veriables: { id: parseInt(cookie.id) },
+    //     headers: { authorization: `Bearer ${cookie.token}` },
+    // });
+
+
+
+
+    // if (user.data.getUserById.status != "ACTIVE") {
+    //     return redirect(`/inactiveuser/${data.data.getUserById.id}`);
+    // };
 
     return json({
         license: data.data.getAllLicense,

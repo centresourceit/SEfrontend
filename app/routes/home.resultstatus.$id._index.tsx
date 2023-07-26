@@ -117,8 +117,8 @@ const ResultStatus: React.FC = (): JSX.Element => {
                   For a detailed review from our expert team
                 </p>
                 <div className="flex gap-4 my-4">
-                  <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
-                    Contact us
+                  <Link to={`/home/userresultdata/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+                    View
                   </Link>
                   <Link
                     to={`/home/resultstatusfull/${result.id}`}

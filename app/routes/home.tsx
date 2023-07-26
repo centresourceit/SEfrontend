@@ -24,12 +24,17 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
         id,
         name,
   		  email,
+        status
       },
     }
   `,
     veriables: { id: parseInt(cookie.id) },
     headers: { authorization: `Bearer ${cookie.token}` },
   });
+
+  if (data.data.getUserById.status != "ACTIVE") {
+    return redirect(`/inactiveuser/${data.data.getUserById.id}`);
+  };
   return json({
     username: data.data.getUserById.name,
     user: cookie,

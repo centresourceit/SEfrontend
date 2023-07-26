@@ -1,5 +1,5 @@
 import { LoaderArgs, json } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { userPrefs } from "~/cookies";
@@ -34,6 +34,7 @@ export async function loader(params: LoaderArgs) {
         query: `
         query getUserLicenseSlave($id:Int!){
             getUserLicenseSlave(id:$id){
+            id,
             licenseTypeId,
             paymentStatus,
             licenseValidity,
@@ -41,6 +42,7 @@ export async function loader(params: LoaderArgs) {
             paymentAmount,
             createdAt,
             licenseType{
+              id,
               paymentAmount,
               licenseType,
               questionAllowed,
@@ -233,32 +235,53 @@ const license: React.FC = (): JSX.Element => {
                                         </div>
                                     }
                                     <div className="grow"></div>
-                                    <div className="flex w-full gap-4 mt-2">
-                                        {val.licenseType == "FREE" ?
+
+                                    {userlicense.licenseType.id == val.id ?
+                                        <div>
                                             <button
-                                                onClick={() => {
-                                                    setLicenseBox(value => true);
-                                                    setLicenaseid((value: any) => val);
-                                                }}
-                                                className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+                                                className="w-full py-1 text-white text-lg grow bg-blue-500 text-center rounded-md font-medium"
                                             >
-                                                Select
+                                                Active Plan
                                             </button>
-                                            :
-                                            <button
-                                                onClick={() => {
-                                                    handlepayment(val.paymentAmount, val.id);
-                                                }}
-                                                className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
-                                            >
-                                                Select
-                                            </button>
-                                        }
-                                    </div>
+                                        </div>
+                                        :
+                                        <>
+                                            <div className="flex w-full gap-4 mt-2">
+                                                {val.licenseType == "FREE" ?
+                                                    <button
+                                                        onClick={() => {
+                                                            setLicenseBox(value => true);
+                                                            setLicenaseid((value: any) => val);
+                                                        }}
+                                                        className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+                                                    >
+                                                        Select
+                                                    </button>
+                                                    :
+                                                    <button
+                                                        onClick={() => {
+                                                            handlepayment(val.paymentAmount, val.id);
+                                                        }}
+                                                        className="py-1 text-white text-lg grow bg-green-500 text-center rounded-md font-medium"
+                                                    >
+                                                        Select
+                                                    </button>
+                                                }
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                             );
                         })
                     )}
+                </div>
+                <div className="flex w-full">
+                    <div className="grow"></div>
+                    <Link to={"/contact"}
+                        className="py-1 text-white text-lg px-4 bg-green-500 text-center rounded-md font-medium"
+                    >
+                        Looking for a Custom Package? - Contact Us
+                    </Link>
                 </div>
                 <div className="h-20"></div>
             </div>

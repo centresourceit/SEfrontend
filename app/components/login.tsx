@@ -71,9 +71,52 @@ export default function Login(): JSX.Element {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
   };
+  const mail = useRef<HTMLInputElement>(null)
+  const [box, setBox] = useState(false);
+
+  const forgetpassword = async () => {
+    const ForgetPasswordScheme = z
+      .object({
+        email: z
+          .string()
+          .nonempty("Email is required.")
+          .email("Enter a valid email."),
+      })
+      .strict();
+
+    type ForgetPasswordScheme = z.infer<typeof ForgetPasswordScheme>;
+
+    const forgetPasswordScheme: ForgetPasswordScheme = {
+      email: mail!.current!.value,
+    };
+
+    const parsed = ForgetPasswordScheme.safeParse(forgetPasswordScheme);
+    if (parsed.success) {
+      const forgetpassword = await ApiCall({
+        query: `
+        mutation forgetpassword($mail:String!){
+          forgetpassword(mail:$mail)
+          }
+          `,
+        veriables: {
+          mail: mail!.current!.value
+        },
+      });
+
+      if (forgetpassword.status) {
+        toast.success("E-Mail Send successfully, Check you mail.", { theme: "light" });
+        setBox((val: boolean) => false);
+      } else {
+        toast.error(forgetpassword.message, { theme: "light" });
+      }
+    } else {
+      toast.error(parsed.error.errors[0].message, { theme: "light" });
+    }
+  }
 
   return (
     <>
+
       <section className="h-screen w-full relative">
         <img
           src="/images/bg/bg5.png"
@@ -118,6 +161,12 @@ export default function Login(): JSX.Element {
             >
               Login
             </button>
+            <div className="flex w-full">
+              <div className="grow"></div>
+
+              <button onClick={(e) => setBox(true)} className="text-secondary text-md text-right mt-4">Forget Password</button>
+            </div>
+
             <h5 className="text-white text-center mt-8">
               Don't have an account?{" "}
               <Link to={"/register"} className="text-[#54edec]">
@@ -143,6 +192,32 @@ export default function Login(): JSX.Element {
           </Form>
         </div>
       </section>
+      <div className={`fixed top-0 left-0 bg-black bg-opacity-50 min-h-screen w-full z-50 ${box ? "grid place-items-center" : "hidden"}`}>
+        <div className="bg-primary-800 p-4 rounded-md w-80">
+          <h3 className="text-2xl text-center font-semibold text-secondary">Enter your email.</h3>
+          <div className="w-full h-[2px] bg-gray-800 my-4"></div>
+          <input
+            ref={mail}
+            className="fill-none outline-none bg-transparent my-2 border-2 border-gray-200 p-2 text-white placeholder:text-gray-300 w-full"
+            placeholder="Enter Your email here."
+          />
+          <div className="flex flex-wrap gap-6 mt-4">
+            <button
+              onClick={forgetpassword}
+              className="py-1 w-full sm:w-auto text-white text-lg px-4 bg-green-500 text-center rounded-md font-medium grow"
+            >
+              Send
+            </button>
+            <button
+              onClick={() => setBox((val: any) => false)}
+              className="py-1 w-full sm:w-auto text-white text-lg px-4 bg-rose-500 text-center rounded-md font-medium grow"
+            >
+              Close
+            </button>
+
+          </div>
+        </div>
+      </div>
     </>
   );
 }
