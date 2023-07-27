@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
         veriables: {
             mail: email
         },
-        headers: { authorization: `Bearer ${cookie.token}` },
+        // headers: { authorization: `Bearer ${cookie.token}` },
     });
     return json({ verification: verification });
 };

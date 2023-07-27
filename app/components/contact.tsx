@@ -3,6 +3,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import { z } from "zod";
 import { toast } from 'react-toastify';
 import { Fa6SolidEnvelope, Fa6SolidUser } from "./icons/Icons";
+import { ApiCall } from "~/services/api";
 
 export default function Contact(): JSX.Element {
     const [chatcount, setCharcount] = useState<number>(0);
@@ -15,7 +16,7 @@ export default function Contact(): JSX.Element {
         setCharcount(messageRef.current?.value.length ?? 0);
     }
 
-    const submit = () => {
+    const submit = async () => {
         const ContactScheme = z.object({
             name: z
                 .string()
@@ -40,7 +41,29 @@ export default function Contact(): JSX.Element {
 
         const parsed = ContactScheme.safeParse(contact)
         if (parsed.success) {
-            toast.success("Successfully Deleted.", { theme: "light", });
+            const forgetpassword = await ApiCall({
+                query: `
+                mutation contactUs($contactUserInput:ContactUserInput!){
+                    contactUs(contactUserInput:$contactUserInput)
+                  }
+                  `,
+                veriables: {
+                    contactUserInput: {
+                        email: contact.email,
+                        name: contact.name,
+                        text: contact.message,
+                    }
+                },
+            });
+
+            if (forgetpassword.status) {
+                nameRef!.current!.value = "";
+                emailRef!.current!.value = "";
+                messageRef!.current!.value = "";
+                toast.success("E-Mail Send successfully. We will contact you soon.", { theme: "light" });
+            } else {
+                toast.error(forgetpassword.message, { theme: "light" });
+            }
         } else {
             toast.error(parsed.error.errors[0].message, { theme: "light", });
         }
