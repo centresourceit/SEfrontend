@@ -293,6 +293,9 @@ const PetroleumPdfView = (): JSX.Element => {
         },
     });
 
+
+
+
     const Certificate = () => (
         <Document>
             <Page style={styles.body} size={'A4'} >
@@ -333,13 +336,13 @@ const PetroleumPdfView = (): JSX.Element => {
                             <Text style={styles.subtitletwo}>License Type: {license.licenseType.licenseType}</Text>
                         </View>
                         <Text style={styles.subtitle} fixed>
-                            Overall Score: {result.totalScore}
+                            Overall Score: {(result.totalScore / result.assesement.result.length).toFixed()}/10 [{result.resultStatus}]
                         </Text>
                         {groupedData.map((val: any, index: number) => {
                             return (
                                 <View>
                                     <Text style={styles.signtext} fixed>
-                                        {val.principlename} : {val.totalMark}/10
+                                        {val.principlename} : {(val.totalMark / val.questions.length).toFixed(0)}/10
                                     </Text>
                                 </View>
                             );
@@ -352,7 +355,7 @@ const PetroleumPdfView = (): JSX.Element => {
 
 
                 <View>
-                    <Text style={styles.subtitle}>Aligned Compliances</Text>
+                    <Text style={styles.subtitle}>Key Recommendations</Text>
                 </View>
                 <View>
                     <Text style={styles.subtitletwo}>{result.assesement.result[0].rec}</Text>
@@ -363,10 +366,10 @@ const PetroleumPdfView = (): JSX.Element => {
                 <View>
                     <Text style={styles.subtitletwo}>{result.assesement.result[6].rec}</Text>
                 </View>
-
                 <View>
-                    <Text style={styles.subtitle}>KEY RECOMMENDATIONS</Text>
+                    <Text style={styles.subtitle}>Aligned Compliances</Text>
                 </View>
+
                 <View style={{ display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row" }}>
                     {compliance.map((val: any, index: number) => {
                         return (
@@ -398,14 +401,14 @@ const PetroleumPdfView = (): JSX.Element => {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.footertext}>For any Issues, false claims or disputes get in touch with us to report. Contact Us /Feedback link</Text>
+                    <Text style={styles.footertext}>For any Issues, false claims or disputes get in touch with us to report. Contact Us /Feedback (https://smartethics.net/contact)</Text>
                 </View>
                 <View style={{ position: 'relative', marginTop: "30px" }}>
                     <View style={{ position: 'absolute', right: "0", bottom: "0", display: "flex", width: "100%", justifyContent: "center" }}>
-                        <Text style={{ fontSize: "10px", fontWeight: 'normal', color: "#374151", textAlign: 'center' }}>Copyright 2023 Open Ethics. All Rights Reserved</Text>
+                        <Text style={{ fontSize: "10px", fontWeight: 'normal', color: "#374151", textAlign: 'center' }}>Copyright 2023 Smart Ethics. All Rights Reserved</Text>
                     </View>
                     <View style={{ position: 'absolute', right: "0", bottom: "0" }}>
-                        <Text style={styles.footertext}>T. & C. Usage Policy.</Text>
+                        <Text style={styles.footertext}>Terms of Usage</Text>
                     </View>
                 </View>
             </Page>

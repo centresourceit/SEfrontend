@@ -1,30 +1,15 @@
-import { LoaderArgs, LoaderFunction, json, logDevReady } from "@remix-run/node";
+import { LoaderArgs, LoaderFunction, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import { BaseUrl } from "~/const";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
-    const email = props.params.mail;
     const cookieHeader = props.request.headers.get("Cookie");
     const cookie: any = await userPrefs.parse(cookieHeader);
-    const verification = await ApiCall({
-        query: `
-        mutation verifyUser($mail:String!){
-            verifyUser(mail:$mail){
-              id
-            }
-          }
-            `,
-        veriables: {
-            mail: email
-        },
-        headers: { authorization: `Bearer ${cookie.token}` },
-    });
+
 
     const user = await ApiCall({
         query: `
@@ -43,7 +28,6 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
         headers: { authorization: `Bearer ${cookie.token}` },
     });
     return json({
-        verification: verification,
         token: cookie.token,
         name: user.data.getUserById.name,
         email: user.data.getUserById.email,
@@ -132,13 +116,13 @@ const verifyuser: React.FC = (): JSX.Element => {
         <>
             <div className={`fixed top-0 left-0 bg-black bg-opacity-50 min-h-screen w-full z-50 ${emailbox ? "grid place-items-center" : "hidden"}`}>
                 <div className="bg-primary-800 p-4 rounded-md w-80">
-                    <h3 className="text-2xl text-center font-semibold text-secondary">Add your comment here.</h3>
+                    <h3 className="text-2xl text-center font-semibold text-secondary">Enter your Email here.</h3>
                     <div className="w-full h-[2px] bg-gray-800 my-4"></div>
                     <input
                         value={editemail}
                         onChange={(e) => setEditEmail(e.target.value)}
                         className="fill-none outline-none bg-transparent my-2 border-2 border-gray-200 p-2 text-white placeholder:text-gray-300 w-full"
-                        placeholder="Enter Your Comment"
+                        placeholder="Enter Your Email"
                     />
                     <div className="flex flex-wrap gap-6 mt-4">
                         <button

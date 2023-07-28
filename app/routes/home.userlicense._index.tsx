@@ -277,7 +277,7 @@ const license: React.FC = (): JSX.Element => {
                 </div>
                 <div className="flex w-full justify-center">
                     <Link to={"/contact"}
-                        className="py-1 text-white text-lg px-4 bg-green-500 text-center rounded-md font-medium"
+                        className="py-1 text-white text-lg px-4 bg-blue-500 text-center rounded-md font-medium"
                     >
                         Looking for a Custom Package? - Contact Us
                     </Link>

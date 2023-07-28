@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
   });
 
   if (data.data.getUserById.status != "ACTIVE") {
-    return redirect(`/inactiveuser/${data.data.getUserById.id}`);
+    return redirect(`/inactiveuser`);
   };
   return json({
     username: data.data.getUserById.name,
