@@ -214,28 +214,28 @@ const ResultStatus = () => {
               Thank you for submitting your assessment.
             </p>
             <p className="text-[#865fe5] font-medium text-2xl">
-              Here is your Public Intelligence Target trust Score
+              Here is your Ethics Alignment Score
             </p>
             <p className="text-white text-md my-6">
               Here is your Unique ID. Use your unique to see your result again
             </p>
             <p className="text-[#865fe5] font-medium text-3xl">{result.certificatedId.toString().toUpperCase()}</p>
             <div className="flex gap-4 my-4">
-              <Link to={`/home/taketest/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={`/home/taketest/${id}`} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
                 Start Again
               </Link>
-              <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
-                Share
+              <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
+                Certificate
               </a>
             </div>
             <p className="text-gray-300 font-medium text-xs">
               For a detailed review from our expert team
             </p>
             <div className="flex gap-4 my-4">
-              <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <Link to={"/contact"} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
                 Contact us
               </Link>
-              <button onClick={publish} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+              <button onClick={publish} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
                 Publish
               </button>
             </div>

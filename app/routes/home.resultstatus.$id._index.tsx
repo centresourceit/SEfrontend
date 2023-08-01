@@ -106,25 +106,25 @@ const ResultStatus: React.FC = (): JSX.Element => {
                 </p>
                 <p className="text-secondary font-medium text-3xl">{result.certificatedId.toString().toUpperCase()}</p>
                 <div className="flex gap-4 my-4">
-                  <Link to={`/home/taketest/${result.projectId}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
+                  <Link to={`/home/taketest/${result.projectId}`} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
                     Start Again
                   </Link>
-                  <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
-                    Share
+                  <a target="_blank" href={`/certificatepdf/${id}`} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
+                    Certificate
                   </a>
                 </div>
                 <p className="text-gray-300 font-medium text-xs">
                   For a detailed review from our expert team
                 </p>
                 <div className="flex gap-4 my-4">
-                  <Link to={`/home/userresultdata/${id}`} className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]">
-                    View
+                  <Link to={`/home/userresultdata/${id}`} className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]">
+                    Recommendations
                   </Link>
                   <Link
                     to={`/home/resultstatusfull/${result.id}`}
-                    className="text-white text-center font-medium text-md rounded-full w-28 py-2 bg-[#865fe5]"
+                    className="text-white text-center font-medium text-md rounded-full w-40 py-2 bg-[#865fe5]"
                   >
-                    Full Cert
+                    Full Results
                   </Link>
                 </div>
               </div>

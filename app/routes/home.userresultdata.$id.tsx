@@ -58,7 +58,7 @@ const userResult: React.FC = (): JSX.Element => {
     <>
       <div className="grow  p-4 w-full">
         <div className="flex">
-          <h1 className="text-white font-medium text-2xl">User Results</h1>
+          <h1 className="text-white font-medium text-2xl">Custom Recommendations</h1>
           <div className="grow"></div>
           <div className="flex gap-2">
             <Link to={`/home/userresult/${data.data.searchResult[0].projectId}`}
