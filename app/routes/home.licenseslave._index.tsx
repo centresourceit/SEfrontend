@@ -5,6 +5,7 @@ import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
 import { toast } from "react-toastify";
+import { longtext } from "~/utils";
 
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
@@ -162,7 +163,7 @@ const LicenseSlave = () => {
       <div className="grow  p-4 w-full overflow-x-hidden">
         <h1 className="text-white font-medium text-2xl">License Purchased</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
-        <div className="flex gap-6 flex-wrap my-6">
+        <div className="flex gap-6 flex-wrap my-6 justify-evenly">
           {license == null || license == undefined ? (
             <>
               <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
@@ -173,10 +174,10 @@ const LicenseSlave = () => {
             license.map((val: any, index: number) => {
               return (
                 <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
-                  <div className="flex gap-6">
+                  <div className="flex gap-4">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
-                      {val.user.name}
+                      {longtext(val.user.name, 15)}
                     </p>
                     <div className="grow"></div>
                     <div className="cursor-pointer">
@@ -227,11 +228,7 @@ const LicenseSlave = () => {
 
 
                   <div className="grow"></div>
-                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
-                  <p className="text-gray-200 font-semibold text-md text-center">
-                    Action
-                  </p>
-                  <div className="flex w-full gap-4 mt-2">
+                  <div className="flex w-full gap-4 mt-4">
                     <button
                       onClick={() => { setId(val.id); setDelBox(val => true); }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"

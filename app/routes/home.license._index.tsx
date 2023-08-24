@@ -5,6 +5,7 @@ import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 
 import { toast } from "react-toastify";
+import { longtext } from "~/utils";
 
 
 
@@ -164,10 +165,10 @@ const License = () => {
             license.map((val: any, index: number) => {
               return (
                 <div key={index} className="bg-primary-800 w-72 p-4 flex flex-col">
-                  <div className="flex gap-6">
+                  <div className="flex gap-4">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
-                      {val.name}
+                      {longtext(val.name, 15)}
                     </p>
                     <div className="grow"></div>
                     <div className="cursor-pointer">
@@ -215,11 +216,7 @@ const License = () => {
                   </p>
 
                   <div className="grow"></div>
-                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
-                  <p className="text-gray-200 font-semibold text-md text-center">
-                    Action
-                  </p>
-                  <div className="flex w-full gap-4 mt-2">
+                  <div className="flex w-full gap-4 mt-4">
                     <button
                       onClick={() => { setId(val.id); setDelBox(val => true); }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"

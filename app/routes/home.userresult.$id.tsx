@@ -7,7 +7,6 @@ import { ApiCall } from "~/services/api";
 
 
 import Stripe from "stripe";
-import { useEffect, useState } from "react";
 
 export async function loader(params: LoaderArgs) {
   const id = params.params.id;

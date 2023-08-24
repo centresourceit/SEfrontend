@@ -32,8 +32,12 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
-  if (data.data.getUserById.status != "ACTIVE") {
+  if (data.data.getUserById.status == "INACTIVE") {
     return redirect(`/inactiveuser`);
+  };
+
+  if (data.data.getUserById.status == "ACTIVE") {
+    return redirect(`/inactiveadmin`);
   };
   return json({
     username: data.data.getUserById.name,

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 import { toast } from "react-toastify";
+import { longtext } from "~/utils";
 
 
 export async function loader(params: LoaderArgs) {
@@ -142,7 +143,7 @@ const UserDashboard = () => {
       <div className="grow  p-4 w-full">
         <h1 className="text-white font-medium text-2xl">User</h1>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
-        <div className="flex gap-6 flex-wrap my-6">
+        <div className="flex gap-4 flex-wrap my-6 justify-evenly">
           {user == null || user == undefined ? (
             <>
               <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500 w-full">
@@ -155,23 +156,23 @@ const UserDashboard = () => {
                 <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
                   <div className="flex gap-2">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
-                    <p className="text-white font-semibold text-xl">
-                      {val.name}
+                    <p className="text-white font-semibold text-lg">
+                      {longtext(val.name, 10)}
                     </p>
                     <div className="grow"></div>
                     <div>
                       {val.role == "ADMIN" ? (
-                        <div className="w-16 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium">
+                        <div className="w-14 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium">
                           ADMIN
                         </div>
                       ) : (
-                        <div className="w-16 py-1 text-white text-xs bg-cyan-500 text-center rounded-md font-medium">
+                        <div className="w-14 py-1 text-white text-xs bg-cyan-500 text-center rounded-md font-medium">
                           USER
                         </div>
                       )}
                     </div>
                     <div className="cursor-pointer">
-                      {val.status == "ACTIVE" ? (
+                      {val.status == "ADMINACTIVE" ? (
                         <div
                           onClick={() => updateStatus(val.id, "INACTIVE")}
                           className="w-16 py-1 text-white text-xs bg-green-500 text-center rounded-md font-medium"
@@ -180,7 +181,7 @@ const UserDashboard = () => {
                         </div>
                       ) : (
                         <div
-                          onClick={() => updateStatus(val.id, "ACTIVE")}
+                          onClick={() => updateStatus(val.id, "ADMINACTIVE")}
                           className="w-16 py-1 text-white text-xs bg-rose-500 text-center rounded-md font-medium"
                         >
                           INACTIVE
@@ -199,11 +200,7 @@ const UserDashboard = () => {
                   </p>
 
                   <div className="grow"></div>
-                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
-                  <p className="text-gray-200 font-semibold text-md text-center">
-                    Action
-                  </p>
-                  <div className="flex w-full gap-4 mt-2">
+                  <div className="flex w-full gap-4 mt-4">
                     <button
                       onClick={() => { setId(val.id); setDelBox(val => true); }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"

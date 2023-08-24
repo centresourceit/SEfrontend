@@ -309,11 +309,7 @@ const Compliance = () => {
                     </p>
                   </> : null}
 
-                  <div className="w-full bg-gray-400 h-[2px] my-2"></div>
-                  <p className="text-gray-200 font-semibold text-md text-center w-96">
-                    Action
-                  </p>
-                  <div className="flex gap-4 mt-2 w-96">
+                  <div className="flex gap-4 mt-4 w-96">
                     <button
                       onClick={() => { setId(val.id); setDelBox(val => true); }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
