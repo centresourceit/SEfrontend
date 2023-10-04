@@ -149,6 +149,7 @@ const TakeTest = () => {
 
   const saveAndExit = async () => {
     const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
+    console.log(sendanswer);
 
 
 

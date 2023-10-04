@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BaseUrl, uploadUrl } from "~/const";
 
-interface imageReture {
+export interface imageReture {
   status: boolean;
   data: unknown;
   message: string;

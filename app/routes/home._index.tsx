@@ -141,7 +141,12 @@ const UserProject = () => {
                         <>
                             <div className="bg-primary-800 gap-6 p-4 flex mb-6 flex-wrap">
                                 <div>
-                                    <img src={user.company.logo} alt="logo" className="w-44 h-44 rounded-md object-cover" />
+
+                                    {user.company.logo == "0" ?
+                                        <img src={"/images/logo.png"} alt="logo" className="w-44 h-44 rounded-md object-contain" />
+                                        :
+                                        <img src={user.company.logo} alt="logo" className="w-44 h-44 rounded-md object-cover" />
+                                    }
                                 </div>
                                 <div className="w-96">
                                     <div className="flex">

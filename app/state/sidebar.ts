@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 enum SideBarTabs {
   None,
+  Home,
   EditProfile,
   TakeTesk,
   RresultStatus,

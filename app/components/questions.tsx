@@ -87,18 +87,19 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
     props: SliderQuestionsProps
 ): JSX.Element => {
     let sliderRef = useRef<HTMLInputElement>(null);
-    const [value, setValue] = useState<number>(0);
+    const [value, setValue] = useState<number>(-1);
     const handleChange = (value: number) => {
         setValue((val) => value);
     };
     const addCacheAnswer = answersStore((state) => state.addCacheAnswer);
+    const removeCacheAnswer = answersStore((state) => state.removeCacheAnswer);
     useEffect(() => {
         if (props.selected != undefined) {
             const selectedIndex = props.question.answer.findIndex(
                 (val: any) => parseInt(val.answer) == parseInt(props.selected!.answer)
             );
             setValue(selectedIndex);
-            sliderRef.current!.value = selectedIndex.toString();
+            sliderRef.current!.value = parseInt(selectedIndex + 1).toString();
         }
     }, []);
 
@@ -119,33 +120,58 @@ const SliderQuestions: React.FC<SliderQuestionsProps> = (
                         ref={sliderRef}
                         type="range"
                         min={0}
-                        max={props.question.answer.length - 1}
+                        max={props.question.answer.length}
                         step={1}
                         className="accent-emerald-500 w-full h-10"
                         defaultValue={0}
                         onChange={(val) => {
-                            setValue(value => parseInt(val.target.value));
-                            addCacheAnswer({
-                                question: props.question.question,
-                                principleid: props.principleid,
-                                principlename: props.principlename,
-                                answer: props.question.answer[val.target.value].answer,
-                                mark: props.question.answer[val.target.value].mark,
-                                rec: props.question.answer[val.target.value].rec,
-                                id: props.question.id,
-                                version: props.question.version,
-                                page: props.pagenumber,
-                                questioncode: props.question.questioncode,
-                                questiontype: props.question.questionType,
-                                license: props.question.licensesId,
-                            });
+                            if (parseInt(val.target.value) != 0) {
+                                setValue(value => parseInt(val.target.value) - 1);
+                                addCacheAnswer({
+                                    question: props.question.question,
+                                    principleid: props.principleid,
+                                    principlename: props.principlename,
+                                    answer: props.question.answer[parseInt(val.target.value) - 1].answer,
+                                    mark: props.question.answer[parseInt(val.target.value) - 1].mark,
+                                    rec: props.question.answer[parseInt(val.target.value) - 1].rec,
+                                    id: props.question.id,
+                                    version: props.question.version,
+                                    page: props.pagenumber,
+                                    questioncode: props.question.questioncode,
+                                    questiontype: props.question.questionType,
+                                    license: props.question.licensesId,
+                                });
+                            } else {
+                                setValue(value => parseInt(val.target.value) - 1);
+                                removeCacheAnswer({
+                                    question: props.question.question,
+                                    principleid: props.principleid,
+                                    principlename: props.principlename,
+                                    answer: "None",
+                                    mark: "0",
+                                    rec: "None",
+                                    id: props.question.id,
+                                    version: props.question.version,
+                                    page: props.pagenumber,
+                                    questioncode: props.question.questioncode,
+                                    questiontype: props.question.questionType,
+                                    license: props.question.licensesId,
+                                });
+                            }
                         }}
                     />
                     <p className="text-white text-3xl font-semibold">
-                        {props.question.answer[value].answer}
+                        {value == -1 ? "" : props.question.answer[value].answer}
                     </p>
                 </div>
                 <div className="flex gap-4 justify-between  rounded-md px-4 py-2">
+                    <div>
+                        <p
+                            className={`text-white font-semibold text-lg p-2 py-1 rounded-md  text-center $`}
+                        >
+
+                        </p>
+                    </div>
                     {props.question.answer.map((val: any, index: number) => {
                         return (
                             <div key={index}>

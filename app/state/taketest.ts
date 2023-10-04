@@ -37,6 +37,7 @@ interface AnswerState {
   changeAnswerStatue: () => void;
   cacheAnswer: any[];
   addCacheAnswer: (value: AnswerInputStructure) => void;
+  removeCacheAnswer: (value: AnswerInputStructure) => void;
   clearCache: () => void;
 }
 
@@ -99,7 +100,6 @@ const answersStore = create<AnswerState>()((set) => ({
       updatedAt: new Date().toLocaleString(),
     };
 
-
     set((state) => {
       const existingAnswerIndex = state.cacheAnswer[value.page].findIndex(
         (ans: any) => ans.id === value.id
@@ -118,6 +118,47 @@ const answersStore = create<AnswerState>()((set) => ({
       }
     });
   },
+  removeCacheAnswer: (value) => {
+    const ans: AnswerStructure = {
+      id: value.id,
+      question: value.question,
+      principleid: value.principleid,
+      principlename: value.principlename,
+      answer: value.answer,
+      mark: value.mark,
+      rec: value.rec,
+      version: value.version,
+      license: value.license,
+      questiontype: value.questiontype,
+      questioncode: value.questioncode,
+      status: false,
+      updatedAt: new Date().toLocaleString(),
+    };
+
+    set((state) => {
+      const existingAnswerIndex = state.cacheAnswer[value.page].findIndex(
+        (ans: any) => ans.id === value.id
+      );
+
+      console.log(existingAnswerIndex);
+      console.log("exit");
+
+      if (existingAnswerIndex !== -1) {
+
+        const updatedAnswers = [...state.cacheAnswer[value.page]];
+        updatedAnswers.splice(existingAnswerIndex, 1);
+        const cacheAnswerDate = [...state.cacheAnswer];
+        cacheAnswerDate[value.page] = updatedAnswers;
+        return { ...state, cacheAnswer: cacheAnswerDate };
+      } else {
+        const updatedPage = [...state.cacheAnswer[value.page], ans];
+        const cacheAnswerDate = [...state.cacheAnswer];
+        cacheAnswerDate[value.page] = updatedPage;
+        return { ...state, cacheAnswer: cacheAnswerDate };
+      }
+    });
+  },
+
   clearCache: () => {
     set((state) => {
       return { ...state, cacheAnswer: [[], [], [], [], [], []] };

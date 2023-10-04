@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { z } from "zod";
 import { userPrefs } from "~/cookies";
-import { ApiCall, UploadFile } from "~/services/api";
+import { ApiCall, UploadFile, imageReture } from "~/services/api";
 
 export async function loader({ params, request }: LoaderArgs) {
     const cookieHeader = request.headers.get("Cookie");
@@ -43,7 +43,7 @@ const AddComapany: React.FC = (): JSX.Element => {
 
     const addComapany = async () => {
 
-        if (logo == null) return toast.error("Select company Logo", { theme: "light" });
+        // if (logo == null) return toast.error("Select company Logo", { theme: "light" });
 
         const CompanyScheme = z
             .object({
@@ -78,8 +78,13 @@ const AddComapany: React.FC = (): JSX.Element => {
 
         type CompanyScheme = z.infer<typeof CompanyScheme>;
 
-        const image = await UploadFile(logo);
-        if (!image.status) return toast.error("Unable to upload logo", { theme: "light" });
+
+        let image: imageReture;
+        if (logo != null) {
+            image = await UploadFile(logo);
+            if (!image.status) return toast.error("Unable to upload logo", { theme: "light" });
+        }
+
 
         const companyScheme: CompanyScheme = {
             name: cName!.current!.value,
@@ -88,7 +93,7 @@ const AddComapany: React.FC = (): JSX.Element => {
             ctoContact: cNumber!.current!.value,
             description: cDesciption!.current!.value,
             address: cAddress!.current!.value,
-            logo: image.data!.toString()
+            logo: logo != null ? image!.data!.toString() : "0"
         };
 
 

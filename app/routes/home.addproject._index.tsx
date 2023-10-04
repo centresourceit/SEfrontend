@@ -77,7 +77,7 @@ const AddProject: React.FC = (): JSX.Element => {
         else { toast.error(parsed.error.errors[0].message, { theme: "light" }); }
     };
     return (<>
-        <div className="grow w-full  p-4  ">
+        <div className="grow w-full  p-4 bg-primary-700 ">
 
             <h1 className="text-white font-medium text-2xl">Add New Project</h1>
             <div className="bg-gray-400 w-full h-[2px] my-2"></div>
