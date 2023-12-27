@@ -1,4 +1,5 @@
-import { LoaderArgs, json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { userPrefs } from "~/cookies";
@@ -6,11 +7,12 @@ import { ApiCall } from "~/services/api";
 import { toast } from "react-toastify";
 import { longtext } from "~/utils";
 
-
 export async function loader(params: LoaderArgs) {
-
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+  if (cookie.role != "ADMIN") {
+    return redirect("/home");
+  }
   const data = await ApiCall({
     query: `
     query getAllUser{
@@ -35,10 +37,8 @@ const UserDashboard = () => {
   const loadreusers = useLoaderData().users;
   const token = useLoaderData().token;
 
-
   const [delBox, setDelBox] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
-
 
   const [user, setUser] = useState<any[]>(loadreusers);
 
@@ -112,7 +112,7 @@ const UserDashboard = () => {
     if (data.status) {
       await updateUsers();
       toast.success("User deleted successfully", { theme: "light" });
-      setDelBox(val => false);
+      setDelBox((val) => false);
     } else {
       toast.error(data.message, { theme: "light" });
     }
@@ -120,10 +120,16 @@ const UserDashboard = () => {
 
   return (
     <>
-      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+      <div
+        className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${
+          delBox ? "grid" : "hidden"
+        } place-content-center`}
+      >
         <div className="bg-white rounded-md p-4">
           <h1 className="text-center text-2xl font-semibold">Delete</h1>
-          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <h3 className="text-lg font-semibold">
+            Are you sure you want to delete?
+          </h3>
           <div className="flex w-full gap-4 mt-2">
             <button
               onClick={() => deleteUser()}
@@ -132,7 +138,7 @@ const UserDashboard = () => {
               Delete
             </button>
             <button
-              onClick={() => setDelBox(val => false)}
+              onClick={() => setDelBox((val) => false)}
               className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
             >
               Cancel
@@ -150,10 +156,13 @@ const UserDashboard = () => {
                 There is no User.
               </p>
             </>
-          ) :
+          ) : (
             user.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
+                <div
+                  key={index}
+                  className="bg-primary-800 w-80 p-4 flex flex-col"
+                >
                   <div className="flex gap-2">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-lg">
@@ -202,7 +211,10 @@ const UserDashboard = () => {
                   <div className="grow"></div>
                   <div className="flex w-full gap-4 mt-4">
                     <button
-                      onClick={() => { setId(val.id); setDelBox(val => true); }}
+                      onClick={() => {
+                        setId(val.id);
+                        setDelBox((val) => true);
+                      }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
                     >
                       Delete
@@ -216,7 +228,8 @@ const UserDashboard = () => {
                   </div>
                 </div>
               );
-            })}
+            })
+          )}
         </div>
       </div>
     </>

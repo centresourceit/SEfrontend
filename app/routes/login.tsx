@@ -1,6 +1,7 @@
 import Login from "~/components/login";
 import styles from 'react-toastify/dist/ReactToastify.css';
-import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs} from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { userPrefs } from "~/cookies";
 
 

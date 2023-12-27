@@ -1,4 +1,5 @@
-import { LoaderArgs, json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
@@ -9,6 +10,9 @@ import { toast } from "react-toastify";
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+  if (cookie.role != "ADMIN") {
+    return redirect("/home");
+  }
 
   const data = await ApiCall({
     query: `
@@ -87,7 +91,6 @@ const Compliance = () => {
     setCompliance((val) => data.data.getAllCompliances);
   };
 
-
   const deleteCompliance = async () => {
     const data = await ApiCall({
       query: `
@@ -110,17 +113,23 @@ const Compliance = () => {
     if (data.status) {
       await updateLicense();
       toast.success("Compliance deleted successfully", { theme: "light" });
-      setDelBox(val => false);
+      setDelBox((val) => false);
     } else {
       toast.error(data.message, { theme: "light" });
     }
   };
   return (
     <>
-      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+      <div
+        className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${
+          delBox ? "grid" : "hidden"
+        } place-content-center`}
+      >
         <div className="bg-white rounded-md p-4">
           <h1 className="text-center text-2xl font-semibold">Delete</h1>
-          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <h3 className="text-lg font-semibold">
+            Are you sure you want to delete?
+          </h3>
           <div className="flex w-full gap-4 mt-2">
             <button
               onClick={() => deleteCompliance()}
@@ -129,7 +138,7 @@ const Compliance = () => {
               Delete
             </button>
             <button
-              onClick={() => setDelBox(val => false)}
+              onClick={() => setDelBox((val) => false)}
               className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
             >
               Cancel
@@ -140,7 +149,12 @@ const Compliance = () => {
       <div className="grow  p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Compliance</h1>
-          <Link to={"/home/addcompliance"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Compliance</Link>
+          <Link
+            to={"/home/addcompliance"}
+            className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md"
+          >
+            Add New Compliance
+          </Link>
         </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-6 flex-wrap my-6">
@@ -153,7 +167,10 @@ const Compliance = () => {
           ) : (
             compliance.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-96 p-4 flex flex-col">
+                <div
+                  key={index}
+                  className="bg-primary-800 w-96 p-4 flex flex-col"
+                >
                   <div className="flex gap-4">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -179,7 +196,11 @@ const Compliance = () => {
                     </div>
                   </div>
                   <div className="my-4">
-                    <img src={val.logo} alt="logo" className="w-44 h-44 rounded-md object-cover" />
+                    <img
+                      src={val.logo}
+                      alt="logo"
+                      className="w-44 h-44 rounded-md object-cover"
+                    />
                   </div>
                   <p className="text-gray-200 font-normal text-md my-1">
                     Description : {val.description}
@@ -193,13 +214,18 @@ const Compliance = () => {
                   <div className="grow"></div>
                   <div className="flex w-full gap-4 mt-4">
                     <button
-                      onClick={() => { setId(val.id); setDelBox(val => true); }}
+                      onClick={() => {
+                        setId(val.id);
+                        setDelBox((val) => true);
+                      }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
                     >
                       Delete
                     </button>
                     <button
-                      onClick={() => navigator(`/home/editcompliance/${val.id}`)}
+                      onClick={() =>
+                        navigator(`/home/editcompliance/${val.id}`)
+                      }
                       className="py-1 text-white text-lg grow bg-cyan-500 text-center rounded-md font-medium"
                     >
                       Update

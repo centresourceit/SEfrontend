@@ -1,6 +1,3 @@
-
-
-
 // // import AsideBarStore, { AdminSideBarTabs } from "~/state/siderbar";
 // import { LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
 // import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
@@ -398,7 +395,7 @@
 //       <Link to={"/home"} className="text-center hidden md:block">Home</Link>
 //       <div className="grow"></div>
 //       <div className="h-8 w-[2px] bg-white"></div>
-//       {/* 
+//       {/*
 //       <div className="flex gap-2 relative group  items-center">
 //         <div className="cursor-pointer">
 //           <img
@@ -437,14 +434,30 @@
 //   );
 // };
 
-
 // import AsideBarStore, { AdminSideBarTabs } from "~/state/siderbar";
-import { LoaderArgs, LoaderFunction, json, redirect } from "@remix-run/node";
+import type { LoaderArgs, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
-import { useEffect, useState } from "react";
 import sideBarStore, { SideBarTabs } from "~/state/sidebar";
 import { userPrefs } from "~/cookies";
-import { Fa6RegularStarHalfStroke, Fa6SolidBars, Fa6SolidBook, Fa6SolidBookTanakh, Fa6SolidBuilding, Fa6SolidChartArea, Fa6SolidCircleQuestion, Fa6SolidCodeBranch, Fa6SolidDiagramProject, Fa6SolidEye, Fa6SolidHouse, Fa6SolidImages, Fa6SolidObjectUngroup, Fa6SolidPaintbrush, Fa6SolidRulerCombined, Fa6SolidStar, Fa6SolidUser, Fa6SolidUserLarge, Fa6SolidXmark, MaterialSymbolsBoltOutline, MaterialSymbolsDiamondOutline, MaterialSymbolsLogoutRounded } from "~/components/icons/Icons";
+import {
+  Fa6RegularStarHalfStroke,
+  Fa6SolidBars,
+  Fa6SolidBook,
+  Fa6SolidBuilding,
+  Fa6SolidChartArea,
+  Fa6SolidCircleQuestion,
+  Fa6SolidHouse,
+  Fa6SolidObjectUngroup,
+  Fa6SolidPaintbrush,
+  Fa6SolidStar,
+  Fa6SolidUser,
+  Fa6SolidUserLarge,
+  Fa6SolidXmark,
+  MaterialSymbolsBoltOutline,
+  MaterialSymbolsDiamondOutline,
+  MaterialSymbolsLogoutRounded,
+} from "~/components/icons/Icons";
 import { ApiCall } from "~/services/api";
 
 export const loader: LoaderFunction = async (props: LoaderArgs) => {
@@ -472,6 +485,10 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
     headers: { authorization: `Bearer ${cookie.token}` },
   });
 
+  if (!data.status) {
+    return redirect("/logout");
+  }
+
   // if (data.data.getUserById.status != "ACTIVE") {
   //   return redirect(`/inactiveuser`);
   // };
@@ -483,11 +500,11 @@ export const loader: LoaderFunction = async (props: LoaderArgs) => {
 
   if (data.data.getUserById.status == "INACTIVE") {
     return redirect(`/inactiveuser`);
-  };
+  }
 
   if (data.data.getUserById.status == "ACTIVE") {
     return redirect(`/inactiveadmin`);
-  };
+  }
   return json({
     username: data.data.getUserById.name,
     user: cookie,
@@ -500,7 +517,7 @@ const DashBoard = () => {
   const changeMobile = sideBarStore((state) => state.change);
   const asideindex = sideBarStore((state) => state.currentIndex);
   const achangeindex = sideBarStore((state) => state.changeTab);
-  const user = useLoaderData().user;
+  // const user = useLoaderData().user;
   const isAdmin = useLoaderData().isAdmin;
   const username = useLoaderData().username;
 
@@ -514,11 +531,12 @@ const DashBoard = () => {
       <section className="h-screen w-full relative">
         <div className="flex min-h-screen relative flex-nowrap w-full">
           <div
-            className={`shrink-0 z-50 w-full md:w-60 bg-primary-800 p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${isMobile ? "grid place-items-center" : "hidden"
-              }`}
+            className={`shrink-0 z-50 w-full md:w-60 bg-primary-800 p-2 md:flex flex-col md:relative fixed top-0 left-0 min-h-screen md:min-h-full md:h-auto ${
+              isMobile ? "grid place-items-center" : "hidden"
+            }`}
           >
             <div className="md:flex flex-col md:h-full">
-              <Link to={'/home'} className="text-white text-center mb-4">
+              <Link to={"/home"} className="text-white text-center mb-4">
                 <img
                   src="/images/logo.png"
                   alt="logo"
@@ -797,10 +815,11 @@ type SideBarTabProps = {
 const SidebarTab = (props: SideBarTabProps) => {
   return (
     <div
-      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-xl cursor-pointer ${props.active
-        ? "border border-secondary bg-secondary bg-opacity-10 text-secondary"
-        : "text-secondary hover:bg-secondary hover:text-white hover:bg-opacity-25"
-        }`}
+      className={`w-60 md:w-auto font-semibold flex gap-2 items-center my-1 b  py-1 px-2 rounded-md text-xl cursor-pointer ${
+        props.active
+          ? "border border-secondary bg-secondary bg-opacity-10 text-secondary"
+          : "text-secondary hover:bg-secondary hover:text-white hover:bg-opacity-25"
+      }`}
     >
       <props.icon></props.icon>
       <p>{props.title.toUpperCase()}</p>
@@ -824,7 +843,9 @@ const TopNavBar = (props: TopNavBarProps) => {
       <Link to={"/home"} className="px hidden md:block">
         <Fa6SolidHouse></Fa6SolidHouse>
       </Link>
-      <Link to={"/home"} className="text-center hidden md:block">Home</Link>
+      <Link to={"/home"} className="text-center hidden md:block">
+        Home
+      </Link>
       <div className="grow"></div>
       <div className="h-8 w-[2px] bg-white"></div>
       {/* 
@@ -854,13 +875,21 @@ const Footer = () => {
       </div>
       <div className="grow"></div>
       <div className="flex gap-2">
-        <Link to="/cookies" className="text-white font-semibold text-lg">COOKIES</Link>
+        <Link to="/cookies" className="text-white font-semibold text-lg">
+          COOKIES
+        </Link>
         <div className="h-6 w-[2px] bg-gray-300"></div>
-        <Link to="/disclaimer" className="text-white font-semibold text-lg">DISCLAIMER</Link>
+        <Link to="/disclaimer" className="text-white font-semibold text-lg">
+          DISCLAIMER
+        </Link>
         <div className="h-6 w-[2px] bg-gray-300"></div>
-        <Link to="/privacypolicy" className="text-white font-semibold text-lg">PRIVACY POLICY</Link>
+        <Link to="/privacypolicy" className="text-white font-semibold text-lg">
+          PRIVACY POLICY
+        </Link>
         <div className="h-6 w-[2px] bg-gray-300"></div>
-        <Link to="/usagesterms" className="text-white font-semibold text-lg">USAGES TERMS</Link>
+        <Link to="/usagesterms" className="text-white font-semibold text-lg">
+          USAGES TERMS
+        </Link>
       </div>
     </div>
   );

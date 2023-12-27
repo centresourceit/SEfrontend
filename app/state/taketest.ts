@@ -140,11 +140,7 @@ const answersStore = create<AnswerState>()((set) => ({
         (ans: any) => ans.id === value.id
       );
 
-      console.log(existingAnswerIndex);
-      console.log("exit");
-
       if (existingAnswerIndex !== -1) {
-
         const updatedAnswers = [...state.cacheAnswer[value.page]];
         updatedAnswers.splice(existingAnswerIndex, 1);
         const cacheAnswerDate = [...state.cacheAnswer];

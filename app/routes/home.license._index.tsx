@@ -1,4 +1,5 @@
-import { LoaderArgs, json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
@@ -7,11 +8,12 @@ import { ApiCall } from "~/services/api";
 import { toast } from "react-toastify";
 import { longtext } from "~/utils";
 
-
-
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+  if (cookie.role != "ADMIN") {
+    return redirect("/home");
+  }
   const data = await ApiCall({
     query: `
     query getAllLicense{
@@ -119,19 +121,24 @@ const License = () => {
     if (data.status) {
       await updateLicense();
       toast.success("License deleted successfully", { theme: "light" });
-      setDelBox(val => false);
+      setDelBox((val) => false);
     } else {
       toast.error(data.message, { theme: "light" });
     }
   };
 
-
   return (
     <>
-      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+      <div
+        className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${
+          delBox ? "grid" : "hidden"
+        } place-content-center`}
+      >
         <div className="bg-white rounded-md p-4">
           <h1 className="text-center text-2xl font-semibold">Delete</h1>
-          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <h3 className="text-lg font-semibold">
+            Are you sure you want to delete?
+          </h3>
           <div className="flex w-full gap-4 mt-2">
             <button
               onClick={() => deleteLicense()}
@@ -140,7 +147,7 @@ const License = () => {
               Delete
             </button>
             <button
-              onClick={() => setDelBox(val => false)}
+              onClick={() => setDelBox((val) => false)}
               className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
             >
               Cancel
@@ -151,7 +158,12 @@ const License = () => {
       <div className="grow  p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">License</h1>
-          <Link to={"/home/addlicense/"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New License</Link>
+          <Link
+            to={"/home/addlicense/"}
+            className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md"
+          >
+            Add New License
+          </Link>
         </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-6 flex-wrap my-6">
@@ -164,7 +176,10 @@ const License = () => {
           ) : (
             license.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-72 p-4 flex flex-col">
+                <div
+                  key={index}
+                  className="bg-primary-800 w-72 p-4 flex flex-col"
+                >
                   <div className="flex gap-4">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -218,7 +233,10 @@ const License = () => {
                   <div className="grow"></div>
                   <div className="flex w-full gap-4 mt-4">
                     <button
-                      onClick={() => { setId(val.id); setDelBox(val => true); }}
+                      onClick={() => {
+                        setId(val.id);
+                        setDelBox((val) => true);
+                      }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
                     >
                       Delete

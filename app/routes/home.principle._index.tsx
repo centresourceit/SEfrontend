@@ -1,6 +1,6 @@
-import { LoaderArgs, json } from "@remix-run/node";
-import { Link, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
-import axios from "axios";
+import type { LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import React, { useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
@@ -8,10 +8,12 @@ import { ApiCall } from "~/services/api";
 import { toast } from "react-toastify";
 import { longtext } from "~/utils";
 
-
 export async function loader(params: LoaderArgs) {
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+  if (cookie.role != "ADMIN") {
+    return redirect("/home");
+  }
   const data = await ApiCall({
     query: `
     query getPrinciple{
@@ -106,7 +108,7 @@ const UserDashboard = () => {
     if (data.status) {
       await updatePrinciple();
       toast.success("Principle deleted successfully", { theme: "light" });
-      setDelBox(val => false);
+      setDelBox((val) => false);
     } else {
       toast.error(data.message, { theme: "light" });
     }
@@ -114,10 +116,16 @@ const UserDashboard = () => {
 
   return (
     <>
-      <div className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${delBox ? "grid" : "hidden"} place-content-center`}>
+      <div
+        className={`w-full bg-black bg-opacity-40 h-screen fixed z-50 top-0 left-0 ${
+          delBox ? "grid" : "hidden"
+        } place-content-center`}
+      >
         <div className="bg-white rounded-md p-4">
           <h1 className="text-center text-2xl font-semibold">Delete</h1>
-          <h3 className="text-lg font-semibold">Are you sure you want to delete?</h3>
+          <h3 className="text-lg font-semibold">
+            Are you sure you want to delete?
+          </h3>
           <div className="flex w-full gap-4 mt-2">
             <button
               onClick={() => deletePrinciple()}
@@ -126,7 +134,7 @@ const UserDashboard = () => {
               Delete
             </button>
             <button
-              onClick={() => setDelBox(val => false)}
+              onClick={() => setDelBox((val) => false)}
               className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
             >
               Cancel
@@ -137,7 +145,12 @@ const UserDashboard = () => {
       <div className="grow  p-4 w-full overflow-x-hidden">
         <div className="flex w-full justify-between">
           <h1 className="text-white font-medium text-2xl">Principle</h1>
-          <Link to={"/home/addprinciple"} className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md">Add New Principle</Link>
+          <Link
+            to={"/home/addprinciple"}
+            className="text-center py-1 text-white font-semibold text-md px-4 bg-green-500 rounded-md"
+          >
+            Add New Principle
+          </Link>
         </div>
         <div className="w-full bg-slate-400 h-[1px] my-2"></div>
         <div className="flex gap-4 flex-wrap my-6 justify-evenly">
@@ -150,7 +163,10 @@ const UserDashboard = () => {
           ) : (
             principle.map((val: any, index: number) => {
               return (
-                <div key={index} className="bg-primary-800 w-80 p-4 flex flex-col">
+                <div
+                  key={index}
+                  className="bg-primary-800 w-80 p-4 flex flex-col"
+                >
                   <div className="flex gap-2">
                     <p className="text-white font-semibold text-lg">{val.id}</p>
                     <p className="text-white font-semibold text-xl">
@@ -183,7 +199,10 @@ const UserDashboard = () => {
                   <div className="grow"></div>
                   <div className="flex w-full gap-4 mt-4">
                     <button
-                      onClick={() => { setId(val.id); setDelBox(val => true); }}
+                      onClick={() => {
+                        setId(val.id);
+                        setDelBox((val) => true);
+                      }}
                       className="py-1 text-white text-lg grow bg-rose-500 text-center rounded-md font-medium"
                     >
                       Delete

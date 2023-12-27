@@ -1,4 +1,4 @@
-import { Form, Link, useNavigate } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { toast } from "react-toastify";
@@ -6,7 +6,6 @@ import { ApiCall } from "~/services/api";
 import { Fa6SolidEye, Fa6SolidEyeSlash, Fa6SolidUser } from "./icons/Icons";
 
 export default function Login(): JSX.Element {
-  const navitgator = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const nextButton = useRef<HTMLButtonElement>(null);
 
@@ -14,10 +13,6 @@ export default function Login(): JSX.Element {
   const eref = useRef<HTMLInputElement>(null);
   const rref = useRef<HTMLInputElement>(null);
   const tref = useRef<HTMLInputElement>(null);
-
-  const handelPassword = () => {
-    setShowPassword((val) => !val);
-  };
 
   const emaliRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
@@ -71,7 +66,7 @@ export default function Login(): JSX.Element {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
   };
-  const mail = useRef<HTMLInputElement>(null)
+  const mail = useRef<HTMLInputElement>(null);
   const [box, setBox] = useState(false);
 
   const forgetpassword = async () => {
@@ -99,12 +94,14 @@ export default function Login(): JSX.Element {
           }
           `,
         veriables: {
-          mail: mail!.current!.value
+          mail: mail!.current!.value,
         },
       });
 
       if (forgetpassword.status) {
-        toast.success("E-Mail Send successfully, Check you mail.", { theme: "light" });
+        toast.success("E-Mail Send successfully, Check you mail.", {
+          theme: "light",
+        });
         setBox((val: boolean) => false);
       } else {
         toast.error(forgetpassword.message, { theme: "light" });
@@ -112,11 +109,10 @@ export default function Login(): JSX.Element {
     } else {
       toast.error(parsed.error.errors[0].message, { theme: "light" });
     }
-  }
+  };
 
   return (
     <>
-
       <section className="h-screen w-full relative">
         <img
           src="/images/bg/bg5.png"
@@ -140,8 +136,15 @@ export default function Login(): JSX.Element {
               />
             </div>
             <div className="border-b-2 border-gray-200 py-1 mt-4 flex items-center">
-              <div className="text-white font-bold text-xl mr-4" onClick={() => setShowPassword(val => !showPassword)}>
-                {showPassword ? <Fa6SolidEye></Fa6SolidEye> : <Fa6SolidEyeSlash></Fa6SolidEyeSlash>}
+              <div
+                className="text-white font-bold text-xl mr-4"
+                onClick={() => setShowPassword((val) => !showPassword)}
+              >
+                {showPassword ? (
+                  <Fa6SolidEye></Fa6SolidEye>
+                ) : (
+                  <Fa6SolidEyeSlash></Fa6SolidEyeSlash>
+                )}
               </div>
               <input
                 ref={passRef}
@@ -150,7 +153,7 @@ export default function Login(): JSX.Element {
                 className="bg-transparent outline-none border-none fill-none text-white py-2 grow"
                 onKeyDown={(e) => {
                   if (e.key == "Enter") {
-                    submit()
+                    submit();
                   }
                 }}
               />
@@ -164,7 +167,12 @@ export default function Login(): JSX.Element {
             <div className="flex w-full">
               <div className="grow"></div>
 
-              <button onClick={(e) => setBox(true)} className="text-secondary text-md text-right mt-4">Forget Password</button>
+              <button
+                onClick={(e) => setBox(true)}
+                className="text-secondary text-md text-right mt-4"
+              >
+                Forgot Password
+              </button>
             </div>
 
             <h5 className="text-white text-center mt-8">
@@ -192,9 +200,15 @@ export default function Login(): JSX.Element {
           </Form>
         </div>
       </section>
-      <div className={`fixed top-0 left-0 bg-black bg-opacity-50 min-h-screen w-full z-50 ${box ? "grid place-items-center" : "hidden"}`}>
+      <div
+        className={`fixed top-0 left-0 bg-black bg-opacity-50 min-h-screen w-full z-50 ${
+          box ? "grid place-items-center" : "hidden"
+        }`}
+      >
         <div className="bg-primary-800 p-4 rounded-md w-80">
-          <h3 className="text-2xl text-center font-semibold text-secondary">Enter your email.</h3>
+          <h3 className="text-2xl text-center font-semibold text-secondary">
+            Enter your email.
+          </h3>
           <div className="w-full h-[2px] bg-gray-800 my-4"></div>
           <input
             ref={mail}
@@ -214,7 +228,6 @@ export default function Login(): JSX.Element {
             >
               Close
             </button>
-
           </div>
         </div>
       </div>

@@ -1,18 +1,23 @@
-import { LoaderArgs, json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { userPrefs } from "~/cookies";
 import { ApiCall } from "~/services/api";
 import answersStore from "~/state/taketest";
 import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
-import { MCQQuestions, PercentQuestions, SliderQuestions } from "~/components/questions";
-
+import {
+  MCQQuestions,
+  PercentQuestions,
+  SliderQuestions,
+} from "~/components/questions";
 
 export async function loader(params: LoaderArgs) {
   const projectid = params.params.id;
   const cookieHeader = params.request.headers.get("Cookie");
   const cookie: any = await userPrefs.parse(cookieHeader);
+
   const data = await ApiCall({
     query: `
     query getPrinciple{
@@ -27,6 +32,9 @@ export async function loader(params: LoaderArgs) {
           version,
           questioncode,
           licensesId,
+          questionPlan{
+            licenseType
+          },
           complince{
             name,
             description,
@@ -77,21 +85,48 @@ export async function loader(params: LoaderArgs) {
     veriables: {
       searchTakeTestInput: {
         userId: parseInt(cookie.id),
-        projectId: parseInt(projectid!)
-      }
+        projectId: parseInt(projectid!),
+      },
     },
     headers: {
       authorization: `Bearer ${cookie.token}`,
     },
   });
 
+  const license = await ApiCall({
+    query: `
+    query getUserLicenseSlave($id:Int!){
+        getUserLicenseSlave(id:$id){
+        licenseTypeId,
+        paymentStatus,
+        licenseValidity,
+        paymentReference,
+        paymentAmount,
+        createdAt,
+            licenseType{
+            name,
+            paymentAmount,
+          licenseType,
+          questionAllowed,
+          projectPerLicense,
+          discountValidTill,          
+          }
+        }
+    }
+        `,
+    veriables: {
+      id: Number(cookie.id),
+    },
+    headers: { authorization: `Bearer ${cookie.token}` },
+  });
 
   return json({
     questions: data.data.getPrinciple,
     userId: cookie.id,
     token: cookie.token,
     projectid: projectid,
-    result: getresult.status ? getresult.data.taketest : null
+    result: getresult.status ? getresult.data.taketest : null,
+    license: license.data.getUserLicenseSlave,
   });
 }
 
@@ -102,7 +137,7 @@ const TakeTest = () => {
   const userId: number = Number(loader.userId);
   const result = loader.result;
   const projectid = loader.projectid;
-
+  const license = loader.license;
 
   const cacheAnswer = answersStore((state) => state.cacheAnswer);
   const addCacheAnswer = answersStore((state) => state.addCacheAnswer);
@@ -115,12 +150,78 @@ const TakeTest = () => {
   const init = async () => {
     let quenum = 0;
     for (let i: number = 0; i < questions.length; i++) {
-      quenum += questions[i].question_bank.length;
+      for (let j: number = 0; j < questions[i].question_bank.length; j++) {
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "FREE" &&
+          license.licenseType.name == "FREE"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "FREE" &&
+          license.licenseType.name == "BUSINESS"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "FREE" &&
+          license.licenseType.name == "PREMIUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "FREE" &&
+          license.licenseType.name == "PLATINUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType ==
+            "BUSINESS" &&
+          license.licenseType.name == "BUSINESS"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType ==
+            "BUSINESS" &&
+          license.licenseType.name == "PREMIUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType ==
+            "BUSINESS" &&
+          license.licenseType.name == "PLATINUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "PREMIUM" &&
+          license.licenseType.name == "PREMIUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType == "PREMIUM" &&
+          license.licenseType.name == "PLATINUM"
+        ) {
+          quenum++;
+        }
+        if (
+          questions[i].question_bank[j].questionPlan.licenseType ==
+            "PLATINUM" &&
+          license.licenseType.name == "PLATINUM"
+        ) {
+          quenum++;
+        }
+      }
+
+      // quenum += questions[i].question_bank.length;
     }
+
     setQuecount((val) => quenum);
     if (!(result == null || result == undefined)) {
-
-
       if (result.totalScore == 0) {
         for (let i = 0; i < result.assesement.result.length; i++) {
           addCacheAnswer({
@@ -135,8 +236,8 @@ const TakeTest = () => {
             license: result.assesement.result[i].license,
             questioncode: result.assesement.result[i].questioncode,
             questiontype: result.assesement.result[i].questiontype,
-            page: 5
-          })
+            page: 5,
+          });
         }
       }
     }
@@ -146,12 +247,15 @@ const TakeTest = () => {
     init();
   }, []);
 
-
   const saveAndExit = async () => {
-    const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
-    console.log(sendanswer);
-
-
+    const sendanswer = [
+      ...cacheAnswer[0],
+      ...cacheAnswer[1],
+      ...cacheAnswer[2],
+      ...cacheAnswer[3],
+      ...cacheAnswer[4],
+      ...cacheAnswer[5],
+    ];
 
     //if user don't done any exam then it's create new save exist
     if (result == null || result == undefined) {
@@ -188,7 +292,6 @@ const TakeTest = () => {
 
     // total score data conditons
     if (result.totalScore == 0) {
-
       const data = await ApiCall({
         query: `
         mutation updateResults($updateAnswerInput:UpdateAnswerInput!,$updateResultInput:UpdateResultInput!){
@@ -219,7 +322,6 @@ const TakeTest = () => {
       }
       return;
     } else {
-
       const data = await ApiCall({
         query: `
       mutation createResults($createAnswerInput:CreateAnswerInput!,$createResultInput:CreateResultInput!){
@@ -253,13 +355,19 @@ const TakeTest = () => {
   };
 
   const submit = async () => {
-    const sendanswer = [...cacheAnswer[0], ...cacheAnswer[1], ...cacheAnswer[2], ...cacheAnswer[3], ...cacheAnswer[4], ...cacheAnswer[5]];
+    const sendanswer = [
+      ...cacheAnswer[0],
+      ...cacheAnswer[1],
+      ...cacheAnswer[2],
+      ...cacheAnswer[3],
+      ...cacheAnswer[4],
+      ...cacheAnswer[5],
+    ];
 
     let totalScore = 0;
     sendanswer.forEach((ans) => {
       totalScore += Number(ans.mark) || 0;
     });
-
 
     //if user don't done any exam then it's create new save exist
     if (result == null || result == undefined) {
@@ -293,7 +401,6 @@ const TakeTest = () => {
       }
       return;
     }
-
 
     // total score data conditions
 
@@ -364,43 +471,38 @@ const TakeTest = () => {
   const [page, setPage] = useState<number>(0);
   const nextpage = () => {
     if (page < 4) {
-      setPage(val => val + 1);
+      setPage((val) => val + 1);
     }
     window.scrollTo(0, 0);
-  }
+  };
   const prevpage = () => {
     if (page > 0) {
-      setPage(val => val - 1);
+      setPage((val) => val - 1);
     }
     window.scrollTo(0, 0);
-  }
+  };
 
   return (
     <>
       <div className="fixed bottom-14 left-0 w-full grid place-items-center z-50">
         <div className="flex justify-center gap-2 mx-auto bg-primary-800 p-3 rounded-full">
-          {
-            page != 0 ?
-              <button
-                onClick={prevpage}
-                className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
-              >
-                Back
-              </button>
-              :
-              null
-          }
+          {page != 0 ? (
+            <button
+              onClick={prevpage}
+              className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
+            >
+              Back
+            </button>
+          ) : null}
 
-          {page != 4 ?
+          {page != 4 ? (
             <button
               onClick={nextpage}
               className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
             >
               Next
             </button>
-            :
-            null
-          }
+          ) : null}
           <button
             onClick={saveAndExit}
             className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
@@ -408,14 +510,14 @@ const TakeTest = () => {
             COMMIT AND EXIT
           </button>
 
-          {page == 4 && cacheAnswer.flat().length == quecount ?
+          {page == 4 && cacheAnswer.flat().length == quecount ? (
             <button
               onClick={submit}
               className="text-center py-2 px-4 text-white bg-cyan-500 font-semibold rounded-full hover:scale-105 transition-all"
             >
               SUBMIT
             </button>
-            : null}
+          ) : null}
 
           <Link
             to={`/home/feedback/`}
@@ -438,7 +540,14 @@ const TakeTest = () => {
           </p>
         </div>
         <div className="text-cyan-500 font-semibold text-2xl rounded-md border-l-4 px-2 py-2 bg-cyan-500 bg-opacity-20 border-cyan-500 my-4 flex">
-          <p className="">Attempted : {cacheAnswer.flat().length}/{quecount}</p><div className="grow"></div> <p>{Number(100 * (cacheAnswer.flat().length / quecount)).toFixed(0)} % Completed</p>
+          <p className="">
+            Attempted : {cacheAnswer.flat().length}/{quecount}
+          </p>
+          <div className="grow"></div>{" "}
+          <p>
+            {Number(100 * (cacheAnswer.flat().length / quecount)).toFixed(0)} %
+            Completed
+          </p>
         </div>
         {questions == null || questions == undefined ? (
           <>
@@ -447,29 +556,80 @@ const TakeTest = () => {
             </p>
           </>
         ) : (
-
           <div>
             <p className="text-green-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-green-500 bg-opacity-20 border-green-500">
               {questions[page].name}
             </p>
-            {questions[page].question_bank == null || questions[page].question_bank == undefined ? (
+            {questions[page].question_bank == null ||
+            questions[page].question_bank == undefined ? (
               <>
                 <p className="text-rose-500 font-semibold text-2xl my-4 rounded-md border-l-4 px-2 py-2 bg-rose-500 bg-opacity-20 border-rose-500">
-                  There is no questions.
+                  There are no questions.
                 </p>
               </>
             ) : (
               questions[page].question_bank.map((que: any, ind: number) => {
+                // if(que.questionPlan.licenseType == "FREE" && license.licenseType.name != "FREE") return <></>;
+                // if(que.questionPlan.licenseType == "FREE" && license.licenseType.name != "BUSINESS") return <></>;
+                // if(que.questionPlan.licenseType == "FREE" && license.licenseType.name != "PREMIUM") return <></>;
+                // if(que.questionPlan.licenseType == "FREE" && license.licenseType.name != "PLATINUM") return <></>;
+                // if(que.questionPlan.licenseType == "BUSINESS" && license.licenseType.name != "BUSINESS") return <></>;
+                // if(que.questionPlan.licenseType == "BUSINESS" && license.licenseType.name != "PREMIUM") return <></>;
+                // if(que.questionPlan.licenseType == "BUSINESS" && license.licenseType.name != "PLATINUM") return <></>;
+                // if(que.questionPlan.licenseType == "PREMIUM" && license.licenseType.name != "PREMIUM") return <></>;
+                // if(que.questionPlan.licenseType == "PREMIUM" && license.licenseType.name != "PLATINUM") return <></>;
+                // if(que.questionPlan.licenseType == "PLATINUM" && license.licenseType.name != "PLATINUM") return <></>;
+
+                if (
+                  que.questionPlan.licenseType == "BUSINESS" &&
+                  license.licenseType.name == "FREE"
+                )
+                  return <></>;
+                if (
+                  que.questionPlan.licenseType == "PREMIUM" &&
+                  license.licenseType.name == "FREE"
+                )
+                  return <></>;
+                if (
+                  que.questionPlan.licenseType == "PREMIUM" &&
+                  license.licenseType.name == "BUSINESS"
+                )
+                  return <></>;
+                if (
+                  que.questionPlan.licenseType == "PLATINUM" &&
+                  license.licenseType.name == "FREE"
+                )
+                  return <></>;
+                if (
+                  que.questionPlan.licenseType == "PLATINUM" &&
+                  license.licenseType.name == "BUSINESS"
+                )
+                  return <></>;
+                if (
+                  que.questionPlan.licenseType == "PLATINUM" &&
+                  license.licenseType.name == "PREMIUM"
+                )
+                  return <></>;
+
                 count++;
-                const question = cacheAnswer[page].filter((val: any) => val.id == que.id);
-                const selectedquestion = cacheAnswer[5].filter((val: any) => val.id == que.id);
-                const data = (result == null || result == undefined) ? null : result.assesement.result.findIndex((val: any) => val.id == que.id);
+                const question = cacheAnswer[page].filter(
+                  (val: any) => val.id == que.id
+                );
+                const selectedquestion = cacheAnswer[5].filter(
+                  (val: any) => val.id == que.id
+                );
+                const data =
+                  result == null || result == undefined
+                    ? null
+                    : result.assesement.result.findIndex(
+                        (val: any) => val.id == que.id
+                      );
                 if (!(result == null || result == undefined)) {
                   if (result.totalScore != 0) {
                     return (
                       <div key={ind}>
                         {que.questionType == "MCQ" ||
-                          que.questionType == "TANDF" ? (
+                        que.questionType == "TANDF" ? (
                           <MCQQuestions
                             queNumber={count}
                             question={que}
@@ -514,7 +674,7 @@ const TakeTest = () => {
                       return (
                         <div key={ind}>
                           {que.questionType == "MCQ" ||
-                            que.questionType == "TANDF" ? (
+                          que.questionType == "TANDF" ? (
                             <MCQQuestions
                               queNumber={count}
                               question={que}
@@ -555,16 +715,26 @@ const TakeTest = () => {
                         </div>
                       );
                     } else if (data !== -1) {
-                      if (selectedquestion[0] == undefined || selectedquestion[0] == undefined) {
-                        return <></>
+                      if (
+                        selectedquestion[0] == undefined ||
+                        selectedquestion[0] == undefined
+                      ) {
+                        return <></>;
                       } else {
-                        return <AnswerBox question={selectedquestion[0].question} answer={selectedquestion[0].answer} index={count}></AnswerBox>;
+                        return (
+                          <AnswerBox
+                            key={ind}
+                            question={selectedquestion[0].question}
+                            answer={selectedquestion[0].answer}
+                            index={count}
+                          ></AnswerBox>
+                        );
                       }
                     } else {
                       return (
                         <div key={ind}>
                           {que.questionType == "MCQ" ||
-                            que.questionType == "TANDF" ? (
+                          que.questionType == "TANDF" ? (
                             <MCQQuestions
                               queNumber={count}
                               question={que}
@@ -610,7 +780,7 @@ const TakeTest = () => {
                   return (
                     <div key={ind}>
                       {que.questionType == "MCQ" ||
-                        que.questionType == "TANDF" ? (
+                      que.questionType == "TANDF" ? (
                         <MCQQuestions
                           queNumber={count}
                           question={que}
@@ -651,7 +821,6 @@ const TakeTest = () => {
                     </div>
                   );
                 }
-
               })
             )}
           </div>
@@ -663,15 +832,15 @@ const TakeTest = () => {
 
 export default TakeTest;
 
-
-
 interface AnswerBoxProps {
   index: number;
   question: string;
   answer: string;
 }
 
-const AnswerBox: React.FC<AnswerBoxProps> = (props: AnswerBoxProps): JSX.Element => {
+const AnswerBox: React.FC<AnswerBoxProps> = (
+  props: AnswerBoxProps
+): JSX.Element => {
   return (
     <>
       <div className="bg-secondary px-8 py-6 rounded-lg my-6 backdrop-filter backdrop-blur-lg bg-opacity-20 border-2 border-secondary">
@@ -684,4 +853,4 @@ const AnswerBox: React.FC<AnswerBoxProps> = (props: AnswerBoxProps): JSX.Element
       </div>
     </>
   );
-}
+};
